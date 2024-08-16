@@ -45,7 +45,7 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
     <div className="container mx-auto p-2">
       <div className="relative my-8 rounded-xl overflow-hidden">
         <img
-          src="../src/assets/particle.jpg"
+          src="https://getwallpapers.com/wallpaper/full/1/4/c/1160356-download-free-tech-hd-wallpapers-1920x1080-download-free.jpg"
           alt="Background"
           className="absolute top-0 left-0 w-full h-full object-cover"
           style={{ filter: "brightness(0.6)", transform: "scale(1.1)" }}
