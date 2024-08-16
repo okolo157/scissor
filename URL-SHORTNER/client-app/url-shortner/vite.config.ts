@@ -9,6 +9,13 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    outDir: "dist",
+    target: "esnext",
+    rollupOptions: {
+      output: {
+        entryFileNames: "[name].js",
+        chunkFileNames: "[name].js",
+        assetFileNames: "[name].[ext]",
+      },
+    },
   },
 });
