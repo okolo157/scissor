@@ -15,15 +15,6 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
     message: string;
   } | null>(null);
 
-  // Ref for the video element
-  const videoRef = React.useRef<HTMLVideoElement>(null);
-
-  React.useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.1;
-    }
-  }, []);
-
   // Auto-hide alert after 3 seconds
   React.useEffect(() => {
     if (alert) {
@@ -53,17 +44,12 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
   return (
     <div className="container mx-auto p-2">
       <div className="relative my-8 rounded-xl overflow-hidden">
-        <video
+        <img
+          src="../src/assets/particle.jpg"
+          alt="Background"
           className="absolute top-0 left-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
           style={{ filter: "brightness(0.6)", transform: "scale(1.1)" }}
-        >
-          <source src="../src/assets/Particle.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        />
         <div className="relative w-full h-full rounded-xl p-20 backdrop-brightness-50 flex flex-col items-center justify-center">
           <h2 className="text-white text-4xl font-bold text-center pb-4">
             Scissor URL Shortener
