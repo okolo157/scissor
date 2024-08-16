@@ -5,15 +5,9 @@
 4 silly config load:file:C:\Users\USER\capstone\url-shortner\server-app\.npmrc
 5 silly config load:file:C:\Users\USER\.npmrc
 6 silly config load:file:C:\Users\USER\AppData\Roaming\npm\etc\npmrc
-7 verbose title npm test
-8 verbose argv "test"
-9 verbose logfile logs-max:10 dir:C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T06_49_10_268Z-
-10 verbose logfile C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T06_49_10_268Z-debug-0.log
+7 verbose title npm run dev
+8 verbose argv "run" "dev"
+9 verbose logfile logs-max:10 dir:C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T14_25_01_666Z-
+10 verbose logfile C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T14_25_01_666Z-debug-0.log
 11 silly logfile start cleaning logs, removing 2 files
 12 silly logfile done cleaning log files
-13 verbose cwd C:\Users\USER\capstone\url-shortner\server-app
-14 verbose os Windows_NT 10.0.19045
-15 verbose node v20.11.0
-16 verbose npm  v10.8.2
-17 verbose exit 1
-18 verbose code 1
