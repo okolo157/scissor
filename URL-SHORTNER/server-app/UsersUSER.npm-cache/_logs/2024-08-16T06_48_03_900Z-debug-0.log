@@ -1,0 +1,372 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\ProgramData\npm\npm\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.8.2
+2 info using node@v20.11.0
+3 silly config load:file:C:\ProgramData\npm\npm\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\USER\capstone\url-shortner\server-app\.npmrc
+5 silly config load:file:C:\Users\USER\.npmrc
+6 silly config load:file:C:\Users\USER\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm install ts-node
+8 verbose argv "install" "ts-node" "--save-dev"
+9 verbose logfile logs-max:10 dir:C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T06_48_03_900Z-
+10 verbose logfile C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T06_48_03_900Z-debug-0.log
+11 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+12 silly logfile start cleaning logs, removing 2 files
+13 silly idealTree buildDeps
+14 silly fetch manifest ts-node@*
+15 silly packumentCache full:https://registry.npmjs.org/ts-node cache-miss
+16 silly logfile done cleaning log files
+17 http fetch GET 200 https://registry.npmjs.org/ts-node 902ms (cache revalidated)
+18 silly packumentCache full:https://registry.npmjs.org/ts-node set size:574520 disposed:false
+19 silly fetch manifest @swc/core@>=1.2.50
+20 silly packumentCache full:https://registry.npmjs.org/@swc%2fcore cache-miss
+21 http fetch GET 200 https://registry.npmjs.org/@swc%2fcore 209ms (cache revalidated)
+22 silly packumentCache full:https://registry.npmjs.org/@swc%2fcore set size:3163803 disposed:false
+23 silly fetch manifest @swc/helpers@*
+24 silly packumentCache full:https://registry.npmjs.org/@swc%2fhelpers cache-miss
+25 http fetch GET 200 https://registry.npmjs.org/@swc%2fhelpers 235ms (cache revalidated)
+26 silly packumentCache full:https://registry.npmjs.org/@swc%2fhelpers set size:568005 disposed:false
+27 silly fetch manifest @swc/wasm@>=1.2.50
+28 silly packumentCache full:https://registry.npmjs.org/@swc%2fwasm cache-miss
+29 http fetch GET 200 https://registry.npmjs.org/@swc%2fwasm 215ms (cache revalidated)
+30 silly packumentCache full:https://registry.npmjs.org/@swc%2fwasm set size:979397 disposed:false
+31 silly fetch manifest @types/node@^22.3.0
+32 silly packumentCache full:https://registry.npmjs.org/@types%2fnode cache-miss
+33 http fetch GET 200 https://registry.npmjs.org/@types%2fnode 210ms (cache revalidated)
+34 silly packumentCache full:https://registry.npmjs.org/@types%2fnode set size:8937156 disposed:false
+35 silly fetch manifest typescript@^5.5.4
+36 silly packumentCache full:https://registry.npmjs.org/typescript cache-miss
+37 http fetch GET 200 https://registry.npmjs.org/typescript 281ms (cache revalidated)
+38 silly packumentCache full:https://registry.npmjs.org/typescript set size:13110389 disposed:false
+39 silly placeDep ROOT ts-node@10.9.2 OK for: url-shortner-api@1.0.0 want: *
+40 silly fetch manifest @cspotcode/source-map-support@^0.8.0
+41 silly packumentCache full:https://registry.npmjs.org/@cspotcode%2fsource-map-support cache-miss
+42 silly fetch manifest @tsconfig/node10@^1.0.7
+43 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode10 cache-miss
+44 silly fetch manifest @tsconfig/node12@^1.0.7
+45 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode12 cache-miss
+46 http fetch GET 200 https://registry.npmjs.org/@tsconfig%2fnode10 226ms (cache revalidated)
+47 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode10 set size:25220 disposed:false
+48 silly fetch manifest @tsconfig/node14@^1.0.0
+49 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode14 cache-miss
+50 http fetch GET 200 https://registry.npmjs.org/@tsconfig%2fnode14 194ms (cache revalidated)
+51 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode14 set size:14623 disposed:false
+52 silly fetch manifest @tsconfig/node16@^1.0.2
+53 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode16 cache-miss
+54 http fetch GET 200 https://registry.npmjs.org/@tsconfig%2fnode16 200ms (cache revalidated)
+55 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode16 set size:17299 disposed:false
+56 silly fetch manifest acorn@^8.4.1
+57 silly packumentCache full:https://registry.npmjs.org/acorn cache-miss
+58 http fetch GET 200 https://registry.npmjs.org/@cspotcode%2fsource-map-support 655ms (cache revalidated)
+59 silly packumentCache full:https://registry.npmjs.org/@cspotcode%2fsource-map-support set size:30214 disposed:false
+60 silly fetch manifest acorn-walk@^8.1.1
+61 silly packumentCache full:https://registry.npmjs.org/acorn-walk cache-miss
+62 http fetch GET 200 https://registry.npmjs.org/@tsconfig%2fnode12 676ms (cache revalidated)
+63 silly packumentCache full:https://registry.npmjs.org/@tsconfig%2fnode12 set size:32642 disposed:false
+64 silly fetch manifest arg@^4.1.0
+65 silly packumentCache full:https://registry.npmjs.org/arg cache-miss
+66 http fetch GET 200 https://registry.npmjs.org/acorn 178ms (cache revalidated)
+67 silly packumentCache full:https://registry.npmjs.org/acorn set size:402415 disposed:false
+68 silly fetch manifest create-require@^1.1.0
+69 silly packumentCache full:https://registry.npmjs.org/create-require cache-miss
+70 http fetch GET 200 https://registry.npmjs.org/acorn-walk 183ms (cache revalidated)
+71 silly packumentCache full:https://registry.npmjs.org/acorn-walk set size:46497 disposed:false
+72 silly fetch manifest diff@^4.0.1
+73 silly packumentCache full:https://registry.npmjs.org/diff cache-miss
+74 http fetch GET 200 https://registry.npmjs.org/arg 182ms (cache revalidated)
+75 silly packumentCache full:https://registry.npmjs.org/arg set size:67253 disposed:false
+76 silly fetch manifest make-error@^1.1.1
+77 silly packumentCache full:https://registry.npmjs.org/make-error cache-miss
+78 http fetch GET 200 https://registry.npmjs.org/create-require 200ms (cache revalidated)
+79 silly packumentCache full:https://registry.npmjs.org/create-require set size:20551 disposed:false
+80 silly fetch manifest v8-compile-cache-lib@^3.0.1
+81 silly packumentCache full:https://registry.npmjs.org/v8-compile-cache-lib cache-miss
+82 http fetch GET 200 https://registry.npmjs.org/diff 206ms (cache revalidated)
+83 silly packumentCache full:https://registry.npmjs.org/diff set size:107619 disposed:false
+84 silly fetch manifest yn@3.1.1
+85 silly packumentCache full:https://registry.npmjs.org/yn cache-miss
+86 http fetch GET 200 https://registry.npmjs.org/make-error 202ms (cache revalidated)
+87 silly packumentCache full:https://registry.npmjs.org/make-error set size:45218 disposed:false
+88 http fetch GET 200 https://registry.npmjs.org/v8-compile-cache-lib 187ms (cache revalidated)
+89 silly packumentCache full:https://registry.npmjs.org/v8-compile-cache-lib set size:8746 disposed:false
+90 http fetch GET 200 https://registry.npmjs.org/yn 184ms (cache revalidated)
+91 silly packumentCache full:https://registry.npmjs.org/yn set size:21861 disposed:false
+92 silly placeDep ROOT @cspotcode/source-map-support@0.8.1 OK for: ts-node@10.9.2 want: ^0.8.0
+93 silly placeDep ROOT @tsconfig/node10@1.0.11 OK for: ts-node@10.9.2 want: ^1.0.7
+94 silly placeDep ROOT @tsconfig/node12@1.0.11 OK for: ts-node@10.9.2 want: ^1.0.7
+95 silly placeDep ROOT @tsconfig/node14@1.0.3 OK for: ts-node@10.9.2 want: ^1.0.0
+96 silly placeDep ROOT @tsconfig/node16@1.0.4 OK for: ts-node@10.9.2 want: ^1.0.2
+97 silly placeDep ROOT acorn@8.12.1 OK for: ts-node@10.9.2 want: ^8.4.1
+98 silly placeDep ROOT acorn-walk@8.3.3 OK for: ts-node@10.9.2 want: ^8.1.1
+99 silly placeDep ROOT arg@4.1.3 OK for: ts-node@10.9.2 want: ^4.1.0
+100 silly placeDep ROOT create-require@1.1.1 OK for: ts-node@10.9.2 want: ^1.1.0
+101 silly placeDep node_modules/ts-node diff@4.0.2 OK for: ts-node@10.9.2 want: ^4.0.1
+102 silly placeDep ROOT make-error@1.3.6 OK for: ts-node@10.9.2 want: ^1.1.1
+103 silly placeDep ROOT v8-compile-cache-lib@3.0.1 OK for: ts-node@10.9.2 want: ^3.0.1
+104 silly placeDep ROOT yn@3.1.1 OK for: ts-node@10.9.2 want: 3.1.1
+105 silly fetch manifest @jridgewell/trace-mapping@0.3.9
+106 silly packumentCache full:https://registry.npmjs.org/@jridgewell%2ftrace-mapping cache-miss
+107 http fetch GET 200 https://registry.npmjs.org/@jridgewell%2ftrace-mapping 281ms (cache revalidated)
+108 silly packumentCache full:https://registry.npmjs.org/@jridgewell%2ftrace-mapping set size:146917 disposed:false
+109 silly placeDep ROOT @jridgewell/trace-mapping@0.3.9 OK for: @cspotcode/source-map-support@0.8.1 want: 0.3.9
+110 silly fetch manifest @jridgewell/resolve-uri@^3.0.3
+111 silly packumentCache full:https://registry.npmjs.org/@jridgewell%2fresolve-uri cache-miss
+112 silly fetch manifest @jridgewell/sourcemap-codec@^1.4.10
+113 silly packumentCache full:https://registry.npmjs.org/@jridgewell%2fsourcemap-codec cache-miss
+114 http fetch GET 200 https://registry.npmjs.org/@jridgewell%2fresolve-uri 362ms (cache revalidated)
+115 silly packumentCache full:https://registry.npmjs.org/@jridgewell%2fresolve-uri set size:57361 disposed:false
+116 http fetch GET 200 https://registry.npmjs.org/@jridgewell%2fsourcemap-codec 368ms (cache revalidated)
+117 silly packumentCache full:https://registry.npmjs.org/@jridgewell%2fsourcemap-codec set size:54548 disposed:false
+118 silly placeDep ROOT @jridgewell/resolve-uri@3.1.2 OK for: @jridgewell/trace-mapping@0.3.9 want: ^3.0.3
+119 silly placeDep ROOT @jridgewell/sourcemap-codec@1.5.0 OK for: @jridgewell/trace-mapping@0.3.9 want: ^1.4.10
+120 silly reify moves {}
+121 silly audit bulk request {
+121 silly audit   '@ioredis/commands': [ '1.2.0' ],
+121 silly audit   '@mongodb-js/saslprep': [ '1.1.8' ],
+121 silly audit   '@types/body-parser': [ '1.19.5' ],
+121 silly audit   '@types/chai': [ '4.3.17' ],
+121 silly audit   '@types/connect': [ '3.4.38' ],
+121 silly audit   '@types/cookiejar': [ '2.1.5' ],
+121 silly audit   '@types/cors': [ '2.8.17' ],
+121 silly audit   '@types/express': [ '4.17.21' ],
+121 silly audit   '@types/express-serve-static-core': [ '4.19.5' ],
+121 silly audit   '@types/http-errors': [ '2.0.4' ],
+121 silly audit   '@types/methods': [ '1.1.4' ],
+121 silly audit   '@types/mime': [ '1.3.5' ],
+121 silly audit   '@types/mocha': [ '10.0.7' ],
+121 silly audit   '@types/mongoose': [ '5.11.97' ],
+121 silly audit   '@types/node': [ '22.3.0' ],
+121 silly audit   '@types/qs': [ '6.9.15' ],
+121 silly audit   '@types/range-parser': [ '1.2.7' ],
+121 silly audit   '@types/send': [ '0.17.4' ],
+121 silly audit   '@types/serve-static': [ '1.15.7' ],
+121 silly audit   '@types/superagent': [ '8.1.8' ],
+121 silly audit   '@types/supertest': [ '6.0.2' ],
+121 silly audit   '@types/valid-url': [ '1.0.7' ],
+121 silly audit   '@types/webidl-conversions': [ '7.0.3' ],
+121 silly audit   '@types/whatwg-url': [ '11.0.5' ],
+121 silly audit   accepts: [ '1.3.8' ],
+121 silly audit   'ansi-colors': [ '4.1.3' ],
+121 silly audit   'ansi-regex': [ '5.0.1' ],
+121 silly audit   'ansi-styles': [ '4.3.0' ],
+121 silly audit   anymatch: [ '3.1.3' ],
+121 silly audit   argparse: [ '2.0.1' ],
+121 silly audit   'array-flatten': [ '1.1.1' ],
+121 silly audit   'assertion-error': [ '2.0.1' ],
+121 silly audit   asynckit: [ '0.4.0' ],
+121 silly audit   'balanced-match': [ '1.0.2' ],
+121 silly audit   'binary-extensions': [ '2.3.0' ],
+121 silly audit   'body-parser': [ '1.20.2' ],
+121 silly audit   'brace-expansion': [ '2.0.1', '1.1.11' ],
+121 silly audit   braces: [ '3.0.3' ],
+121 silly audit   'browser-stdout': [ '1.3.1' ],
+121 silly audit   bson: [ '6.8.0' ],
+121 silly audit   bytes: [ '3.1.2' ],
+121 silly audit   'call-bind': [ '1.0.7' ],
+121 silly audit   camelcase: [ '6.3.0' ],
+121 silly audit   chai: [ '5.1.1' ],
+121 silly audit   chalk: [ '4.1.2' ],
+121 silly audit   'supports-color': [ '7.2.0', '5.5.0', '8.1.1' ],
+121 silly audit   'check-error': [ '2.1.1' ],
+121 silly audit   chokidar: [ '3.6.0' ],
+121 silly audit   cliui: [ '7.0.4' ],
+121 silly audit   'cluster-key-slot': [ '1.1.2' ],
+121 silly audit   'color-convert': [ '2.0.1' ],
+121 silly audit   'color-name': [ '1.1.4' ],
+121 silly audit   'combined-stream': [ '1.0.8' ],
+121 silly audit   'concat-map': [ '0.0.1' ],
+121 silly audit   'content-disposition': [ '0.5.4' ],
+121 silly audit   'content-type': [ '1.0.5' ],
+121 silly audit   cookie: [ '0.6.0' ],
+121 silly audit   'cookie-signature': [ '1.0.6' ],
+121 silly audit   cors: [ '2.8.5' ],
+121 silly audit   debug: [ '2.6.9', '4.3.6' ],
+121 silly audit   decamelize: [ '4.0.0' ],
+121 silly audit   'deep-eql': [ '5.0.2' ],
+121 silly audit   'define-data-property': [ '1.1.4' ],
+121 silly audit   'delayed-stream': [ '1.0.0' ],
+121 silly audit   denque: [ '2.1.0' ],
+121 silly audit   depd: [ '2.0.0' ],
+121 silly audit   destroy: [ '1.2.0' ],
+121 silly audit   diff: [ '5.2.0', '4.0.2' ],
+121 silly audit   dotenv: [ '16.4.5' ],
+121 silly audit   'ee-first': [ '1.1.1' ],
+121 silly audit   'emoji-regex': [ '8.0.0' ],
+121 silly audit   encodeurl: [ '1.0.2' ],
+121 silly audit   'es-define-property': [ '1.0.0' ],
+121 silly audit   'es-errors': [ '1.3.0' ],
+121 silly audit   escalade: [ '3.1.2' ],
+121 silly audit   'escape-html': [ '1.0.3' ],
+121 silly audit   'escape-string-regexp': [ '4.0.0' ],
+121 silly audit   etag: [ '1.8.1' ],
+121 silly audit   express: [ '4.19.2' ],
+121 silly audit   'express-rate-limit': [ '7.4.0' ],
+121 silly audit   'fill-range': [ '7.1.1' ],
+121 silly audit   finalhandler: [ '1.2.0' ],
+121 silly audit   'find-up': [ '5.0.0' ],
+121 silly audit   flat: [ '5.0.2' ],
+121 silly audit   'form-data': [ '4.0.0' ],
+121 silly audit   forwarded: [ '0.2.0' ],
+121 silly audit   fresh: [ '0.5.2' ],
+121 silly audit   'fs.realpath': [ '1.0.0' ],
+121 silly audit   fsevents: [ '2.3.3' ],
+121 silly audit   'function-bind': [ '1.1.2' ],
+121 silly audit   'get-caller-file': [ '2.0.5' ],
+121 silly audit   'get-func-name': [ '2.0.2' ],
+121 silly audit   'get-intrinsic': [ '1.2.4' ],
+121 silly audit   glob: [ '8.1.0' ],
+121 silly audit   'glob-parent': [ '5.1.2' ],
+121 silly audit   gopd: [ '1.0.1' ],
+121 silly audit   'has-flag': [ '4.0.0', '3.0.0' ],
+121 silly audit   'has-property-descriptors': [ '1.0.2' ],
+121 silly audit   'has-proto': [ '1.0.3' ],
+121 silly audit   'has-symbols': [ '1.0.3' ],
+121 silly audit   hasown: [ '2.0.2' ],
+121 silly audit   he: [ '1.2.0' ],
+121 silly audit   'http-errors': [ '2.0.0' ],
+121 silly audit   'iconv-lite': [ '0.4.24' ],
+121 silly audit   'ignore-by-default': [ '1.0.1' ],
+121 silly audit   inflight: [ '1.0.6' ],
+121 silly audit   inherits: [ '2.0.4' ],
+121 silly audit   ioredis: [ '5.4.1' ],
+121 silly audit   ms: [ '2.1.2', '2.1.3', '2.0.0' ],
+121 silly audit   'ipaddr.js': [ '1.9.1' ],
+121 silly audit   'is-binary-path': [ '2.1.0' ],
+121 silly audit   'is-extglob': [ '2.1.1' ],
+121 silly audit   'is-fullwidth-code-point': [ '3.0.0' ],
+121 silly audit   'is-glob': [ '4.0.3' ],
+121 silly audit   'is-number': [ '7.0.0' ],
+121 silly audit   'is-plain-obj': [ '2.1.0' ],
+121 silly audit   'is-unicode-supported': [ '0.1.0' ],
+121 silly audit   'js-yaml': [ '4.1.0' ],
+121 silly audit   kareem: [ '2.6.3' ],
+121 silly audit   'locate-path': [ '6.0.0' ],
+121 silly audit   'lodash.defaults': [ '4.2.0' ],
+121 silly audit   'lodash.isarguments': [ '3.1.0' ],
+121 silly audit   'log-symbols': [ '4.1.0' ],
+121 silly audit   loupe: [ '3.1.1' ],
+121 silly audit   'media-typer': [ '0.3.0' ],
+121 silly audit   'memory-pager': [ '1.5.0' ],
+121 silly audit   'merge-descriptors': [ '1.0.1' ],
+121 silly audit   methods: [ '1.1.2' ],
+121 silly audit   mime: [ '1.6.0' ],
+121 silly audit   'mime-db': [ '1.52.0' ],
+121 silly audit   'mime-types': [ '2.1.35' ],
+121 silly audit   minimatch: [ '5.1.6', '3.1.2' ],
+121 silly audit   mocha: [ '10.7.3' ],
+121 silly audit   mongodb: [ '6.7.0' ],
+121 silly audit   'mongodb-connection-string-url': [ '3.0.1' ],
+121 silly audit   mongoose: [ '8.5.3' ],
+121 silly audit   mpath: [ '0.9.0' ],
+121 silly audit   mquery: [ '5.0.0' ],
+121 silly audit   nanoid: [ '3.3.7' ],
+121 silly audit   negotiator: [ '0.6.3' ],
+121 silly audit   nodemon: [ '3.1.4' ],
+121 silly audit   'normalize-path': [ '3.0.0' ],
+121 silly audit   'object-assign': [ '4.1.1' ],
+121 silly audit   'object-inspect': [ '1.13.2' ],
+121 silly audit   'on-finished': [ '2.4.1' ],
+121 silly audit   once: [ '1.4.0' ],
+121 silly audit   'p-limit': [ '3.1.0' ],
+121 silly audit   'p-locate': [ '5.0.0' ],
+121 silly audit   parseurl: [ '1.3.3' ],
+121 silly audit   'path-exists': [ '4.0.0' ],
+121 silly audit   'path-to-regexp': [ '0.1.7' ],
+121 silly audit   pathval: [ '2.0.0' ],
+121 silly audit   picomatch: [ '2.3.1' ],
+121 silly audit   'proxy-addr': [ '2.0.7' ],
+121 silly audit   'pstree.remy': [ '1.1.8' ],
+121 silly audit   punycode: [ '2.3.1' ],
+121 silly audit   qs: [ '6.11.0' ],
+121 silly audit   randombytes: [ '2.1.0' ],
+121 silly audit   'range-parser': [ '1.2.1' ],
+121 silly audit   'raw-body': [ '2.5.2' ],
+121 silly audit   readdirp: [ '3.6.0' ],
+121 silly audit   'redis-errors': [ '1.2.0' ],
+121 silly audit   'redis-parser': [ '3.0.0' ],
+121 silly audit   'require-directory': [ '2.1.1' ],
+121 silly audit   'safe-buffer': [ '5.2.1' ],
+121 silly audit   'safer-buffer': [ '2.1.2' ],
+121 silly audit   semver: [ '7.6.3' ],
+121 silly audit   send: [ '0.18.0' ],
+121 silly audit   'serialize-javascript': [ '6.0.2' ],
+121 silly audit   'serve-static': [ '1.15.0' ],
+121 silly audit   'set-function-length': [ '1.2.2' ],
+121 silly audit   setprototypeof: [ '1.2.0' ],
+121 silly audit   'side-channel': [ '1.0.6' ],
+121 silly audit   sift: [ '17.1.3' ],
+121 silly audit   'simple-update-notifier': [ '2.0.0' ],
+121 silly audit   'sparse-bitfield': [ '3.0.3' ],
+121 silly audit   'standard-as-callback': [ '2.1.0' ],
+121 silly audit   statuses: [ '2.0.1' ],
+121 silly audit   'string-width': [ '4.2.3' ],
+121 silly audit   'strip-ansi': [ '6.0.1' ],
+121 silly audit   'strip-json-comments': [ '3.1.1' ],
+121 silly audit   'to-regex-range': [ '5.0.1' ],
+121 silly audit   toidentifier: [ '1.0.1' ],
+121 silly audit   touch: [ '3.1.1' ],
+121 silly audit   tr46: [ '4.1.1' ],
+121 silly audit   'type-is': [ '1.6.18' ],
+121 silly audit   typescript: [ '5.5.4' ],
+121 silly audit   undefsafe: [ '2.0.5' ],
+121 silly audit   'undici-types': [ '6.18.2' ],
+121 silly audit   unpipe: [ '1.0.0' ],
+121 silly audit   'utils-merge': [ '1.0.1' ],
+121 silly audit   'valid-url': [ '1.0.9' ],
+121 silly audit   vary: [ '1.1.2' ],
+121 silly audit   'webidl-conversions': [ '7.0.0' ],
+121 silly audit   'whatwg-url': [ '13.0.0' ],
+121 silly audit   workerpool: [ '6.5.1' ],
+121 silly audit   'wrap-ansi': [ '7.0.0' ],
+121 silly audit   wrappy: [ '1.0.2' ],
+121 silly audit   y18n: [ '5.0.8' ],
+121 silly audit   yargs: [ '16.2.0' ],
+121 silly audit   'yargs-parser': [ '20.2.9' ],
+121 silly audit   'yargs-unparser': [ '2.0.0' ],
+121 silly audit   'yocto-queue': [ '0.1.0' ],
+121 silly audit   'ts-node': [ '10.9.2' ],
+121 silly audit   '@cspotcode/source-map-support': [ '0.8.1' ],
+121 silly audit   '@tsconfig/node10': [ '1.0.11' ],
+121 silly audit   '@tsconfig/node12': [ '1.0.11' ],
+121 silly audit   '@tsconfig/node14': [ '1.0.3' ],
+121 silly audit   '@tsconfig/node16': [ '1.0.4' ],
+121 silly audit   acorn: [ '8.12.1' ],
+121 silly audit   'acorn-walk': [ '8.3.3' ],
+121 silly audit   arg: [ '4.1.3' ],
+121 silly audit   'create-require': [ '1.1.1' ],
+121 silly audit   'make-error': [ '1.3.6' ],
+121 silly audit   'v8-compile-cache-lib': [ '3.0.1' ],
+121 silly audit   yn: [ '3.1.1' ],
+121 silly audit   '@jridgewell/trace-mapping': [ '0.3.9' ],
+121 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+121 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.0' ]
+121 silly audit }
+122 verbose reify failed optional dependency C:\Users\USER\capstone\url-shortner\server-app\node_modules\fsevents
+123 silly reify mark deleted [
+123 silly reify   'C:\\Users\\USER\\capstone\\url-shortner\\server-app\\node_modules\\fsevents'
+123 silly reify ]
+124 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 339ms
+125 silly audit report {}
+126 silly ADD node_modules/@jridgewell/sourcemap-codec
+127 silly ADD node_modules/@jridgewell/resolve-uri
+128 silly ADD node_modules/@jridgewell/trace-mapping
+129 silly ADD node_modules/yn
+130 silly ADD node_modules/v8-compile-cache-lib
+131 silly ADD node_modules/make-error
+132 silly ADD node_modules/create-require
+133 silly ADD node_modules/arg
+134 silly ADD node_modules/acorn-walk
+135 silly ADD node_modules/acorn
+136 silly ADD node_modules/@tsconfig/node16
+137 silly ADD node_modules/@tsconfig/node14
+138 silly ADD node_modules/@tsconfig/node12
+139 silly ADD node_modules/@tsconfig/node10
+140 silly ADD node_modules/@cspotcode/source-map-support
+141 silly ADD node_modules/ts-node
+142 silly ADD node_modules/ts-node/node_modules/diff
+143 silly ADD
+144 verbose cwd C:\Users\USER\capstone\url-shortner\server-app
+145 verbose os Windows_NT 10.0.19045
+146 verbose node v20.11.0
+147 verbose npm  v10.8.2
+148 verbose exit 0
+149 info ok
