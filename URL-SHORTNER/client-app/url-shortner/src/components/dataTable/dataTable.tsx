@@ -3,7 +3,6 @@ import axios from "axios";
 import Alert from "@mui/material/Alert";
 import Modal from "@mui/material/Modal";
 import QRCode from "react-qr-code";
-import CircularProgress from "@mui/material/CircularProgress";
 import { urlData } from "../../interface/urlData";
 import { serverUrl } from "../../helpers/constants";
 
@@ -12,12 +11,12 @@ interface IDataTableProps {
   updateReloadState: () => void;
 }
 
-const DataTable: React.FC<IDataTableProps> = ({ data, updateReloadState }) => {
+const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
+  const { data, updateReloadState } = props;
   const [alert, setAlert] = React.useState<{
     severity: "success" | "error";
     message: string;
   } | null>(null);
-  const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [selectedUrl, setSelectedUrl] = React.useState<string | null>(null);
 
@@ -30,30 +29,17 @@ const DataTable: React.FC<IDataTableProps> = ({ data, updateReloadState }) => {
 
   const handleCloseAlert = () => setAlert(null);
 
+  // Set a timeout to automatically close the alert after 5 seconds
   React.useEffect(() => {
     if (alert) {
       const timer = setTimeout(() => {
         setAlert(null);
       }, 5000); // 5000ms = 5 seconds
 
+      // Cleanup the timeout if the component unmounts or if alert changes
       return () => clearTimeout(timer);
     }
   }, [alert]);
-
-  const copyToClipboard = (shortUrl: string) => {
-    navigator.clipboard.writeText(`${serverUrl}/api/shortUrl/${shortUrl}`);
-    setAlert({ severity: "success", message: "Short URL copied to clipboard!" });
-  };
-
-  const deleteUrl = async (id: string) => {
-    try {
-      await axios.delete(`${serverUrl}/api/shortUrl/${id}`);
-      setAlert({ severity: "success", message: "URL deleted successfully." });
-      updateReloadState();
-    } catch (error) {
-      setAlert({ severity: "error", message: "Failed to delete URL." });
-    }
-  };
 
   const renderTableData = () => {
     return data.map((item) => (
@@ -130,17 +116,38 @@ const DataTable: React.FC<IDataTableProps> = ({ data, updateReloadState }) => {
         <td className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
           <button
             onClick={() => handleOpen(item.shortUrl)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="text-blue-500 underline"
           >
-            Show QR
+            View QR Code
           </button>
         </td>
       </tr>
     ));
   };
 
+  const copyToClipboard = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(`${serverUrl}/api/shortUrl/${url}`);
+      setAlert({ severity: "success", message: "Copied to clipboard!" });
+    } catch (error) {
+      console.log(error);
+      setAlert({ severity: "error", message: "Failed to copy URL." });
+    }
+  };
+
+  const deleteUrl = async (id: string) => {
+    try {
+      await axios.delete(`${serverUrl}/api/shortUrl/${id}`);
+      setAlert({ severity: "error", message: "URL deleted successfully." });
+      updateReloadState();
+    } catch (error) {
+      console.log(error);
+      setAlert({ severity: "error", message: "Failed to delete URL." });
+    }
+  };
+
   return (
-    <div className="relative p-4">
+    <div className="container mx-auto p-4">
       {alert && (
         <div className="absolute top-16 right-0 p-4">
           <Alert severity={alert.severity} onClose={handleCloseAlert}>
@@ -148,18 +155,6 @@ const DataTable: React.FC<IDataTableProps> = ({ data, updateReloadState }) => {
           </Alert>
         </div>
       )}
-
-      {loading && (
-        <Modal open={loading}>
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-4 rounded flex items-center justify-center">
-              <CircularProgress />
-              <span className="ml-4">Processing...</span>
-            </div>
-          </div>
-        </Modal>
-      )}
-
       <div className="overflow-x-auto">
         <table className="min-w-full text-left">
           <thead>
@@ -184,7 +179,6 @@ const DataTable: React.FC<IDataTableProps> = ({ data, updateReloadState }) => {
           <tbody>{renderTableData()}</tbody>
         </table>
       </div>
-
       <Modal open={open} onClose={handleClose}>
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded">
