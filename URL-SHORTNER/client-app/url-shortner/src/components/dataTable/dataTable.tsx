@@ -37,7 +37,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         key={item._id}
         className="border-b text-white bg-gray-600 hover:bg-white hover:text-gray-800"
       >
-        <td className="px-2 py-3 md:px-4 break-words">
+        <td className="px-2 py-3 md:px-4 break-words w-4/12">
           <a
             href={item.fullUrl}
             target="_blank"
@@ -47,7 +47,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             {item.fullUrl}
           </a>
         </td>
-        <td className="px-2 py-3 md:px-4">
+        <td className="px-2 py-3 md:px-4 w-3/12">
           <a
             href={`${serverUrl}/api/shortUrl/${item.shortUrl}`}
             target="_blank"
@@ -57,10 +57,10 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             {item.shortUrl}
           </a>
         </td>
-        <td className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base">
+        <td className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base w-1/12">
           {item.clicks}
         </td>
-        <td className="px-2 py-3 md:px-4">
+        <td className="px-2 py-3 md:px-4 w-2/12">
           <div className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-2">
             <div
               className="cursor-pointer"
@@ -103,7 +103,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             </div>
           </div>
         </td>
-        <td className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
+        <td className="px-2 py-3 md:px-4 w-2/12 text-xs sm:text-sm md:text-base">
           <button
             onClick={() => handleOpen(item.shortUrl)}
             className="text-blue-500 underline"
@@ -139,70 +139,47 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
   return (
     <div className="container mx-auto pt-2 pb-10">
       {alert && (
-        <div className="mb-4">
-          <Alert
-            severity={alert.severity}
-            onClose={handleCloseAlert}
-            sx={{ width: "100%" }}
-          >
+        <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50">
+          <Alert severity={alert.severity} onClose={handleCloseAlert}>
             {alert.message}
           </Alert>
         </div>
       )}
-      <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
-        <table className="w-full table-fixed text-xs text-left rtl:text-right text-gray-500">
-          <thead className="text-xs sm:text-sm md:text-base uppercase text-gray-50 bg-gray-700">
-            <tr>
-              <th
-                scope="col"
-                className="px-2 py-3 w-4/12 md:px-6 truncate"
-              >
-                Full URL
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 w-3/12 md:px-6 truncate"
-              >
-                Short URL
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 w-1/12 text-center md:px-6 truncate"
-              >
-                Clicks
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 w-2/12 md:px-6 truncate"
-              >
-                Action
-              </th>
-              <th
-                scope="col"
-                className="px-2 py-3 w-2/12 md:px-6 truncate"
-              >
-                QR Code
-              </th>
-            </tr>
-          </thead>
-          <tbody>{renderTableData()}</tbody>
-        </table>
-      </div>
-
       <Modal open={open} onClose={handleClose}>
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded shadow-lg">
-            <h2 className="text-xl font-bold mb-4">QR Code for {selectedUrl}</h2>
-            <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} size={256} />
+        <div className="flex items-center justify-center h-screen">
+          <div className="bg-white p-4 rounded-lg shadow-md">
+            <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
             <button
               onClick={handleClose}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             >
               Close
             </button>
           </div>
         </div>
       </Modal>
+      <table className="min-w-full divide-y divide-gray-200 table-auto">
+        <thead>
+          <tr className="bg-gray-800">
+            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+              Full URL
+            </th>
+            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+              Short URL
+            </th>
+            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+              Clicks
+            </th>
+            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+              Actions
+            </th>
+            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+              QR Code
+            </th>
+          </tr>
+        </thead>
+        <tbody>{renderTableData()}</tbody>
+      </table>
     </div>
   );
 };
