@@ -63,9 +63,7 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="flex items-center space-x-2">
               <div className="relative flex-grow">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-slate-800">
-                  scissor.link/
-                </div>
+                
                 <input
                   type="text"
                   placeholder="e.g. https://www.example.com"
