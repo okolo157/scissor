@@ -43,20 +43,6 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
     }
   }, [alert]);
 
-  // Simulate the shorten process (assuming a function shortenUrl exists)
-  const shortenUrl = async (url: string) => {
-    setLoading(true); // Start loading
-    try {
-      await axios.post(`${serverUrl}/api/shortUrl`, { fullUrl: url });
-      setAlert({ severity: "success", message: "URL shortened successfully." });
-      updateReloadState(); // Update the table data
-    } catch (error) {
-      setAlert({ severity: "error", message: "Failed to shorten URL." });
-    } finally {
-      setLoading(false); // End loading
-    }
-  };
-
   const renderTableData = () => {
     return data.map((item) => (
       <tr
