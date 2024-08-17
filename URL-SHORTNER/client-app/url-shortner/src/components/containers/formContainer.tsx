@@ -76,7 +76,7 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
               </div>
               <button
                 type="submit"
-                className="w-full md:w-auto p-3 md:p-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                className="md:w-auto p-3 md:p-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
               >
                 Shorten
               </button>
