@@ -188,7 +188,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
                 onClick={handleClose}
                 className="cursor-pointer text-gray-600"
                 style={{ fontSize: 28 }}
-              />Close</div>Button>
+              > Close </Button>
             </div>
             {selectedUrl && (
               <div className="flex justify-center">
