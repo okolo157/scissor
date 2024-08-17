@@ -150,22 +150,37 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         </div>
       )}
       <div className="relative overflow-x-auto shadow-sm sm:rounded-lg">
-        <table className="w-full table-fixed text-xs sm:text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-sm uppercase text-gray-50 bg-gray-700">
+        <table className="w-full table-fixed text-xs text-left rtl:text-right text-gray-500">
+          <thead className="text-xs sm:text-sm md:text-base uppercase text-gray-50 bg-gray-700">
             <tr>
-              <th scope="col" className="px-2 py-3 w-4/12 md:px-4">
+              <th
+                scope="col"
+                className="px-2 py-3 w-4/12 md:px-4 truncate"
+              >
                 Full URL
               </th>
-              <th scope="col" className="px-2 py-3 w-3/12 md:px-4">
+              <th
+                scope="col"
+                className="px-2 py-3 w-3/12 md:px-4 truncate"
+              >
                 Short URL
               </th>
-              <th scope="col" className="px-2 py-3 w-1/12 text-center md:px-4">
+              <th
+                scope="col"
+                className="px-2 py-3 w-1/12 text-center md:px-4 truncate"
+              >
                 Clicks
               </th>
-              <th scope="col" className="px-2 py-3 w-2/12 md:px-4">
+              <th
+                scope="col"
+                className="px-2 py-3 w-2/12 md:px-4 truncate"
+              >
                 Action
               </th>
-              <th scope="col" className="px-2 py-3 w-2/12 md:px-4">
+              <th
+                scope="col"
+                className="px-2 py-3 w-2/12 md:px-4 truncate"
+              >
                 QR Code
               </th>
             </tr>
