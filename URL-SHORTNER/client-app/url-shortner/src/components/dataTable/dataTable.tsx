@@ -3,6 +3,7 @@ import axios from "axios";
 import Alert from "@mui/material/Alert";
 import Modal from "@mui/material/Modal";
 import QRCode from "react-qr-code";
+import CircularProgress from "@mui/material/CircularProgress";
 import { urlData } from "../../interface/urlData";
 import { serverUrl } from "../../helpers/constants";
 
@@ -17,6 +18,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
     severity: "success" | "error";
     message: string;
   } | null>(null);
+  const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [selectedUrl, setSelectedUrl] = React.useState<string | null>(null);
 
@@ -27,8 +29,32 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
 
   const handleClose = () => setOpen(false);
 
-  const handleCloseAlert = () => {
-    setAlert(null);
+  const handleCloseAlert = () => setAlert(null);
+
+  // Set a timeout to automatically close the alert after 5 seconds
+  React.useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        setAlert(null);
+      }, 5000); // 5000ms = 5 seconds
+
+      // Cleanup the timeout if the component unmounts or if alert changes
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
+
+  // Simulate the shorten process (assuming a function shortenUrl exists)
+  const shortenUrl = async (url: string) => {
+    setLoading(true); // Start loading
+    try {
+      await axios.post(`${serverUrl}/api/shortUrl`, { fullUrl: url });
+      setAlert({ severity: "success", message: "URL shortened successfully." });
+      updateReloadState(); // Update the table data
+    } catch (error) {
+      setAlert({ severity: "error", message: "Failed to shorten URL." });
+    } finally {
+      setLoading(false); // End loading
+    }
   };
 
   const renderTableData = () => {
@@ -37,7 +63,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         key={item._id}
         className="border-b text-white bg-gray-600 hover:bg-white hover:text-gray-800"
       >
-        <td className="px-2 py-3 md:px-2 text-left break-words w-4/12">
+        <td className="px-2 py-3 md:px-4 break-words">
           <a
             href={item.fullUrl}
             target="_blank"
@@ -47,7 +73,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             {item.fullUrl}
           </a>
         </td>
-        <td className="px-2 py-3 md:px-3 text-left w-3/12">
+        <td className="px-2 py-3 md:px-4">
           <a
             href={`${serverUrl}/api/shortUrl/${item.shortUrl}`}
             target="_blank"
@@ -57,10 +83,10 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             {item.shortUrl}
           </a>
         </td>
-        <td className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base w-1/12">
+        <td className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base">
           {item.clicks}
         </td>
-        <td className="px-2 py-3 md:px-4 w-2/12">
+        <td className="px-2 py-3 md:px-4">
           <div className="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-2">
             <div
               className="cursor-pointer"
@@ -103,83 +129,88 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             </div>
           </div>
         </td>
-        <td className="px-2 py-3 md:px-2 text-left w-2/12 text-xs sm:text-sm md:text-base">
+        <td className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
           <button
             onClick={() => handleOpen(item.shortUrl)}
-            className="text-blue-500 underline"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            View QR Code
+            Show QR
           </button>
         </td>
       </tr>
     ));
   };
 
-  const copyToClipboard = async (url: string) => {
-    try {
-      await navigator.clipboard.writeText(`${serverUrl}/api/shortUrl/${url}`);
-      setAlert({ severity: "success", message: "Copied to clipboard!" });
-    } catch (error) {
-      console.log(error);
-      setAlert({ severity: "error", message: "Failed to copy URL." });
-    }
+  const copyToClipboard = (shortUrl: string) => {
+    navigator.clipboard.writeText(`${serverUrl}/api/shortUrl/${shortUrl}`);
+    setAlert({ severity: "success", message: "Short URL copied to clipboard!" });
   };
 
   const deleteUrl = async (id: string) => {
     try {
       await axios.delete(`${serverUrl}/api/shortUrl/${id}`);
-      setAlert({ severity: "error", message: "URL deleted successfully." });
+      setAlert({ severity: "success", message: "URL deleted successfully." });
       updateReloadState();
     } catch (error) {
-      console.log(error);
       setAlert({ severity: "error", message: "Failed to delete URL." });
     }
   };
 
   return (
-    <div className="container mx-auto pt-2 pb-10">
+    <div className="relative p-4">
       {alert && (
-        <div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="absolute top-16 right-0 p-4">
           <Alert severity={alert.severity} onClose={handleCloseAlert}>
             {alert.message}
           </Alert>
         </div>
       )}
+
+      {loading && (
+        <Modal open={loading}>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-4 rounded flex items-center justify-center">
+              <CircularProgress />
+              <span className="ml-4">Processing...</span>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-left">
+          <thead>
+            <tr className="bg-gray-800 text-white">
+              <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
+                Full URL
+              </th>
+              <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
+                Short URL
+              </th>
+              <th className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base">
+                Clicks
+              </th>
+              <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
+                Actions
+              </th>
+              <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base">
+                QR Code
+              </th>
+            </tr>
+          </thead>
+          <tbody>{renderTableData()}</tbody>
+        </table>
+      </div>
+
       <Modal open={open} onClose={handleClose}>
-        <div className="flex items-center justify-center h-screen">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
-            <button
-              onClick={handleClose}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
-            >
-              Close
-            </button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded">
+            {selectedUrl && (
+              <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
+            )}
           </div>
         </div>
       </Modal>
-      <table className="min-w-full divide-y divide-gray-200 table-auto">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="px-2 py-3 md:px-2 text-left text-xs sm:text-sm md:text-base text-white">
-              Full URL
-            </th>
-            <th className="px-2 py-3 md:px-3 text-left text-xs sm:text-sm md:text-base text-white">
-              Short URL
-            </th>
-            <th className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base text-white">
-              Clicks
-            </th>
-            <th className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base text-white">
-              Actions
-            </th>
-            <th className="px-2 py-3 md:px-2 text-left text-xs sm:text-sm md:text-base text-white">
-              QR Code
-            </th>
-          </tr>
-        </thead>
-        <tbody>{renderTableData()}</tbody>
-      </table>
     </div>
   );
 };
