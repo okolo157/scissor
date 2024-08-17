@@ -5,7 +5,7 @@ import Modal from "@mui/material/Modal";
 import QRCode from "react-qr-code";
 import { urlData } from "../../interface/urlData";
 import { serverUrl } from "../../helpers/constants";
-import CloseIcon from "@mui/icons-material/Close"; // Import MUI Close icon
+
 
 interface IDataTableProps {
   data: urlData[];
@@ -184,11 +184,11 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded relative w-full max-w-xs">
             <div className="absolute top-2 right-2">
-              <CloseIcon
+              <Button
                 onClick={handleClose}
                 className="cursor-pointer text-gray-600"
                 style={{ fontSize: 28 }}
-              />
+              />Close</div>Button>
             </div>
             {selectedUrl && (
               <div className="flex justify-center">
