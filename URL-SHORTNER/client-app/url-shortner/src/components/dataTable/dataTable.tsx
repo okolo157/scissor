@@ -12,8 +12,7 @@ interface IDataTableProps {
   updateReloadState: () => void;
 }
 
-const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
-  const { data, updateReloadState } = props;
+const DataTable: React.FC<IDataTableProps> = ({ data, updateReloadState }) => {
   const [alert, setAlert] = React.useState<{
     severity: "success" | "error";
     message: string;
@@ -31,17 +30,30 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
 
   const handleCloseAlert = () => setAlert(null);
 
-  // Set a timeout to automatically close the alert after 5 seconds
   React.useEffect(() => {
     if (alert) {
       const timer = setTimeout(() => {
         setAlert(null);
       }, 5000); // 5000ms = 5 seconds
 
-      // Cleanup the timeout if the component unmounts or if alert changes
       return () => clearTimeout(timer);
     }
   }, [alert]);
+
+  const copyToClipboard = (shortUrl: string) => {
+    navigator.clipboard.writeText(`${serverUrl}/api/shortUrl/${shortUrl}`);
+    setAlert({ severity: "success", message: "Short URL copied to clipboard!" });
+  };
+
+  const deleteUrl = async (id: string) => {
+    try {
+      await axios.delete(`${serverUrl}/api/shortUrl/${id}`);
+      setAlert({ severity: "success", message: "URL deleted successfully." });
+      updateReloadState();
+    } catch (error) {
+      setAlert({ severity: "error", message: "Failed to delete URL." });
+    }
+  };
 
   const renderTableData = () => {
     return data.map((item) => (
@@ -125,21 +137,6 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         </td>
       </tr>
     ));
-  };
-
-  const copyToClipboard = (shortUrl: string) => {
-    navigator.clipboard.writeText(`${serverUrl}/api/shortUrl/${shortUrl}`);
-    setAlert({ severity: "success", message: "Short URL copied to clipboard!" });
-  };
-
-  const deleteUrl = async (id: string) => {
-    try {
-      await axios.delete(`${serverUrl}/api/shortUrl/${id}`);
-      setAlert({ severity: "success", message: "URL deleted successfully." });
-      updateReloadState();
-    } catch (error) {
-      setAlert({ severity: "error", message: "Failed to delete URL." });
-    }
   };
 
   return (
