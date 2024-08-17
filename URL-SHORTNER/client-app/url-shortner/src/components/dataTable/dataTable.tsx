@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import QRCode from "react-qr-code";
 import { urlData } from "../../interface/urlData";
 import { serverUrl } from "../../helpers/constants";
+import CloseIcon from "@mui/icons-material/Close"; // Import MUI Close icon
 
 interface IDataTableProps {
   data: urlData[];
@@ -181,27 +182,18 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
       </div>
       <Modal open={open} onClose={handleClose}>
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded relative">
-            <button
-              onClick={handleClose}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              aria-label="Close"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-6 h-6"
-              >
-                <path d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+          <div className="bg-white p-4 rounded relative w-full max-w-xs">
+            <div className="absolute top-2 right-2">
+              <CloseIcon
+                onClick={handleClose}
+                className="cursor-pointer text-gray-600"
+                style={{ fontSize: 28 }}
+              />
+            </div>
             {selectedUrl && (
-              <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
+              <div className="flex justify-center">
+                <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
+              </div>
             )}
           </div>
         </div>
