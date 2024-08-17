@@ -37,7 +37,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         key={item._id}
         className="border-b text-white bg-gray-600 hover:bg-white hover:text-gray-800"
       >
-        <td className="px-2 py-3 md:px-4 break-words w-4/12">
+        <td className="px-2 py-3 md:px-2 text-left break-words w-4/12">
           <a
             href={item.fullUrl}
             target="_blank"
@@ -47,7 +47,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             {item.fullUrl}
           </a>
         </td>
-        <td className="px-2 py-3 md:px-4 w-3/12">
+        <td className="px-2 py-3 md:px-3 text-left w-3/12">
           <a
             href={`${serverUrl}/api/shortUrl/${item.shortUrl}`}
             target="_blank"
@@ -103,7 +103,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             </div>
           </div>
         </td>
-        <td className="px-2 py-3 md:px-4 w-2/12 text-xs sm:text-sm md:text-base">
+        <td className="px-2 py-3 md:px-2 text-left w-2/12 text-xs sm:text-sm md:text-base">
           <button
             onClick={() => handleOpen(item.shortUrl)}
             className="text-blue-500 underline"
@@ -161,19 +161,19 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
       <table className="min-w-full divide-y divide-gray-200 table-auto">
         <thead>
           <tr className="bg-gray-800">
-            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+            <th className="px-2 py-3 md:px-2 text-left text-xs sm:text-sm md:text-base text-white">
               Full URL
             </th>
-            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+            <th className="px-2 py-3 md:px-3 text-left text-xs sm:text-sm md:text-base text-white">
               Short URL
             </th>
-            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+            <th className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base text-white">
               Clicks
             </th>
-            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+            <th className="px-2 py-3 md:px-4 text-center text-xs sm:text-sm md:text-base text-white">
               Actions
             </th>
-            <th className="px-2 py-3 md:px-4 text-xs sm:text-sm md:text-base text-white">
+            <th className="px-2 py-3 md:px-2 text-left text-xs sm:text-sm md:text-base text-white">
               QR Code
             </th>
           </tr>
