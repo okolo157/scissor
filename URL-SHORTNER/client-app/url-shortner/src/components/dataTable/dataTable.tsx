@@ -37,7 +37,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         key={item._id}
         className="border-b text-white bg-gray-600 hover:bg-white hover:text-gray-800"
       >
-        <td className="px-2 py-3 md:px-6 break-words">
+        <td className="px-2 py-3 md:px-6 truncate">
           <a
             href={item.fullUrl}
             target="_blank"
@@ -47,7 +47,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
             {item.fullUrl}
           </a>
         </td>
-        <td className="px-2 py-3 md:px-6">
+        <td className="px-2 py-3 md:px-6 truncate">
           <a
             href={`${serverUrl}/api/shortUrl/${item.shortUrl}`}
             target="_blank"
@@ -70,7 +70,9 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
                 fill="currentColor"
                 className="w-5 h-5 md:w-6 md:h-6"
               >
-                {/* SVG path for the copy icon */}
+                <path d="M19 21H9C7.897 21 7 20.103 7 19V7H5v12c0 2.206 1.794 4 4 4h10v-2z" />
+                <path d="M18 2H8c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm0 14H8V4h10v12z" />
+                <path d="M11 6h2v2h-2zM15 6h2v2h-2zM11 10h2v2h-2zM15 10h2v2h-2z" />
               </svg>
             </div>
             <div
@@ -83,7 +85,8 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
                 fill="red"
                 className="w-5 h-5 md:w-6 md:h-6"
               >
-                {/* SVG path for the delete icon */}
+                <path d="M5 3h14v2H5zm2 3h10v14H7z" />
+                <path d="M9 7h2v10H9zm4 0h2v10h-2z" />
               </svg>
             </div>
           </div>
