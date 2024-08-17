@@ -181,23 +181,24 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         </table>
       </div>
       <Modal open={open} onClose={handleClose}>
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded relative w-full max-w-xs">
-            <div className="absolute top-2 right-2">
-              <Button
-                onClick={handleClose}
-                className="cursor-pointer text-gray-600"
-                style={{ fontSize: 28 }}
-              > Close </Button>
-            </div>
-            {selectedUrl && (
-              <div className="flex justify-center">
-                <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
-              </div>
-            )}
-          </div>
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="bg-white p-4 rounded relative w-full max-w-xs">
+      <button
+        onClick={handleClose}
+        className="absolute top-2 right-2 text-gray-600 text-xl"
+        style={{ border: 'none', background: 'transparent' }}
+      >
+        ×
+      </button>
+      {selectedUrl && (
+        <div className="flex justify-center">
+          <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
         </div>
-      </Modal>
+      )}
+    </div>
+  </div>
+</Modal>
+
     </div>
   );
 };
