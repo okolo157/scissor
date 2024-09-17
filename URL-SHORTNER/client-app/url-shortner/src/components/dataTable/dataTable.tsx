@@ -6,7 +6,6 @@ import QRCode from "react-qr-code";
 import { urlData } from "../../interface/urlData";
 import { serverUrl } from "../../helpers/constants";
 
-
 interface IDataTableProps {
   data: urlData[];
   updateReloadState: () => void;
@@ -49,14 +48,9 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         className="border-b text-white bg-gray-600 hover:bg-white hover:text-gray-800"
       >
         <td className="px-2 py-3 md:px-4 break-words">
-          <a
-            href={item.fullUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="block text-xs sm:text-sm md:text-base"
-          >
+          <p className="block text-xs sm:text-sm md:text-base">
             {item.fullUrl}
-          </a>
+          </p>
         </td>
         <td className="px-2 py-3 md:px-4">
           <a
@@ -95,10 +89,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
                 />
               </svg>
             </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => deleteUrl(item._id)}
-            >
+            <div className="cursor-pointer" onClick={() => deleteUrl(item._id)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -181,24 +172,23 @@ const DataTable: React.FunctionComponent<IDataTableProps> = (props) => {
         </table>
       </div>
       <Modal open={open} onClose={handleClose}>
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-white p-4 rounded relative w-full max-w-xs">
-      <button
-        onClick={handleClose}
-        className="absolute top-2 right-2 text-gray-600 text-xl"
-        style={{ border: 'none', background: 'transparent' }}
-      >
-        ×
-      </button>
-      {selectedUrl && (
-        <div className="flex justify-center">
-          <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded relative w-full max-w-xs">
+            <button
+              onClick={handleClose}
+              className="absolute top-2 right-2 text-gray-600 text-xl"
+              style={{ border: "none", background: "transparent" }}
+            >
+              ×
+            </button>
+            {selectedUrl && (
+              <div className="flex justify-center">
+                <QRCode value={`${serverUrl}/api/shortUrl/${selectedUrl}`} />
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
-  </div>
-</Modal>
-
+      </Modal>
     </div>
   );
 };
