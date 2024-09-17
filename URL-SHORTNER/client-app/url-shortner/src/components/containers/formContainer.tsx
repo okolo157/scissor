@@ -45,22 +45,13 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
     <div className="container mx-auto p-4">
       <div className="relative my-8 rounded-xl overflow-hidden">
         <img
-<<<<<<< HEAD
-          src="../src/assets/newp.jpg"
-=======
           src="https://getwallpapers.com/wallpaper/full/1/4/c/1160356-download-free-tech-hd-wallpapers-1920x1080-download-free.jpg"
->>>>>>> 7c517196e196590b1e72587d855833b27b592758
           alt="Background"
           className="absolute top-0 left-0 w-full h-full object-cover"
           style={{ filter: "brightness(0.6)", transform: "scale(1.1)" }}
         />
-<<<<<<< HEAD
-        <div className="relative w-full h-full rounded-xl p-20 backdrop-brightness-50 flex flex-col items-center justify-center">
-          <h2 className="text-white text-4xl font-bold text-center pb-4">
-=======
         <div className="relative w-full h-full rounded-xl p-8 md:p-20 backdrop-brightness-50 flex flex-col items-center justify-center">
           <h2 className="text-white text-3xl md:text-4xl font-bold text-center pb-4">
->>>>>>> 7c517196e196590b1e72587d855833b27b592758
             Scissor URL Shortener
           </h2>
           <p className="text-white text-center pb-2 text-lg md:text-xl font-light">
