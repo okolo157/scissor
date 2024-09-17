@@ -42,35 +42,41 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
   };
 
   return (
-    <div className="container mx-auto p-2">
+    <div className="container mx-auto p-4">
       <div className="relative my-8 rounded-xl overflow-hidden">
         <img
+<<<<<<< HEAD
           src="../src/assets/newp.jpg"
+=======
+          src="https://getwallpapers.com/wallpaper/full/1/4/c/1160356-download-free-tech-hd-wallpapers-1920x1080-download-free.jpg"
+>>>>>>> 7c517196e196590b1e72587d855833b27b592758
           alt="Background"
           className="absolute top-0 left-0 w-full h-full object-cover"
           style={{ filter: "brightness(0.6)", transform: "scale(1.1)" }}
         />
+<<<<<<< HEAD
         <div className="relative w-full h-full rounded-xl p-20 backdrop-brightness-50 flex flex-col items-center justify-center">
           <h2 className="text-white text-4xl font-bold text-center pb-4">
+=======
+        <div className="relative w-full h-full rounded-xl p-8 md:p-20 backdrop-brightness-50 flex flex-col items-center justify-center">
+          <h2 className="text-white text-3xl md:text-4xl font-bold text-center pb-4">
+>>>>>>> 7c517196e196590b1e72587d855833b27b592758
             Scissor URL Shortener
           </h2>
-          <p className="text-white text-center pb-2 text-xl font-light">
+          <p className="text-white text-center pb-2 text-lg md:text-xl font-light">
             Paste your link to shorten it
           </p>
           <p className="text-white text-center pb-4 text-sm font-thin">
             Free tool to shorten URL or reduce link length
           </p>
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-            <div className="flex items-center space-x-2">
-              <div className="relative flex-grow">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-slate-800">
-                  scissor.link/
-                </div>
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+              <div className="relative flex-grow w-full">
                 <input
                   type="text"
                   placeholder="e.g. https://www.example.com"
                   required
-                  className="block w-full p-4 ps-32 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full p-3 md:p-4 text-sm md:text-base text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
                   value={fullUrl}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setFullUrl(e.target.value)
@@ -79,7 +85,7 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
               </div>
               <button
                 type="submit"
-                className="p-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                className="md:w-auto p-3 md:p-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
               >
                 Shorten
               </button>
