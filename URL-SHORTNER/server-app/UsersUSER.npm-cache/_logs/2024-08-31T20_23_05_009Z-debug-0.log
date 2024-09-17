@@ -7,7 +7,9 @@
 6 silly config load:file:C:\Users\USER\AppData\Roaming\npm\etc\npmrc
 7 verbose title npm run dev
 8 verbose argv "run" "dev"
-9 verbose logfile logs-max:10 dir:C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T11_42_19_802Z-
-10 verbose logfile C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-16T11_42_19_802Z-debug-0.log
+9 verbose logfile logs-max:10 dir:C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-31T20_23_05_009Z-
+10 verbose logfile C:\Users\USER\capstone\url-shortner\server-app\UsersUSER.npm-cache\_logs\2024-08-31T20_23_05_009Z-debug-0.log
 11 silly logfile start cleaning logs, removing 2 files
-12 silly logfile done cleaning log files
+12 http fetch GET https://registry.npmjs.org/npm attempt 1 failed with ENOTFOUND
+13 silly logfile done cleaning log files
+14 http fetch GET https://registry.npmjs.org/npm attempt 2 failed with ENOTFOUND

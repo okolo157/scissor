@@ -1,6 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress"; // MUI spinner
 import { serverUrl } from "../../helpers/constants";
 
 interface IFormContainerProps {
@@ -10,6 +11,7 @@ interface IFormContainerProps {
 const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
   const { updateReloadState } = props;
   const [fullUrl, setFullUrl] = React.useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false); // Loading state
   const [alert, setAlert] = React.useState<{
     severity: "success" | "error";
     message: string;
@@ -28,6 +30,7 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true); // Start loading
     try {
       await axios.post(`${serverUrl}/api/shortUrl`, {
         fullUrl: fullUrl,
@@ -38,6 +41,8 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
     } catch (error) {
       console.log(error);
       setAlert({ severity: "error", message: "Failed to shorten URL." });
+    } finally {
+      setLoading(false); // Stop loading once request is complete
     }
   };
 
@@ -77,8 +82,13 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
               <button
                 type="submit"
                 className="md:w-auto p-3 md:p-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
+                disabled={loading} // Disable button while loading
               >
-                Shorten
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" /> // Show loading spinner
+                ) : (
+                  "Shorten"
+                )}
               </button>
             </div>
           </form>
