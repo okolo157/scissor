@@ -66,7 +66,7 @@ yarn dev
 
 # Frontend Setup
 Navigate to the frontend directory:
-cd ../frontend
+cd ../client-app
 
 
 Install dependencies:
@@ -90,22 +90,22 @@ yarn dev
 
 **Running the Project**
 To run the project, ensure both the backend and frontend servers are running.
+e.g
+
 Backend: http://localhost:5000
 Frontend: http://localhost:3000
 
 
 # Deployment
 **Backend Deployment**
-Deploy your backend to a cloud service like Heroku, AWS, or DigitalOcean.
-Ensure your MongoDB connection string is properly configured in the production environment.
+Deploy the backend to a cloud service like Heroku, AWS, or DigitalOcean.
+Ensure the MongoDB connection string is properly configured in the production environment.
 Set up the production environment variables on your deployment platform.
 
 
 **Frontend Deployment**
 Build the frontend for production:
 npm run build
-or
-yarn build
 Deploy the frontend build folder to a static hosting service like Render, Netlify, Vercel, or GitHub Pages.
 
 Update the VITE_SERVER_URL in your environment variables to point to the live backend URL.
