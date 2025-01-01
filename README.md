@@ -19,7 +19,7 @@ View the number of clicks on each shortened URL.
 Generate QR codes for shortened URLs.
 Copy shortened URLs to clipboard.
 Rate limiting to prevent abuse.
-User-friendly interface with a video background.
+
 
 
 # Tech Stack
@@ -38,11 +38,8 @@ Clone the repository:
 git clone https://github.com/vik1234-del/scissor.git
 cd scissor/url-shortner
 
-Navigate to the backend directory:
-cd backend
+Navigate to the directory:
 Install dependencies:
-
-
 npm install
 **or**
 yarn install
@@ -66,7 +63,7 @@ yarn dev
 
 # Frontend Setup
 Navigate to the frontend directory:
-cd ../client-app
+e.g cd ../client-app
 
 
 Install dependencies:
