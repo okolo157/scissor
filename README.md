@@ -2,26 +2,6 @@
 
 Scissor is a simple and effective URL shortening service. This project allows users to input a long URL and receive a shortened version, which can be easily shared and tracked. The project includes both a frontend built with React and Vite, and a backend built with Express and MongoDB.
 
-Table of Contents
-Features
-Tech Stack
-Installation
-Backend Setup
-Frontend Setup
-Environment Variables
-Running the Project
-Deployment
-Contributing
-License
-Features
-Shorten long URLs.
-View the number of clicks on each shortened URL.
-Generate QR codes for shortened URLs.
-Copy shortened URLs to clipboard.
-Rate limiting to prevent abuse.
-
-
-
 # Tech Stack
 Frontend: React, Vite, TypeScript, Tailwind CSS
 Backend: Node.js, Express, MongoDB
