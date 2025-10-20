@@ -1,12 +1,21 @@
 import * as React from "react";
 
-interface IFooterProps {}
-
-const Footer: React.FunctionComponent<IFooterProps> = () => {
+const Footer: React.FC = () => {
   return (
-    <div className="bg-slate-900 text-white text-base text-center py-5">
-      Copyright &#169; Scissor | Victor Okolo
-    </div>
+    <footer className="w-full mt-16 border-t border-white/10 bg-slate-900/50 backdrop-blur-md text-center py-6">
+      <p className="text-sm text-blue-100/80">
+        © {new Date().getFullYear()}{" "}
+        <span className="font-semibold text-blue-300">Scissor</span> • Crafted with 💙 by{" "}
+        <a
+          href="https://victor.is-a.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline hover:text-blue-400 transition-colors"
+        >
+          Victor Okolo
+        </a>
+      </p>
+    </footer>
   );
 };
 
