@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
-import Footer from "./components/footer/footer";
+// import Footer from "./components/footer/footer";
 
 export default function App() {
   return (
@@ -8,7 +8,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
