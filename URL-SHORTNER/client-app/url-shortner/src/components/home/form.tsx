@@ -16,6 +16,8 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
   } | null>(null);
   const [shortenedUrl, setShortenedUrl] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState<boolean>(false);
+  const [submittedUrl, setSubmittedUrl] = React.useState<string | null>(null);
+
 
   // Auto-hide alerts
   React.useEffect(() => {
@@ -31,7 +33,8 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
 
     try {
       setLoading(true);
-      const result = await onSubmit(fullUrl); // Expecting { shortUrl }
+      const result = await onSubmit(fullUrl);
+      setSubmittedUrl(fullUrl);  // save original URL for display
       setShortenedUrl(`${window.location.origin}/${result.shortUrl}`);
       setAlert({ severity: "success", message: "URL successfully shortened!" });
     } catch (err) {
@@ -98,10 +101,10 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
       {shortenedUrl && (
         <div className="mt-6 p-4 w-full max-w-sm border border-gray-200 bg-white/10 dark:bg-gray-800/40 backdrop-blur-md rounded-lg">
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">Original URL:</p>
-          <p className="text-sm text-gray-900 dark:text-white truncate mb-3">{fullUrl}</p>
+          <p className="text-sm text-gray-900 dark:text-white truncate mb-3">{submittedUrl}</p>
 
           <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">Shortened URL:</p>
-          <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-900/40 p-2 rounded-md">
+          <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-900/40 p-2 rounded-md overflow-x-auto">
             <a
               href={shortenedUrl}
               target="_blank"
