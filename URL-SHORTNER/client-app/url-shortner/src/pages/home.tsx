@@ -59,16 +59,7 @@ const handleShortenUrl = async (originalUrl: string) => {
         transition={{ duration: 0.4 }}
         className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-8"
       >
-        <div className="container mx-auto flex flex-col items-center justify-center gap-3 text-center">
-            <img
-            src={Logo}
-            alt="Scissor Logo"
-            className="w-24 h-24 md:w-14 md:h-14 object-contain"
-            />
-            <h1 className="text-white text-2xl md:text-3xl font-semibold tracking-wide">
-            Scissor <span className="text-blue-400">URL Shortener</span>
-            </h1>
-        </div>
+
 
 
         <motion.div
