@@ -6,7 +6,7 @@ import FormContainer from "../components/home/form";
 import { CircularProgress } from "@mui/material";
 import { Check, Copy } from "lucide-react";
 import { motion } from "framer-motion";
-import Logo from "../../assets/scissor-logo.png";
+import Logo from "../assets/scissor-logo.png";
 
 
 const Home: React.FC = () => {
