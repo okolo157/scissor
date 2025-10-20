@@ -33,7 +33,7 @@ const Container: React.FC<IContainerProps> = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-12 p-4">
+    <div className="max-w-lg mx-auto mt-12 p-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800">
       <FormContainer onSubmit={handleShortenUrl} />
 
       {loading && (
