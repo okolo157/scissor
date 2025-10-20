@@ -12,6 +12,8 @@ const Home: React.FC = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState<boolean>(false);
+
+
 const handleShortenUrl = async (originalUrl: string) => {
   try {
     setError(null);
@@ -20,24 +22,19 @@ const handleShortenUrl = async (originalUrl: string) => {
     setCopied(false);
 
     const response = await axios.post<urlData>(`${serverUrl}/api/shortUrl`, {
-      fullUrl: originalUrl, 
+      fullUrl: originalUrl,
     });
 
-    const shortened = response.data?.shortUrl;
-    if (!shortened) {
-      throw new Error("Invalid response from server");
-    }
-
-    setShortUrl(shortened);
+    return { shortUrl: response.data.shortUrl };
   } catch (err: any) {
     console.error("Error creating short URL:", err);
-    const message =
-      err.response?.data?.message || "Failed to shorten URL. Please try again.";
-    setError(message);
+    setError("Failed to shorten URL. Please try again.");
+    throw err;
   } finally {
     setLoading(false);
   }
 };
+
 
 
   const handleCopy = () => {
