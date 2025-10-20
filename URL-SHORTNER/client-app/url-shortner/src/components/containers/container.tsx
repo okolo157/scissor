@@ -1,59 +1,65 @@
 import * as React from "react";
-import FormContainer from "./formContainer";
-import { urlData } from "../../interface/urlData";
 import axios from "axios";
 import { serverUrl } from "../../helpers/constants";
-import DataTable from "../dataTable/dataTable";
-import CircularProgress from "@mui/material/CircularProgress"; // MUI spinner
-import Box from "@mui/material/Box"; // MUI Box for centering the spinner
+import { urlData } from "../../interface/urlData";
+import FormContainer from "./formContainer";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 interface IContainerProps {}
 
-const Container: React.FunctionComponent<IContainerProps> = () => {
-  const [data, setData] = React.useState<urlData[]>([]);
-  const [reload, setReload] = React.useState<boolean>(false);
-  const [loading, setLoading] = React.useState<boolean>(true); // Loading state
+const Container: React.FC<IContainerProps> = () => {
+  const [shortUrl, setShortUrl] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
 
-  const updateReloadState = (): void => {
-    setReload(true);
-  };
-
-  const fetchTableData = async () => {
+  const handleShortenUrl = async (originalUrl: string) => {
     try {
-      const response = await axios.get(`${serverUrl}/api/shortUrl`);
-      console.log("Server response", response);
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+      setError(null);
+      setLoading(true);
+      setShortUrl(null);
+
+      const response = await axios.post<urlData>(`${serverUrl}/api/shortUrl`, {
+        originalUrl,
+      });
+
+      setShortUrl(response.data.shortUrl);
+    } catch (err: any) {
+      console.error("Error creating short URL:", err);
+      setError("Failed to shorten URL. Please try again.");
     } finally {
-      setLoading(false); // Stop loading when data is fetched
-      setReload(false);
+      setLoading(false);
     }
   };
 
-  React.useEffect(() => {
-    fetchTableData();
-  }, [reload]);
-
-  if (loading) {
-    // Full-page loading animation
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <CircularProgress size={80} color="primary" /> {/* Big spinner */}
-      </Box>
-    );
-  }
-
   return (
-    <>
-      <FormContainer updateReloadState={updateReloadState} />
-      <DataTable updateReloadState={updateReloadState} data={data} />
-    </>
+    <div className="max-w-lg mx-auto mt-12 p-4">
+      <FormContainer onSubmit={handleShortenUrl} />
+
+      {loading && (
+        <Box display="flex" justifyContent="center" alignItems="center" mt={4}>
+          <CircularProgress color="primary" />
+        </Box>
+      )}
+
+      {error && (
+        <p className="text-red-600 mt-4 text-center font-medium">{error}</p>
+      )}
+
+      {shortUrl && !loading && (
+        <div className="mt-6 p-4 border border-gray-300 rounded-lg text-center">
+          <p className="text-gray-700">Shortened URL:</p>
+          <a
+            href={shortUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            {shortUrl}
+          </a>
+        </div>
+      )}
+    </div>
   );
 };
 

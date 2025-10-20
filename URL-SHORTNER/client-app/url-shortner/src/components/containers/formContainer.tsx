@@ -1,48 +1,41 @@
 import * as React from "react";
-import axios from "axios";
 import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress"; // MUI spinner
-import { serverUrl } from "../../helpers/constants";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface IFormContainerProps {
-  updateReloadState: () => void;
+  onSubmit: (url: string) => Promise<void> | void;
 }
 
-const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
-  const { updateReloadState } = props;
+const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
   const [fullUrl, setFullUrl] = React.useState<string>("");
-  const [loading, setLoading] = React.useState<boolean>(false); // Loading state
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [alert, setAlert] = React.useState<{
     severity: "success" | "error";
     message: string;
   } | null>(null);
 
-  // Auto-hide alert after 3 seconds
+  // Auto-hide alerts after 3 seconds
   React.useEffect(() => {
     if (alert) {
-      const timer = setTimeout(() => {
-        setAlert(null);
-      }, 3000); // Alert disappears after 3 seconds
-
-      return () => clearTimeout(timer); // Clean up timer on component unmount or alert change
+      const timer = setTimeout(() => setAlert(null), 3000);
+      return () => clearTimeout(timer);
     }
   }, [alert]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    if (!fullUrl.trim()) return;
+
     try {
-      await axios.post(`${serverUrl}/api/shortUrl`, {
-        fullUrl: fullUrl,
-      });
+      setLoading(true);
+      await onSubmit(fullUrl); // Pass to parent handler
       setFullUrl("");
       setAlert({ severity: "success", message: "URL successfully shortened!" });
-      updateReloadState();
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error("Error in form submit:", err);
       setAlert({ severity: "error", message: "Failed to shorten URL." });
     } finally {
-      setLoading(false); // Stop loading once request is complete
+      setLoading(false);
     }
   };
 
@@ -65,33 +58,31 @@ const FormContainer: React.FunctionComponent<IFormContainerProps> = (props) => {
           <p className="text-white text-center pb-4 text-sm font-thin">
             Free tool to shorten URL or reduce link length
           </p>
+
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-              <div className="relative flex-grow w-full">
-                <input
-                  type="text"
-                  placeholder="e.g. https://www.example.com"
-                  required
-                  className="block w-full p-3 md:p-4 text-sm md:text-base text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
-                  value={fullUrl}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFullUrl(e.target.value)
-                  }
-                />
-              </div>
+              <input
+                type="url"
+                placeholder="e.g. https://www.example.com"
+                required
+                className="flex-grow w-full p-3 md:p-4 text-sm md:text-base text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500"
+                value={fullUrl}
+                onChange={(e) => setFullUrl(e.target.value)}
+              />
               <button
                 type="submit"
                 className="md:w-auto p-3 md:p-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300"
-                disabled={loading} // Disable button while loading
+                disabled={loading}
               >
                 {loading ? (
-                  <CircularProgress size={24} color="inherit" /> // Show loading spinner
+                  <CircularProgress size={24} color="inherit" />
                 ) : (
                   "Shorten"
                 )}
               </button>
             </div>
           </form>
+
           {alert && (
             <div className="mt-4">
               <Alert severity={alert.severity} onClose={() => setAlert(null)}>
