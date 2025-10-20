@@ -41,8 +41,12 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <h1 className="text-3xl font-bold text-slate-800 mb-1">Scissor</h1>
-      <p className="text-gray-600 mb-6">Simple, fast & free URL shortener</p>
+      <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">
+        Scissor
+      </h1>
+      <p className="text-gray-600 dark:text-gray-300 mb-8 text-sm sm:text-base">
+        Simple, fast & free URL shortener
+      </p>
 
       <form onSubmit={handleSubmit} className="w-full space-y-4">
         <div className="flex flex-col sm:flex-row items-center gap-3">
