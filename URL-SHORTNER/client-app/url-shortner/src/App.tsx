@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import Container from "./components/containers/container";
+import Home from "./pages/home";
 import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
 import QrCodePage from "./components/extra/qrCode";
@@ -11,7 +11,7 @@ export default function App() {
       <main className="flex-grow">
         <Routes>
           <Route path="/qrcode/:shortUrl" element={<QrCodePage />} />
-          <Route path="/" element={<Container />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </main>
       <Footer />
