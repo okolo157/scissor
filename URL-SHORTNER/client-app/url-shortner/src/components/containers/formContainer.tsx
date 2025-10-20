@@ -40,7 +40,7 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800 overflow-hidden">
       {/* Background blur elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-blue-600/30 blur-3xl rounded-full animate-pulse" />
