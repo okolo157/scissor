@@ -1,8 +1,8 @@
 import * as React from "react";
 import axios from "axios";
-import { serverUrl } from "../../helpers/constants";
-import { urlData } from "../../interface/urlData";
-import FormContainer from "../../components/home/form";
+import { serverUrl } from "../helpers/constants";
+import { urlData } from "../interface/urlData";
+import FormContainer from "../components/home/form";
 import { CircularProgress } from "@mui/material";
 import { Check, Copy } from "lucide-react";
 import { motion } from "framer-motion";
