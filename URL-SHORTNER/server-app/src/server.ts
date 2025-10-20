@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import rateLimit from "express-rate-limit"; // Import express-rate-limit
+import rateLimit from "express-rate-limit";
 import connectDb from "./config/dbConfig";
 import shortUrl from "./routes/shortUrl";
 
@@ -9,13 +9,12 @@ dotenv.config();
 connectDb();
 
 const port = process.env.PORT || 5000;
-
 const app = express();
 
-// Configure rate limiting
+// Rate limiter
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: "Too many requests from this IP, please try again later.",
 });
 
@@ -29,14 +28,15 @@ app.use(
   })
 );
 
-// Apply rate limiting to all routes
+// Apply rate limiter globally
 app.use(limiter);
 
-app.use("/api/", shortUrl);
+// Mount API routes under /api
+app.use("/api", shortUrl);
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
+// Mount redirect routes at the root level
+import { getUrl } from "./controllers/shortUrl";
+app.get("/:id", getUrl);
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
