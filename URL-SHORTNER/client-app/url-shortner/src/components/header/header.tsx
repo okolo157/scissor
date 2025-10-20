@@ -1,5 +1,5 @@
 import * as React from "react";
-import Logo from "../../../assets/scissor-logo.png";
+import Logo from "../../assets/scissor-logo.png";
 
 interface IHeaderProps {}
 
