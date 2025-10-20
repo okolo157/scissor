@@ -59,15 +59,18 @@ const handleShortenUrl = async (originalUrl: string) => {
         transition={{ duration: 0.4 }}
         className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-8"
       >
-       <div className="container mx-auto flex flex-col items-center justify-center gap-3 text-center mb-6 border-b border-white/10 pb-4">
-        <img
-            src={Logo}
-            alt="Scissor Logo"
-            className="w-24 h-24 object-contain"
-        />
+       <motion.div
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container mx-auto flex flex-col items-center justify-center gap-3 text-center mb-6 border-b border-white/10 pb-4"
+        >
+        <img src={Logo} alt="Scissor Logo" className="w-24 h-24 object-contain" />
         <h1 className="text-white text-2xl md:text-3xl font-semibold tracking-wide">
             Scissor <span className="text-blue-400">URL Shortener</span>
         </h1>
+        </motion.div>
+
         </div>
 
         <FormContainer onSubmit={handleShortenUrl} />
