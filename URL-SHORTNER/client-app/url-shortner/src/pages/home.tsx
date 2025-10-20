@@ -7,9 +7,7 @@ import { CircularProgress } from "@mui/material";
 import { Check, Copy } from "lucide-react";
 import { motion } from "framer-motion";
 
-interface IContainerProps {}
-
-const Home: React.FC<IContainerProps> = () => {
+const Home: React.FC = () => {
   const [shortUrl, setShortUrl] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -44,17 +42,17 @@ const Home: React.FC<IContainerProps> = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full justify-center min-h-[80vh] px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800">
+    <div className="flex flex-col items-center w-full justify-center min-h-screen px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800">
+      {/* Background blobs for visual depth */}
+      <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
+
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl p-6"
+        className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-8"
       >
-        <h2 className="text-2xl font-semibold text-center text-slate-800 mb-4">
-          Shorten Your Link 🔗
-        </h2>
-
         <FormContainer onSubmit={handleShortenUrl} />
 
         {loading && (
@@ -64,7 +62,7 @@ const Home: React.FC<IContainerProps> = () => {
         )}
 
         {error && (
-          <p className="text-red-600 mt-4 text-center font-medium">{error}</p>
+          <p className="text-red-400 mt-4 text-center font-medium">{error}</p>
         )}
 
         {shortUrl && !loading && (
@@ -72,32 +70,32 @@ const Home: React.FC<IContainerProps> = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="mt-6 p-4 border border-gray-200 bg-gray-50 rounded-lg text-center"
+            className="mt-6 p-4 border border-gray-200 bg-white/10 backdrop-blur-md rounded-lg text-center"
           >
-            <p className="text-gray-700 mb-2 font-medium">Shortened URL:</p>
+            <p className="text-white mb-2 font-medium">Shortened URL:</p>
             <div className="flex items-center justify-center gap-2">
               <a
                 href={shortUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 font-semibold hover:underline break-all"
+                className="text-blue-300 font-semibold hover:underline break-all"
               >
                 {shortUrl}
               </a>
               <button
                 onClick={handleCopy}
-                className="p-2 rounded-md hover:bg-blue-50 transition-colors"
+                className="p-2 rounded-md hover:bg-blue-100/20 active:scale-90 transition-transform"
                 title="Copy link"
               >
                 {copied ? (
-                  <Check size={18} className="text-green-600" />
+                  <Check size={18} className="text-green-400" />
                 ) : (
-                  <Copy size={18} className="text-gray-600" />
+                  <Copy size={18} className="text-blue-200" />
                 )}
               </button>
             </div>
             {copied && (
-              <p className="text-sm text-green-600 mt-1">Copied to clipboard!</p>
+              <p className="text-sm text-green-400 mt-1">Copied to clipboard!</p>
             )}
           </motion.div>
         )}
