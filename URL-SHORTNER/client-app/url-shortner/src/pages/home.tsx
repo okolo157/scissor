@@ -42,7 +42,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full justify-center min-h-screen px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800">
+    <div className="relative flex flex-col items-center w-full justify-center min-h-screen px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800 text-white overflow-hidden">
       {/* Background blobs for visual depth */}
       <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
       <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
@@ -70,9 +70,9 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
-            className="mt-6 p-4 border border-gray-200 bg-white/10 backdrop-blur-md rounded-lg text-center"
+            className="mt-6 p-4 border border-white/20 bg-white/10 backdrop-blur-md rounded-lg text-center"
           >
-            <p className="text-white mb-2 font-medium">Shortened URL:</p>
+            <p className="text-blue-100 mb-2 font-medium">Shortened URL:</p>
             <div className="flex items-center justify-center gap-2">
               <a
                 href={shortUrl}
@@ -95,11 +95,40 @@ const Home: React.FC = () => {
               </button>
             </div>
             {copied && (
-              <p className="text-sm text-green-400 mt-1">Copied to clipboard!</p>
+              <p className="text-sm text-green-400 mt-1">
+                Copied to clipboard!
+              </p>
             )}
           </motion.div>
         )}
       </motion.div>
+
+      {/* --- Descriptive Section --- */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+        className="relative z-10 mt-12 max-w-2xl text-center px-4"
+      >
+        <h2 className="text-2xl font-semibold text-blue-100 mb-3">
+          What is Scissor?
+        </h2>
+        <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
+          Scissor helps you transform long, cluttered URLs into clean, short,
+          and shareable links in just seconds. Whether you’re promoting a brand,
+          tracking campaigns, or simplifying posts for social media — Scissor
+          makes it effortless.
+        </p>
+        <p className="mt-4 text-blue-300 text-sm sm:text-base leading-relaxed">
+          No signup, no fuss — simply paste, shorten, and share. 
+          Built for speed, privacy, and convenience ✨
+        </p>
+      </motion.div>
+
+      {/* Footer */}
+      <p className="mt-10 text-xs text-blue-300/70">
+        © {new Date().getFullYear()} Scissor • Crafted with 💙
+      </p>
     </div>
   );
 };
