@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Prevent crawling of redirect or API routes
+Disallow: /api/
+Disallow: /shortUrl/
+Disallow: /*?
+Disallow: /*=
+Sitemap: https://www.scissor.site/sitemap.xml

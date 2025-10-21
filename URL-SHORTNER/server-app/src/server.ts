@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://www.scissor.work.gd",
+    origin: "*",
     credentials: true,
   })
 );
