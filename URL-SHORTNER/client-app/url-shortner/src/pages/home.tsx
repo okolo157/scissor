@@ -48,7 +48,7 @@ const handleShortenUrl = async (originalUrl: string) => {
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full justify-center py-4 min-h-screen px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800 text-white overflow-hidden">
+    <div className="relative flex flex-col items-center w-full justify-center py-5 min-h-screen px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-800 text-white overflow-hidden">
       {/* Background blobs for visual depth */}
       <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
       <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
@@ -156,4 +156,5 @@ const handleShortenUrl = async (originalUrl: string) => {
 };
 
 export default Home;
+
 
