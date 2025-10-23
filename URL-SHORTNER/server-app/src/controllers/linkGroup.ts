@@ -373,23 +373,7 @@ export const getLinkGroupPage = async (
             z-index: 1;
           }
 
-          .status-badge {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            width: 24px;
-            height: 24px;
-            background: #10b981;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            animation: pulse 2s ease-in-out infinite;
-          }
 
-          @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-          }
 
           h1 {
             color: #fff;
