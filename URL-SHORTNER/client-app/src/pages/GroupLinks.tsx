@@ -1,35 +1,28 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { serverUrl } from "../helpers/constants";
-import { LinkGroup, Link } from "../interface/linkGroup";
+import { Link } from "../interface/linkGroup";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
-  Edit,
-  ExternalLink,
-  Copy,
-  Check,
   Link2,
   Save,
   X,
   Image,
   Upload,
   Trash2,
-  Search,
-  Grid,
-  List,
+  Check,
+  Zap,
+  Share2,
+  BarChart3,
+  Sparkles,
+  Copy,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 
 const GroupLinks: React.FC = () => {
-  const [linkGroups, setLinkGroups] = useState<LinkGroup[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
-  const [editingGroup, setEditingGroup] = useState<LinkGroup | null>(null);
-  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [error, setError] = useState<string | null>(null);
+  const [createdGroupUrl, setCreatedGroupUrl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     groupName: "",
@@ -39,39 +32,6 @@ const GroupLinks: React.FC = () => {
   });
 
   const [newLink, setNewLink] = useState({ title: "", url: "" });
-
-  useEffect(() => {
-    fetchLinkGroups();
-  }, []);
-
-  const fetchLinkGroups = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get<LinkGroup[]>(
-        `${serverUrl}/api/linkGroups`
-      );
-      setLinkGroups(response.data);
-    } catch (error) {
-      console.error("Error fetching link groups:", error);
-      setError("Failed to load link groups. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Memoized filtered groups
-  const filteredGroups = useMemo(() => {
-    if (!searchQuery.trim()) return linkGroups;
-
-    const query = searchQuery.toLowerCase();
-    return linkGroups.filter(
-      (group) =>
-        group.groupName.toLowerCase().includes(query) ||
-        group.description?.toLowerCase().includes(query) ||
-        group.links.some((link) => link.title.toLowerCase().includes(query))
-    );
-  }, [linkGroups, searchQuery]);
 
   const handleCreateGroup = useCallback(
     async (e: React.FormEvent) => {
@@ -83,14 +43,13 @@ const GroupLinks: React.FC = () => {
       }
 
       try {
-        // Debug: Log the formData being sent
         console.log("Creating group with data:", formData);
 
-        const response = await axios.post<LinkGroup>(
+        const response = await axios.post(
           `${serverUrl}/api/linkGroup`,
           formData
         );
-        setLinkGroups((prev) => [response.data, ...prev]);
+        setCreatedGroupUrl(response.data.groupUrl);
         setShowCreateModal(false);
         resetForm();
       } catch (error) {
@@ -100,50 +59,6 @@ const GroupLinks: React.FC = () => {
     },
     [formData]
   );
-
-  const handleUpdateGroup = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!editingGroup) return;
-
-      if (formData.links.length === 0) {
-        alert("Please add at least one link to the group");
-        return;
-      }
-
-      try {
-        const response = await axios.put<LinkGroup>(
-          `${serverUrl}/api/linkGroup/${editingGroup._id}`,
-          formData
-        );
-        setLinkGroups((prev) =>
-          prev.map((group) =>
-            group._id === editingGroup._id ? response.data : group
-          )
-        );
-        setEditingGroup(null);
-        resetForm();
-      } catch (error) {
-        console.error("Error updating link group:", error);
-        alert("Failed to update link group. Please try again.");
-      }
-    },
-    [editingGroup, formData]
-  );
-
-  const handleDeleteGroup = useCallback(async (groupId: string) => {
-    if (!window.confirm("Are you sure you want to delete this link group?")) {
-      return;
-    }
-
-    try {
-      await axios.delete(`${serverUrl}/api/linkGroup/${groupId}`);
-      setLinkGroups((prev) => prev.filter((group) => group._id !== groupId));
-    } catch (error) {
-      console.error("Error deleting link group:", error);
-      alert("Failed to delete link group. Please try again.");
-    }
-  }, []);
 
   const addLinkToForm = useCallback(() => {
     if (!newLink.title.trim() || !newLink.url.trim()) {
@@ -175,35 +90,6 @@ const GroupLinks: React.FC = () => {
     }));
   }, []);
 
-  const reorderLinks = useCallback((fromIndex: number, toIndex: number) => {
-    setFormData((prev) => {
-      const newLinks = [...prev.links];
-      const [movedLink] = newLinks.splice(fromIndex, 1);
-      newLinks.splice(toIndex, 0, movedLink);
-      return {
-        ...prev,
-        links: newLinks.map((link, i) => ({ ...link, order: i })),
-      };
-    });
-  }, []);
-
-  const openEditModal = useCallback((group: LinkGroup) => {
-    setEditingGroup(group);
-    setFormData({
-      groupName: group.groupName,
-      description: group.description,
-      profileImage: group.profileImage || "",
-      links: group.links,
-    });
-  }, []);
-
-  const copyGroupUrl = useCallback((groupUrl: string) => {
-    const fullUrl = `${window.location.origin}/g/${groupUrl}`;
-    navigator.clipboard.writeText(fullUrl);
-    setCopiedUrl(groupUrl);
-    setTimeout(() => setCopiedUrl(null), 2000);
-  }, []);
-
   const resetForm = useCallback(() => {
     setFormData({
       groupName: "",
@@ -216,164 +102,221 @@ const GroupLinks: React.FC = () => {
 
   const closeModal = useCallback(() => {
     setShowCreateModal(false);
-    setEditingGroup(null);
     resetForm();
   }, [resetForm]);
 
+  const copyCreatedUrl = useCallback(() => {
+    if (!createdGroupUrl) return;
+    const fullUrl = `${window.location.origin}/g/${createdGroupUrl}`;
+    navigator.clipboard.writeText(fullUrl);
+  }, [createdGroupUrl]);
+
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="container mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Link Groups</h1>
-            <p className="text-blue-200">
-              Create and manage your link collections
-            </p>
+    <div className="min-h-screen py-12 px-4">
+      <div className="container mx-auto max-w-5xl">
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 bg-blue-500/20 backdrop-blur-xl border border-blue-400/30 rounded-full px-4 py-2 mb-6">
+            <Sparkles size={16} className="text-blue-300" />
+            <span className="text-sm text-blue-200 font-medium">
+              One Link to Rule Them All
+            </span>
           </div>
+
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Share All Your Links
+            <br />
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              In One Place
+            </span>
+          </h1>
+
+          <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
+            Create a beautiful landing page with all your important links.
+            Perfect for social media bios, email signatures, and more.
+          </p>
+
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg"
+            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-3 shadow-2xl shadow-blue-500/50 mx-auto text-lg font-semibold group"
           >
-            <Plus size={20} />
-            Create Group
+            <Plus size={24} />
+            Create Your Link Group
+            <motion.span className="group-hover:translate-x-1 transition-transform">
+              →
+            </motion.span>
           </button>
+        </motion.div>
+
+        {/* Success Message */}
+        <AnimatePresence>
+          {createdGroupUrl && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: -20 }}
+              className="bg-green-500/20 backdrop-blur-xl border border-green-400/30 rounded-2xl p-6 mb-12"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Check size={24} className="text-green-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    🎉 Your Link Group is Ready!
+                  </h3>
+                  <p className="text-green-200 mb-4">
+                    Share your new link group with the world
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex-1 bg-black/20 rounded-lg p-3 border border-white/10">
+                      <p className="text-xs text-green-300 mb-1">Your Link:</p>
+                      <code className="text-sm text-white break-all">
+                        {window.location.origin}/g/{createdGroupUrl}
+                      </code>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={copyCreatedUrl}
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors flex items-center gap-2"
+                      >
+                        <Copy size={16} />
+                        Copy
+                      </button>
+                      <a
+                        href={`/g/${createdGroupUrl}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                      >
+                        <Share2 size={16} />
+                        View
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setCreatedGroupUrl(null)}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <X size={20} className="text-white" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Benefits Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
+          >
+            <div className="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+              <Zap size={28} className="text-blue-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Lightning Fast Setup
+            </h3>
+            <p className="text-blue-200">
+              Create your link group in seconds. No account required, just add
+              your links and go.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-purple-500/20 transition-all"
+          >
+            <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+              <Share2 size={28} className="text-purple-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Share Everywhere
+            </h3>
+            <p className="text-blue-200">
+              Perfect for Instagram, Twitter, TikTok, email signatures, or
+              anywhere you need one link.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-green-500/20 transition-all"
+          >
+            <div className="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
+              <BarChart3 size={28} className="text-green-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Beautiful & Professional
+            </h3>
+            <p className="text-blue-200">
+              Clean, modern design with custom profile images. Make a great
+              first impression.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Search and View Toggle */}
-        {!loading && linkGroups.length > 0 && (
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300"
-                size={20}
-              />
-              <input
-                type="text"
-                placeholder="Search groups..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="flex gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-1">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-blue-600 text-white"
-                    : "text-blue-300 hover:bg-white/10"
-                }`}
+        {/* Use Cases */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center"
+        >
+          <h2 className="text-2xl font-bold text-white mb-4">Perfect For</h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {[
+              "Content Creators",
+              "Influencers",
+              "Small Businesses",
+              "Freelancers",
+              "Artists",
+              "Podcasters",
+              "Musicians",
+              "Entrepreneurs",
+            ].map((useCase, index) => (
+              <span
+                key={index}
+                className="px-4 py-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-blue-200"
               >
-                <Grid size={20} />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={`p-2 rounded transition-colors ${
-                  viewMode === "list"
-                    ? "bg-blue-600 text-white"
-                    : "text-blue-300 hover:bg-white/10"
-                }`}
-              >
-                <List size={20} />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-6">
-            <p className="text-red-200">{error}</p>
-            <button
-              onClick={fetchLinkGroups}
-              className="mt-2 text-sm text-red-100 underline hover:no-underline"
-            >
-              Try again
-            </button>
-          </div>
-        )}
-
-        {/* Loading State */}
-        {loading && (
-          <div className="flex justify-center py-20">
-            <CircularProgress />
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && linkGroups.length === 0 && (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Link2 size={40} className="text-blue-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2">
-              No link groups yet
-            </h3>
-            <p className="text-blue-200 mb-6">
-              Create your first link group to get started
-            </p>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
-            >
-              <Plus size={20} />
-              Create Your First Group
-            </button>
-          </div>
-        )}
-
-        {/* Groups Grid/List */}
-        {!loading && filteredGroups.length > 0 && (
-          <div
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                : "space-y-4"
-            }
-          >
-            {filteredGroups.map((group) => (
-              <GroupCard
-                key={group._id}
-                group={group}
-                viewMode={viewMode}
-                copiedUrl={copiedUrl}
-                onEdit={openEditModal}
-                onCopy={copyGroupUrl}
-                onDelete={handleDeleteGroup}
-              />
+                {useCase}
+              </span>
             ))}
           </div>
-        )}
 
-        {/* No Search Results */}
-        {!loading && linkGroups.length > 0 && filteredGroups.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-blue-200 mb-4">No groups match your search</p>
-            <button
-              onClick={() => setSearchQuery("")}
-              className="text-blue-400 hover:underline"
-            >
-              Clear search
-            </button>
-          </div>
-        )}
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="mt-8 px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2 font-semibold"
+          >
+            <Plus size={20} />
+            Get Started Now - It's Free
+          </button>
+        </motion.div>
       </div>
 
       {/* Modal */}
       <AnimatePresence>
-        {(showCreateModal || editingGroup) && (
+        {showCreateModal && (
           <GroupModal
-            isEdit={!!editingGroup}
             formData={formData}
             setFormData={setFormData}
             newLink={newLink}
             setNewLink={setNewLink}
-            onSubmit={editingGroup ? handleUpdateGroup : handleCreateGroup}
+            onSubmit={handleCreateGroup}
             onClose={closeModal}
             addLinkToForm={addLinkToForm}
             removeLinkFromForm={removeLinkFromForm}
-            reorderLinks={reorderLinks}
           />
         )}
       </AnimatePresence>
@@ -381,131 +324,8 @@ const GroupLinks: React.FC = () => {
   );
 };
 
-// Separate GroupCard component for better organization
-interface GroupCardProps {
-  group: LinkGroup;
-  viewMode: "grid" | "list";
-  copiedUrl: string | null;
-  onEdit: (group: LinkGroup) => void;
-  onCopy: (groupUrl: string) => void;
-  onDelete: (groupId: string) => void;
-}
-
-const GroupCard: React.FC<GroupCardProps> = ({
-  group,
-  viewMode,
-  copiedUrl,
-  onEdit,
-  onCopy,
-  onDelete,
-}) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className={`bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl transition-all ${
-        viewMode === "list" ? "flex items-center gap-6" : ""
-      }`}
-    >
-      <div
-        className={`flex items-start ${
-          viewMode === "list" ? "flex-row flex-1 gap-4" : "flex-col"
-        }`}
-      >
-        <div
-          className={`flex items-start ${
-            viewMode === "grid" ? "justify-between mb-4 w-full" : "gap-4"
-          }`}
-        >
-          {group.profileImage ? (
-            <img
-              src={group.profileImage}
-              alt={group.groupName}
-              className="w-16 h-16 rounded-full object-cover border-2 border-white/30 flex-shrink-0"
-            />
-          ) : (
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-xl border-2 border-white/30 flex-shrink-0">
-              {group.groupName.charAt(0).toUpperCase()}
-            </div>
-          )}
-          <div className={`flex-1 ${viewMode === "grid" ? "ml-4" : ""}`}>
-            <h3 className="text-xl font-bold text-white mb-1">
-              {group.groupName}
-            </h3>
-            <p className="text-sm text-blue-200 line-clamp-2">
-              {group.description || "No description"}
-            </p>
-          </div>
-        </div>
-
-        <div
-          className={`flex items-center gap-4 text-sm text-blue-200 ${
-            viewMode === "grid" ? "mb-4" : ""
-          }`}
-        >
-          <span className="flex items-center gap-1">
-            <Link2 size={14} />
-            {group.links.length} link{group.links.length !== 1 ? "s" : ""}
-          </span>
-        </div>
-
-        <div
-          className={`bg-white/10 rounded-lg p-3 ${
-            viewMode === "grid" ? "mb-4" : "flex-1"
-          }`}
-        >
-          <p className="text-xs text-blue-200 mb-1">Group URL:</p>
-          <div className="flex items-center gap-2">
-            <code className="text-sm text-white flex-1 truncate">
-              /g/{group.groupUrl}
-            </code>
-            <button
-              onClick={() => onCopy(group.groupUrl)}
-              className="p-1.5 hover:bg-white/10 rounded transition-colors"
-              title="Copy URL"
-            >
-              {copiedUrl === group.groupUrl ? (
-                <Check size={16} className="text-green-400" />
-              ) : (
-                <Copy size={16} className="text-blue-300" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className={`flex gap-2 ${viewMode === "list" ? "flex-col" : ""}`}>
-        <a
-          href={`/g/${group.groupUrl}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm"
-        >
-          <ExternalLink size={16} />
-          View
-        </a>
-        <button
-          onClick={() => onEdit(group)}
-          className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
-          title="Edit group"
-        >
-          <Edit size={16} />
-        </button>
-        <button
-          onClick={() => onDelete(group._id)}
-          className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-colors"
-          title="Delete group"
-        >
-          <Trash2 size={16} />
-        </button>
-      </div>
-    </motion.div>
-  );
-};
-
-// Group Modal Component (continued in next part)
+// Group Modal Component
 interface GroupModalProps {
-  isEdit: boolean;
   formData: {
     groupName: string;
     description: string;
@@ -528,11 +348,9 @@ interface GroupModalProps {
   onClose: () => void;
   addLinkToForm: () => void;
   removeLinkFromForm: (index: number) => void;
-  reorderLinks: (fromIndex: number, toIndex: number) => void;
 }
 
 const GroupModal: React.FC<GroupModalProps> = ({
-  isEdit,
   formData,
   setFormData,
   newLink,
@@ -603,9 +421,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
-          <h2 className="text-2xl font-bold">
-            {isEdit ? "Edit Link Group" : "Create New Link Group"}
-          </h2>
+          <h2 className="text-2xl font-bold">Create New Link Group</h2>
           <button
             type="button"
             onClick={onClose}
@@ -816,7 +632,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
               className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save size={20} />
-              {isEdit ? "Update" : "Create"} Group
+              Create Group
             </button>
           </div>
         </form>

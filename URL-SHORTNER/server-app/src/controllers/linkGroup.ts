@@ -9,7 +9,7 @@ export const createLinkGroup = async (
   res: express.Response
 ) => {
   try {
-    const { groupName, description, links, theme } = req.body;
+    const { groupName, description, profileImage, links, theme } = req.body;
 
     if (!groupName) {
       return res.status(400).send({ message: "Group name is required" });
@@ -18,6 +18,7 @@ export const createLinkGroup = async (
     const linkGroup = await linkGroupModel.create({
       groupName,
       description,
+      profileImage,
       links: links || [],
       theme: theme || {},
     });
@@ -29,7 +30,33 @@ export const createLinkGroup = async (
     return res.status(500).send({ message: "Something went wrong" });
   }
 };
+// ... existing code ...
+export const updateLinkGroup = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.params;
+    const { groupName, description, profileImage, links, theme } = req.body;
 
+    const linkGroup = await linkGroupModel.findByIdAndUpdate(
+      id,
+      { groupName, description, profileImage, links, theme },
+      { new: true, runValidators: true }
+    );
+
+    if (!linkGroup) {
+      return res.status(404).send({ message: "Link group not found" });
+    }
+
+    console.log("Link group updated:", linkGroup.groupUrl);
+    return res.status(200).send(linkGroup);
+  } catch (error) {
+    console.error("Error in updateLinkGroup:", error);
+    return res.status(500).send({ message: "Something went wrong" });
+  }
+};
+// ... existing code ...
 /**
  * Get all link groups
  */
@@ -424,35 +451,6 @@ export const getLinkGroupPage = async (
   } catch (error) {
     console.error("Error in getLinkGroupPage:", error);
     return res.status(500).send("Something went wrong");
-  }
-};
-
-/**
- * Update a link group
- */
-export const updateLinkGroup = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const { id } = req.params;
-    const { groupName, description, links, theme } = req.body;
-
-    const linkGroup = await linkGroupModel.findByIdAndUpdate(
-      id,
-      { groupName, description, links, theme },
-      { new: true, runValidators: true }
-    );
-
-    if (!linkGroup) {
-      return res.status(404).send({ message: "Link group not found" });
-    }
-
-    console.log("Link group updated:", linkGroup.groupUrl);
-    return res.status(200).send(linkGroup);
-  } catch (error) {
-    console.error("Error in updateLinkGroup:", error);
-    return res.status(500).send({ message: "Something went wrong" });
   }
 };
 
