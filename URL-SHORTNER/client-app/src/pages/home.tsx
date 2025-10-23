@@ -59,7 +59,7 @@ const Home: React.FC = () => {
             Welcome to <span className="text-blue-400">Scissor</span>
           </h1>
           <p className="text-blue-200 text-sm sm:text-base md:text-lg max-w-2xl">
-            The ultimate link tool you'll ever need. Shorten URLs or create
+            The only link tool you'll ever need. Shorten URLs or create
             beautiful link-in-bio pages.
           </p>
         </motion.div>
