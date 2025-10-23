@@ -7,6 +7,18 @@ export default defineConfig({
   server: {
     open: true,
     port: 3000,
+    proxy: {
+      // Proxy API requests to backend
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
+      // Proxy group links to backend
+      "/g": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     target: "esnext",

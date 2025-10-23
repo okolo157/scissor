@@ -115,7 +115,7 @@ const GroupLinks: React.FC = () => {
         title="Link Groups — Create Your Link in Bio Page | Scissor"
         description="Create a beautiful link-in-bio page with Scissor. Perfect alternative to Linktree. Group all your important links in one place - social media, portfolio, store, and more."
         keywords="link in bio, linktree alternative, link groups, bio link, social media links, link page, free linktree"
-        canonical="https://www.scissor.site/group-links"
+        canonical="https://www.scissor.site/links"
         schemaData={{
           "@context": "https://schema.org",
           "@type": "WebApplication",

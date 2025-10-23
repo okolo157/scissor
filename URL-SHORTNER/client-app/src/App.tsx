@@ -11,7 +11,7 @@ export default function App() {
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/group-links" element={<GroupLinks />} />
+          <Route path="/links" element={<GroupLinks />} />
         </Routes>
       </div>
       {/* <Footer /> */}

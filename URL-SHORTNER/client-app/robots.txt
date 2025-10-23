@@ -3,7 +3,7 @@
 
 User-agent: *
 Allow: /
-Allow: /group-links
+Allow: /links
 
 # Prevent crawling of API endpoints and dynamic routes
 Disallow: /api/

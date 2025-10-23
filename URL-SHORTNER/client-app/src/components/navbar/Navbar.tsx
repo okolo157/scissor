@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
-    { path: "/group-links", label: "Link Groups", icon: Layers },
+    { path: "/links", label: "Link Groups", icon: Layers },
   ];
 
   const isActive = (path: string) => location.pathname === path;
