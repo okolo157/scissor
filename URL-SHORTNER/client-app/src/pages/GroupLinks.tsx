@@ -4,6 +4,7 @@ import { serverUrl } from "../helpers/constants";
 import { Link } from "../interface/linkGroup";
 import SEO from "../components/SEO";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Plus,
   Link2,
@@ -15,10 +16,12 @@ import {
   Check,
   Copy,
   ExternalLink,
+  ArrowLeft,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 
 const GroupLinks: React.FC = () => {
+  const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [createdGroupUrl, setCreatedGroupUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -152,6 +155,18 @@ const GroupLinks: React.FC = () => {
         {/* Background blobs for visual depth */}
         <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
         <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
+
+        {/* Back Button */}
+        <motion.button
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+          onClick={() => navigate("/")}
+          className="relative z-10 self-start mb-6 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-lg transition-all text-blue-200 hover:text-white"
+        >
+          <ArrowLeft size={20} />
+          <span className="text-sm font-medium">Back to Home</span>
+        </motion.button>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

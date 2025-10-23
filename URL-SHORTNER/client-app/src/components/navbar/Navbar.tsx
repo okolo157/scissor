@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Layers } from "lucide-react";
+import { Home, Link2, FolderKanban } from "lucide-react";
 import Logo from "../../assets/scissor-logo.png";
 
 const Navbar: React.FC = () => {
@@ -8,7 +8,8 @@ const Navbar: React.FC = () => {
 
   const navItems = [
     { path: "/", label: "Home", icon: Home },
-    { path: "/links", label: "Link Groups", icon: Layers },
+    { path: "/shorten", label: "Shorten Link", icon: Link2 },
+    { path: "/link-group", label: "Link Groups", icon: FolderKanban },
   ];
 
   const isActive = (path: string) => location.pathname === path;

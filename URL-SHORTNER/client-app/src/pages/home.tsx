@@ -1,33 +1,12 @@
 import * as React from "react";
-import axios from "axios";
-import { serverUrl } from "../helpers/constants";
-import { urlData } from "../interface/urlData";
-import FormContainer from "../components/home/form";
+import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import { motion } from "framer-motion";
+import { Link2, FolderKanban, ArrowRight, Scissors } from "lucide-react";
 import Logo from "../assets/scissor-logo.png";
 
 const Home: React.FC = () => {
-  const handleShortenUrl = async (originalUrl: string, customUrl?: string) => {
-    try {
-      const requestBody: { fullUrl: string; customUrl?: string } = {
-        fullUrl: originalUrl,
-      };
-      if (customUrl) {
-        requestBody.customUrl = customUrl;
-      }
-
-      const response = await axios.post<urlData>(
-        `${serverUrl}/api/shortUrl`,
-        requestBody
-      );
-
-      return { shortUrl: response.data.shortUrl };
-    } catch (err: unknown) {
-      console.error("Error creating short URL:", err);
-      throw err;
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <>
@@ -57,63 +36,179 @@ const Home: React.FC = () => {
           ],
         }}
       />
-      <div className="relative flex flex-col items-center w-full justify-center py-5 sm:py-8 min-h-screen px-4 sm:px-6 text-white overflow-hidden">
+      <div className="relative flex flex-col items-center w-full justify-center py-8 sm:py-12 min-h-screen px-4 sm:px-6 text-white overflow-hidden">
         {/* Background blobs for visual depth */}
         <div className="absolute top-1/4 left-1/3 w-64 h-64 sm:w-72 sm:h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
         <div className="absolute bottom-1/4 right-1/3 w-72 h-72 sm:w-80 sm:h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
 
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="relative z-10 w-full max-w-xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-6 sm:p-8"
+          transition={{ duration: 0.5 }}
+          className="relative z-10 flex flex-col items-center justify-center gap-4 text-center mb-8 sm:mb-12"
         >
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="container mx-auto flex flex-col items-center justify-center gap-3 text-center mb-6 border-b border-white/10 pb-4"
-          >
+          <div className="flex items-center gap-3">
             <img
               src={Logo}
               alt="Scissor Logo"
-              className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
             />
-            <h1 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-              Scissor <span className="text-blue-400">URL Shortener</span>
-            </h1>
-            <p className="text-blue-200 text-xs sm:text-sm mt-2">
-              Simple, fast & free URL shortener
-            </p>
-          </motion.div>
-
-          <FormContainer onSubmit={handleShortenUrl} />
+            <Scissors size={48} className="text-blue-400 hidden sm:block" />
+          </div>
+          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+            Welcome to <span className="text-blue-400">Scissor</span>
+          </h1>
+          <p className="text-blue-200 text-sm sm:text-base md:text-lg max-w-2xl">
+            Your all-in-one solution for link management — Shorten URLs or
+            create beautiful link-in-bio pages
+          </p>
         </motion.div>
 
-        {/* --- Descriptive Section --- */}
+        {/* Main Cards */}
+        <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
+          {/* Shorten Link Card */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            onClick={() => navigate("/shorten")}
+            className="group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-blue-400/50 shadow-lg hover:shadow-blue-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-shadow">
+                <Link2 size={40} className="text-white" />
+              </div>
+
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                  Shorten Link
+                </h2>
+                <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
+                  Transform long URLs into short, shareable links in seconds
+                </p>
+              </div>
+
+              <div className="space-y-2 w-full">
+                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                  <span>Instant URL shortening</span>
+                </div>
+                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                  <span>Custom short links</span>
+                </div>
+                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                  <span>No registration required</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-blue-300 font-semibold group-hover:text-white transition-colors pt-2">
+                <span>Get Started</span>
+                <ArrowRight
+                  size={20}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Create Link Group Card */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            onClick={() => navigate("/link-group")}
+            className="group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-indigo-400/50 shadow-lg hover:shadow-indigo-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow">
+                <FolderKanban size={40} className="text-white" />
+              </div>
+
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                  Create Link Group
+                </h2>
+                <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
+                  Build a beautiful link-in-bio page for all your important
+                  links
+                </p>
+              </div>
+
+              <div className="space-y-2 w-full">
+                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                  <span>Multiple links in one page</span>
+                </div>
+                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                  <span>Custom profile & branding</span>
+                </div>
+                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                  <span>Perfect for social media</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-indigo-300 font-semibold group-hover:text-white transition-colors pt-2">
+                <span>Get Started</span>
+                <ArrowRight
+                  size={20}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Features Section */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="relative z-10 mt-8 sm:mt-12 max-w-2xl text-center px-4"
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="relative z-10 mt-8 max-w-4xl px-4"
         >
-          <h2 className="text-xl sm:text-2xl font-semibold text-blue-100 mb-3">
-            What is Scissor?
-          </h2>
-          <p className="text-blue-200 text-xs sm:text-sm md:text-base leading-relaxed">
-            Scissor helps you transform long, cluttered URLs into clean, short,
-            and shareable links in just seconds. Whether you're promoting a
-            brand, tracking campaigns, or simplifying posts for social media,
-            Scissor makes it effortless.
-          </p>
-          <p className="mt-3 sm:mt-4 text-blue-300 text-xs sm:text-sm md:text-base leading-relaxed">
-            No signup, no fuss — simply paste, shorten, and share. Built for
-            speed, privacy, and convenience.
-          </p>
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6">
+              Why Choose Scissor?
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div className="text-center">
+                <div className="text-4xl mb-3">⚡</div>
+                <h3 className="text-white font-semibold mb-2">
+                  Lightning Fast
+                </h3>
+                <p className="text-blue-200 text-sm">
+                  Create short links and link pages in seconds
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-4xl mb-3">🎨</div>
+                <h3 className="text-white font-semibold mb-2">
+                  Beautiful Design
+                </h3>
+                <p className="text-blue-200 text-sm">
+                  Professional-looking links and pages
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-4xl mb-3">🔒</div>
+                <h3 className="text-white font-semibold mb-2">Privacy First</h3>
+                <p className="text-blue-200 text-sm">
+                  No signup required, your privacy matters
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         {/* Footer */}
-        <p className="mt-8 sm:mt-10 text-xs sm:text-sm text-blue-300/70">
+        <p className="mt-8 sm:mt-12 text-xs sm:text-sm text-blue-300/70 text-center">
           © {new Date().getFullYear()} Scissor • Crafted with 💙{" "}
           <a
             href="https://github.com/okolo157"
