@@ -21,6 +21,7 @@ import { CircularProgress } from "@mui/material";
 const GroupLinks: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [createdGroupUrl, setCreatedGroupUrl] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
     groupName: "",
@@ -40,6 +41,8 @@ const GroupLinks: React.FC = () => {
         return;
       }
 
+      setIsSubmitting(true);
+
       try {
         console.log("Creating group with data:", formData);
 
@@ -53,6 +56,8 @@ const GroupLinks: React.FC = () => {
       } catch (error) {
         console.error("Error creating link group:", error);
         alert("Failed to create link group. Please try again.");
+      } finally {
+        setIsSubmitting(false);
       }
     },
     [formData]
@@ -140,13 +145,13 @@ const GroupLinks: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-8"
+          className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-4 sm:p-6 md:p-8"
         >
-          <div className="text-center mb-6 border-b border-white/10 pb-6">
-            <h1 className="text-white text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)] mb-2">
+          <div className="text-center mb-4 sm:mb-6 border-b border-white/10 pb-4 sm:pb-6">
+            <h1 className="text-white text-2xl sm:text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)] mb-2">
               Link <span className="text-blue-400">Groups</span>
             </h1>
-            <p className="text-blue-200 text-sm">
+            <p className="text-blue-200 text-xs sm:text-sm">
               Create a beautiful landing page with all your links in one place
             </p>
           </div>
@@ -254,9 +259,9 @@ const GroupLinks: React.FC = () => {
 
             <button
               onClick={() => setShowCreateModal(true)}
-              className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-500/30 font-semibold"
+              className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl transition-all flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-blue-500/30 font-semibold text-sm sm:text-base"
             >
-              <Plus size={24} />
+              <Plus size={20} className="sm:w-6 sm:h-6" />
               Create Link Group
             </button>
           </div>
@@ -288,6 +293,7 @@ const GroupLinks: React.FC = () => {
               onClose={closeModal}
               addLinkToForm={addLinkToForm}
               removeLinkFromForm={removeLinkFromForm}
+              isSubmitting={isSubmitting}
             />
           )}
         </AnimatePresence>
@@ -320,6 +326,7 @@ interface GroupModalProps {
   onClose: () => void;
   addLinkToForm: () => void;
   removeLinkFromForm: (index: number) => void;
+  isSubmitting: boolean;
 }
 
 const GroupModal: React.FC<GroupModalProps> = ({
@@ -331,6 +338,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
   onClose,
   addLinkToForm,
   removeLinkFromForm,
+  isSubmitting,
 }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
 
@@ -389,7 +397,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
@@ -418,6 +426,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
                 setFormData((prev) => ({ ...prev, groupName: e.target.value }))
               }
               placeholder="My Social Links"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -437,6 +446,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
                 }))
               }
               placeholder="A brief description of your link group"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -459,7 +469,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
                       const file = e.target.files?.[0];
                       if (file) handleImageUpload(file);
                     }}
-                    disabled={uploadingImage}
+                    disabled={uploadingImage || isSubmitting}
                   />
                   <div className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
                     {uploadingImage ? (
@@ -511,11 +521,11 @@ const GroupModal: React.FC<GroupModalProps> = ({
             </h3>
 
             <div className="space-y-3 mb-4">
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   autoComplete="off"
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm"
                   placeholder="Link title"
                   value={newLink.title}
                   onChange={(e) =>
@@ -527,11 +537,12 @@ const GroupModal: React.FC<GroupModalProps> = ({
                       addLinkToForm();
                     }
                   }}
+                  disabled={isSubmitting}
                 />
                 <input
                   type="url"
                   autoComplete="off"
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm"
                   placeholder="https://..."
                   value={newLink.url}
                   onChange={(e) =>
@@ -543,14 +554,16 @@ const GroupModal: React.FC<GroupModalProps> = ({
                       addLinkToForm();
                     }
                   }}
+                  disabled={isSubmitting}
                 />
                 <button
                   type="button"
                   onClick={addLinkToForm}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto w-full"
                   title="Add link"
                 >
-                  <Plus size={20} />
+                  <Plus size={20} className="mx-auto" />
                 </button>
               </div>
             </div>
@@ -590,21 +603,31 @@ const GroupModal: React.FC<GroupModalProps> = ({
             )}
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              disabled={isSubmitting}
+              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={formData.links.length === 0}
+              disabled={formData.links.length === 0 || isSubmitting}
               className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save size={20} />
-              Create Group
+              {isSubmitting ? (
+                <>
+                  <CircularProgress size={20} className="text-white" />
+                  <span>Creating...</span>
+                </>
+              ) : (
+                <>
+                  <Save size={20} />
+                  Create Group
+                </>
+              )}
             </button>
           </div>
         </form>
