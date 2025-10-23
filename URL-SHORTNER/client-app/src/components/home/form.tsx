@@ -1,6 +1,4 @@
 import * as React from "react";
-import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 import { Check, Copy } from "lucide-react";
 
 interface IFormContainerProps {
@@ -17,7 +15,6 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
   const [shortenedUrl, setShortenedUrl] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState<boolean>(false);
   const [submittedUrl, setSubmittedUrl] = React.useState<string | null>(null);
-
 
   // Auto-hide alerts
   React.useEffect(() => {
@@ -80,7 +77,13 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
                 : "bg-blue-600 hover:bg-blue-700 hover:scale-[1.03]"
             }`}
           >
-            {loading ? <CircularProgress size={22} color="inherit" /> : "Shorten"}
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : (
+              "Shorten"
+            )}
           </button>
         </div>
       </form>
@@ -88,9 +91,23 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
       {/* Alert feedback */}
       {alert && (
         <div className="mt-4 w-full max-w-sm">
-          <Alert severity={alert.severity} onClose={() => setAlert(null)}>
-            {alert.message}
-          </Alert>
+          <div
+            className={`p-4 rounded-lg border ${
+              alert.severity === "success"
+                ? "bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300"
+                : "bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">{alert.message}</span>
+              <button
+                onClick={() => setAlert(null)}
+                className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                ×
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
