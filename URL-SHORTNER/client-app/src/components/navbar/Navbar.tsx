@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Layers, Scissors } from "lucide-react";
+import { Home, Layers } from "lucide-react";
 import Logo from "../../assets/scissor-logo.png";
 
 const Navbar: React.FC = () => {
