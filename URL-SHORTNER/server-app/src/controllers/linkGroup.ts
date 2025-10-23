@@ -510,6 +510,8 @@ export const getLinkGroupPage = async (
             padding: 2rem 1.5rem;
             position: relative;
             z-index: 1;
+            color: white;
+            text-decoration: none;
           }
 
           .footer-card {
