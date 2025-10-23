@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const shortUrl_1 = require("../controllers/shortUrl");
 const router = express_1.default.Router();
 router.post("/shortUrl", shortUrl_1.createUrl);
-router.get("/shortUrl", shortUrl_1.getAllUrl);
-router.get("/shortUrl/:id", shortUrl_1.getUrl);
+router.get("/:id", shortUrl_1.getUrl);
 router.delete("/shortUrl/:id", shortUrl_1.deleteUrl);
 exports.default = router;

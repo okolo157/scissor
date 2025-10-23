@@ -4,6 +4,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import connectDb from "./config/dbConfig";
 import shortUrl from "./routes/shortUrl";
+import linkGroup from "./routes/linkGroup";
 
 dotenv.config();
 connectDb();
@@ -35,9 +36,12 @@ app.use(limiter);
 
 // Mount API routes under /api
 app.use("/api", shortUrl);
+app.use("/api", linkGroup);
 
 // Mount redirect routes at the root level
 import { getUrl } from "./controllers/shortUrl";
+
+// Handle short URLs
 app.get("/:id", getUrl);
 
 app.listen(port, () => {
