@@ -39,7 +39,9 @@ const GroupLinks: React.FC = () => {
   const fetchLinkGroups = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<LinkGroup[]>(`${serverUrl}/api/linkGroups`);
+      const response = await axios.get<LinkGroup[]>(
+        `${serverUrl}/api/linkGroups`
+      );
       setLinkGroups(response.data);
     } catch (error) {
       console.error("Error fetching link groups:", error);
@@ -48,40 +50,49 @@ const GroupLinks: React.FC = () => {
     }
   };
 
-  const handleCreateGroup = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post<LinkGroup>(`${serverUrl}/api/linkGroup`, formData);
-      setLinkGroups((prev) => [response.data, ...prev]);
-      setShowCreateModal(false);
-      setFormData({ groupName: "", description: "", links: [] });
-      setNewLink({ title: "", url: "" });
-    } catch (error) {
-      console.error("Error creating link group:", error);
-    }
-  }, [formData]);
+  const handleCreateGroup = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+        const response = await axios.post<LinkGroup>(
+          `${serverUrl}/api/linkGroup`,
+          formData
+        );
+        setLinkGroups((prev) => [response.data, ...prev]);
+        setShowCreateModal(false);
+        setFormData({ groupName: "", description: "", links: [] });
+        setNewLink({ title: "", url: "" });
+      } catch (error) {
+        console.error("Error creating link group:", error);
+      }
+    },
+    [formData]
+  );
 
-  const handleUpdateGroup = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingGroup) return;
+  const handleUpdateGroup = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!editingGroup) return;
 
-    try {
-      const response = await axios.put<LinkGroup>(
-        `${serverUrl}/api/linkGroup/${editingGroup._id}`,
-        formData
-      );
-      setLinkGroups((prev) =>
-        prev.map((group) =>
-          group._id === editingGroup._id ? response.data : group
-        )
-      );
-      setEditingGroup(null);
-      setFormData({ groupName: "", description: "", links: [] });
-      setNewLink({ title: "", url: "" });
-    } catch (error) {
-      console.error("Error updating link group:", error);
-    }
-  }, [editingGroup, formData]);
+      try {
+        const response = await axios.put<LinkGroup>(
+          `${serverUrl}/api/linkGroup/${editingGroup._id}`,
+          formData
+        );
+        setLinkGroups((prev) =>
+          prev.map((group) =>
+            group._id === editingGroup._id ? response.data : group
+          )
+        );
+        setEditingGroup(null);
+        setFormData({ groupName: "", description: "", links: [] });
+        setNewLink({ title: "", url: "" });
+      } catch (error) {
+        console.error("Error updating link group:", error);
+      }
+    },
+    [editingGroup, formData]
+  );
 
   const handleDeleteGroup = async (id: string) => {
     if (!confirm("Are you sure you want to delete this group?")) return;
@@ -280,9 +291,17 @@ const GroupLinks: React.FC = () => {
 interface GroupModalProps {
   isEdit: boolean;
   formData: { groupName: string; description: string; links: Link[] };
-  setFormData: React.Dispatch<React.SetStateAction<{ groupName: string; description: string; links: Link[] }>>;
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      groupName: string;
+      description: string;
+      links: Link[];
+    }>
+  >;
   newLink: { title: string; url: string };
-  setNewLink: React.Dispatch<React.SetStateAction<{ title: string; url: string }>>;
+  setNewLink: React.Dispatch<
+    React.SetStateAction<{ title: string; url: string }>
+  >;
   onSubmit: (e: React.FormEvent) => void;
   onClose: () => void;
   addLinkToForm: () => void;
@@ -339,7 +358,9 @@ const GroupModal: React.FC<GroupModalProps> = ({
               autoComplete="off"
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               value={formData.groupName}
-              onChange={(e) => setFormData({ ...formData, groupName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, groupName: e.target.value })
+              }
               placeholder="My Social Links"
             />
           </div>
@@ -353,7 +374,9 @@ const GroupModal: React.FC<GroupModalProps> = ({
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               rows={3}
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="A brief description of your link group"
             />
           </div>
@@ -371,9 +394,11 @@ const GroupModal: React.FC<GroupModalProps> = ({
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                   placeholder="Link title"
                   value={newLink.title}
-                  onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
+                  onChange={(e) =>
+                    setNewLink({ ...newLink, title: e.target.value })
+                  }
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       e.preventDefault();
                       if (newLink.title && newLink.url) {
                         addLinkToForm();
@@ -387,9 +412,11 @@ const GroupModal: React.FC<GroupModalProps> = ({
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                   placeholder="https://..."
                   value={newLink.url}
-                  onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+                  onChange={(e) =>
+                    setNewLink({ ...newLink, url: e.target.value })
+                  }
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       e.preventDefault();
                       if (newLink.title && newLink.url) {
                         addLinkToForm();
