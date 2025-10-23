@@ -38,6 +38,16 @@ app.use(limiter);
 app.use("/api", shortUrl);
 app.use("/api", linkGroup);
 
+// Health check endpoint for keep-alive service
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Backend is alive",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
 // Mount redirect routes at the root level
 import { getUrl } from "./controllers/shortUrl";
 import { getLinkGroupPage } from "./routes/linkGroup";

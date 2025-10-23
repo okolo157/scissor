@@ -27,7 +27,7 @@ const Home: React.FC = () => {
       });
 
       return { shortUrl: response.data.shortUrl };
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error creating short URL:", err);
       setError("Failed to shorten URL. Please try again.");
       throw err;
