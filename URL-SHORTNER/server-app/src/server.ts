@@ -34,11 +34,7 @@ app.use(
 // Apply rate limiter globally
 app.use(limiter);
 
-// Mount API routes under /api
-app.use("/api", shortUrl);
-app.use("/api", linkGroup);
-
-// Health check endpoint for keep-alive service
+// Health check endpoint for keep-alive service (must be before wildcard routes)
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     status: "ok",
@@ -47,6 +43,10 @@ app.get("/api/health", (req, res) => {
     uptime: process.uptime(),
   });
 });
+
+// Mount API routes under /api
+app.use("/api", shortUrl);
+app.use("/api", linkGroup);
 
 // Mount redirect routes at the root level
 import { getUrl } from "./controllers/shortUrl";
