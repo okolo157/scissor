@@ -128,10 +128,86 @@ export const getLinkGroupPage = async (
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${linkGroup.groupName} | Scissor</title>
-        <link rel="icon" type="image/png" href="https://i.imgur.com/YourScissorFavicon.png">
+        <meta name="description" content="${
+          linkGroup.description ||
+          `Check out all links from ${linkGroup.groupName}. Powered by Scissor.`
+        }" />
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://www.scissor.site/g/${
+          linkGroup.groupUrl
+        }" />
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="${linkGroup.groupName}" />
+        <meta property="og:description" content="${
+          linkGroup.description || `All my links in one place`
+        }" />
+        ${
+          linkGroup.profileImage
+            ? `<meta property="og:image" content="${linkGroup.profileImage}" />`
+            : '<meta property="og:image" content="https://www.scissor.site/og-image.png" />'
+        }
+        <meta property="og:url" content="https://www.scissor.site/g/${
+          linkGroup.groupUrl
+        }" />
+        <meta property="og:type" content="profile" />
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="${linkGroup.groupName}" />
+        <meta name="twitter:description" content="${
+          linkGroup.description || `All my links in one place`
+        }" />
+        ${
+          linkGroup.profileImage
+            ? `<meta name="twitter:image" content="${linkGroup.profileImage}" />`
+            : '<meta name="twitter:image" content="https://www.scissor.site/og-image.png" />'
+        }
+        
+        <!-- SEO Tags -->
+        <meta name="robots" content="index, follow" />
+        <meta name="keywords" content="link in bio, ${
+          linkGroup.groupName
+        }, social links, linktree" />
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="https://www.scissor.site/favicon.png" />
+        
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          "name": "${linkGroup.groupName}",
+          "description": "${linkGroup.description || ""}",
+          ${
+            linkGroup.profileImage
+              ? `"image": "${linkGroup.profileImage}",`
+              : ""
+          }
+          "url": "https://www.scissor.site/g/${linkGroup.groupUrl}",
+          "mainEntity": {
+            "@type": "Person",
+            "name": "${linkGroup.groupName}",
+            ${
+              linkGroup.profileImage
+                ? `"image": "${linkGroup.profileImage}",`
+                : ""
+            }
+            "sameAs": [
+              ${linkGroup.links
+                .map((link) => `"${link.url}"`)
+                .join(",\n              ")}
+            ]
+          }
+        }
+        </script>
         <style>
           * {
             margin: 0;

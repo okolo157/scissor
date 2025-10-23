@@ -1,9 +1,22 @@
+# Scissor - URL Shortener & Link in Bio Tool
+# www.scissor.site
+
 User-agent: *
 Allow: /
+Allow: /group-links
 
-# Prevent crawling of redirect or API routes
+# Prevent crawling of API endpoints and dynamic routes
 Disallow: /api/
 Disallow: /shortUrl/
 Disallow: /*?
 Disallow: /*=
+
+# Allow Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+
+# Crawl delay
+Crawl-delay: 10
+
+# Sitemap
 Sitemap: https://www.scissor.site/sitemap.xml
