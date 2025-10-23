@@ -215,28 +215,6 @@ const GroupLinks: React.FC = () => {
           <div className="flex justify-center py-20">
             <CircularProgress />
           </div>
-        ) : linkGroups.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20"
-          >
-            <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Link2 size={40} className="text-blue-600 dark:text-blue-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2">
-              No link groups yet
-            </h3>
-            <p className="text-blue-200 mb-6">
-              Create your first link group to organize and share your links
-            </p>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Create Your First Group
-            </button>
-          </motion.div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {linkGroups.map((group) => (
@@ -473,6 +451,13 @@ const GroupModal: React.FC<GroupModalProps> = ({
                         <CircularProgress size={20} />
                         <span>Uploading...</span>
                       </>
+                    ) : formData.profileImage ? (
+                      <>
+                        <Check size={20} className="text-green-600" />
+                        <span className="text-green-600 dark:text-green-400">
+                          Image uploaded successfully
+                        </span>
+                      </>
                     ) : (
                       <>
                         <Upload size={20} />
@@ -482,28 +467,6 @@ const GroupModal: React.FC<GroupModalProps> = ({
                   </div>
                 </label>
               </div>
-
-              {/* OR Divider */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  OR
-                </span>
-                <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
-              </div>
-
-              {/* URL Input */}
-              <input
-                type="url"
-                autoComplete="off"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                value={formData.profileImage}
-                onChange={(e) =>
-                  setFormData({ ...formData, profileImage: e.target.value })
-                }
-                placeholder="Or paste image URL"
-                disabled={uploadingImage}
-              />
             </div>
 
             {formData.profileImage && (

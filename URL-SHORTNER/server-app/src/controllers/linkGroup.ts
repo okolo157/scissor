@@ -178,7 +178,11 @@ export const getLinkGroupPage = async (
           }
 
           .logo-icon {
-            font-size: 1.2rem;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
 
           .container {
@@ -380,8 +384,10 @@ export const getLinkGroupPage = async (
       </head>
       <body>
         <div class="header">
-          <a href="${req.protocol}://${req.get("host")}/" class="logo">
-            <span class="logo-icon">✂️</span>
+          <a href="/" class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4L12 12M12 12L4 20M12 12L20 20M12 12L4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             <span>Scissor</span>
           </a>
         </div>
@@ -428,9 +434,7 @@ export const getLinkGroupPage = async (
               .join("")}
           </div>
           <div class="footer">
-            Create your own link page with <a href="${req.protocol}://${req.get(
-      "host"
-    )}/">Scissor</a>
+            Create your own link page with <a href="/">Scissor</a>
           </div>
         </div>
       </body>
