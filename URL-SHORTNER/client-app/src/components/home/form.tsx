@@ -54,65 +54,62 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <p className="text-gray-600 dark:text-gray-300 mb-8 text-sm sm:text-base">
-        Simple, fast & free URL shortener
-      </p>
+      {/* Show form when no shortened URL exists */}
+      {!shortenedUrl ? (
+        <>
+          <p className="text-gray-600 dark:text-gray-300 mb-8 text-sm sm:text-base">
+            Simple, fast & free URL shortener
+          </p>
 
-      <form onSubmit={handleSubmit} className="w-full space-y-4">
-        <div className="flex flex-col sm:flex-row items-center gap-3">
-          <input
-            type="url"
-            placeholder="Paste your long URL here..."
-            required
-            className="flex-grow p-3 text-gray-900 text-sm rounded-xl border border-gray-200 focus:ring-4 focus:ring-blue-400 outline-none"
-            value={fullUrl}
-            onChange={(e) => setFullUrl(e.target.value)}
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className={`px-5 py-3 text-sm font-medium rounded-xl text-white transition-all ${
-              loading
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 hover:scale-[1.03]"
-            }`}
-          >
-            {loading ? (
-              <div className="flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : (
-              "Shorten"
-            )}
-          </button>
-        </div>
-      </form>
-
-      {/* Alert feedback */}
-      {alert && (
-        <div className="mt-4 w-full max-w-sm">
-          <div
-            className={`p-4 rounded-lg border ${
-              alert.severity === "success"
-                ? "bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300"
-                : "bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">{alert.message}</span>
+          <form onSubmit={handleSubmit} className="w-full space-y-4">
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <input
+                type="url"
+                placeholder="Paste your long URL here..."
+                required
+                className="flex-grow p-3 text-gray-900 text-sm rounded-xl border border-gray-200 focus:ring-4 focus:ring-blue-400 outline-none"
+                value={fullUrl}
+                onChange={(e) => setFullUrl(e.target.value)}
+              />
               <button
-                onClick={() => setAlert(null)}
-                className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                type="submit"
+                disabled={loading}
+                className={`px-5 py-3 text-sm font-medium rounded-xl text-white transition-all ${
+                  loading
+                    ? "bg-blue-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700 hover:scale-[1.03]"
+                }`}
               >
-                ×
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : (
+                  "Shorten"
+                )}
               </button>
             </div>
-          </div>
-        </div>
-      )}
+          </form>
 
-      {/* Improved shortened URL section */}
-      {shortenedUrl && (
+          {/* Alert feedback - only show error alerts on form view */}
+          {alert && alert.severity === "error" && (
+            <div className="mt-4 w-full max-w-sm">
+              <div className="p-4 rounded-lg border bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">{alert.message}</span>
+                  <button
+                    onClick={() => setAlert(null)}
+                    className="ml-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        /* Show success display when URL is shortened */
         <div className="mt-6 w-full max-w-md">
           {/* Success header */}
           <div className="flex items-center justify-center gap-2 mb-4">
@@ -194,16 +191,17 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
             </div>
           </div>
 
-          {/* Quick actions */}
-          <div className="mt-4 flex justify-center">
+          {/* Action button to return to form */}
+          <div className="mt-6 flex justify-center">
             <button
               onClick={() => {
                 setShortenedUrl(null);
                 setSubmittedUrl(null);
+                setCopied(false);
               }}
-              className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 underline transition-colors"
+              className="px-6 py-3 text-sm font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 hover:scale-[1.03] transition-all"
             >
-              Shorten another URL
+              Shorten Another URL
             </button>
           </div>
         </div>
@@ -212,4 +210,4 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
   );
 };
 
-export default FormContainer;
+export default FormContainer
