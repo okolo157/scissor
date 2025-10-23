@@ -138,23 +138,32 @@ const handleShortenUrl = async (originalUrl: string) => {
         <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
           Scissor helps you transform long, cluttered URLs into clean, short,
           and shareable links in just seconds. Whether you’re promoting a brand,
-          tracking campaigns, or simplifying posts for social media — Scissor
+          tracking campaigns, or simplifying posts for social media, Scissor
           makes it effortless.
         </p>
         <p className="mt-4 text-blue-300 text-sm sm:text-base leading-relaxed">
           No signup, no fuss — simply paste, shorten, and share. 
-          Built for speed, privacy, and convenience ✨
+          Built for speed, privacy, and convenience.
         </p>
       </motion.div>
 
       {/* Footer */}
-      <p className="mt-10 text-xs text-blue-300/70">
-        © {new Date().getFullYear()} Scissor • Crafted with 💙
+       <p className="mt-10 text-xs text-blue-300/70">
+        © {new Date().getFullYear()} Scissor • Crafted with 💙{" "}
+        <a 
+          href="https://github.com/okolo157" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:text-blue-200 transition-colors"
+        >
+          Victor Okolo
+        </a>
       </p>
     </div>
   );
 };
 
 export default Home;
+
 
 
