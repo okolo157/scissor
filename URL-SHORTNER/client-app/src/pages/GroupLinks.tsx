@@ -12,11 +12,8 @@ import {
   Upload,
   Trash2,
   Check,
-  Zap,
-  Share2,
-  BarChart3,
-  Sparkles,
   Copy,
+  ExternalLink,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 
@@ -112,198 +109,148 @@ const GroupLinks: React.FC = () => {
   }, [createdGroupUrl]);
 
   return (
-    <div className="min-h-screen py-12 px-4">
-      <div className="container mx-auto max-w-5xl">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 bg-blue-500/20 backdrop-blur-xl border border-blue-400/30 rounded-full px-4 py-2 mb-6">
-            <Sparkles size={16} className="text-blue-300" />
-            <span className="text-sm text-blue-200 font-medium">
-              One Link to Rule Them All
-            </span>
-          </div>
+    <div className="relative flex flex-col items-center w-full justify-center py-8 min-h-screen px-4 text-white overflow-hidden">
+      {/* Background blobs for visual depth */}
+      <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
 
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Share All Your Links
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              In One Place
-            </span>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-8"
+      >
+        <div className="text-center mb-6 border-b border-white/10 pb-6">
+          <h1 className="text-white text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)] mb-2">
+            Link <span className="text-blue-400">Groups</span>
           </h1>
-
-          <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
-            Create a beautiful landing page with all your important links.
-            Perfect for social media bios, email signatures, and more.
+          <p className="text-blue-200 text-sm">
+            Create a beautiful landing page with all your links in one place
           </p>
-
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-3 shadow-2xl shadow-blue-500/50 mx-auto text-lg font-semibold group"
-          >
-            <Plus size={24} />
-            Create Your Link Group
-            <motion.span className="group-hover:translate-x-1 transition-transform">
-              →
-            </motion.span>
-          </button>
-        </motion.div>
+        </div>
 
         {/* Success Message */}
         <AnimatePresence>
           {createdGroupUrl && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: -20 }}
-              className="bg-green-500/20 backdrop-blur-xl border border-green-400/30 rounded-2xl p-6 mb-12"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="mb-6 p-4 border border-green-400/30 bg-green-500/10 backdrop-blur-md rounded-lg"
             >
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Check size={24} className="text-green-400" />
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Check size={20} className="text-green-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    🎉 Your Link Group is Ready!
+                  <h3 className="text-lg font-semibold text-white mb-1">
+                    🎉 Link Group Created!
                   </h3>
-                  <p className="text-green-200 mb-4">
-                    Share your new link group with the world
+                  <p className="text-green-200 text-sm mb-3">
+                    Your link group is ready to share
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <div className="flex-1 bg-black/20 rounded-lg p-3 border border-white/10">
-                      <p className="text-xs text-green-300 mb-1">Your Link:</p>
-                      <code className="text-sm text-white break-all">
-                        {window.location.origin}/g/{createdGroupUrl}
-                      </code>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={copyCreatedUrl}
-                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        <Copy size={16} />
-                        Copy
-                      </button>
-                      <a
-                        href={`/g/${createdGroupUrl}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        <Share2 size={16} />
-                        View
-                      </a>
-                    </div>
+                  <div className="bg-black/20 rounded-lg p-3 mb-3">
+                    <p className="text-xs text-green-300 mb-1">Your Link:</p>
+                    <code className="text-sm text-white break-all">
+                      {window.location.origin}/g/{createdGroupUrl}
+                    </code>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={copyCreatedUrl}
+                      className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+                    >
+                      <Copy size={16} />
+                      Copy Link
+                    </button>
+                    <a
+                      href={`/g/${createdGroupUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+                    >
+                      <ExternalLink size={16} />
+                      View Page
+                    </a>
                   </div>
                 </div>
                 <button
                   onClick={() => setCreatedGroupUrl(null)}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-1 hover:bg-white/10 rounded transition-colors flex-shrink-0"
                 >
-                  <X size={20} className="text-white" />
+                  <X size={18} className="text-white" />
                 </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Benefits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
-          >
-            <div className="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
-              <Zap size={28} className="text-blue-400" />
+        {/* Main Content */}
+        <div className="space-y-6">
+          <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Link2 size={24} className="text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-white mb-1">
+                  What are Link Groups?
+                </h3>
+                <p className="text-blue-200 text-sm leading-relaxed">
+                  Create a personalized landing page (like Linktree) with all
+                  your important links - social media, portfolio, store, blog,
+                  and more.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Lightning Fast Setup
-            </h3>
-            <p className="text-blue-200">
-              Create your link group in seconds. No account required, just add
-              your links and go.
-            </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-purple-500/20 transition-all"
-          >
-            <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
-              <Share2 size={28} className="text-purple-400" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-2xl mb-2">⚡</div>
+              <h4 className="text-white font-medium text-sm mb-1">
+                Fast Setup
+              </h4>
+              <p className="text-blue-200 text-xs">Create in seconds</p>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Share Everywhere
-            </h3>
-            <p className="text-blue-200">
-              Perfect for Instagram, Twitter, TikTok, email signatures, or
-              anywhere you need one link.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-green-500/20 transition-all"
-          >
-            <div className="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
-              <BarChart3 size={28} className="text-green-400" />
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-2xl mb-2">🎨</div>
+              <h4 className="text-white font-medium text-sm mb-1">
+                Beautiful Design
+              </h4>
+              <p className="text-blue-200 text-xs">Professional look</p>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Beautiful & Professional
-            </h3>
-            <p className="text-blue-200">
-              Clean, modern design with custom profile images. Make a great
-              first impression.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Use Cases */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center"
-        >
-          <h2 className="text-2xl font-bold text-white mb-4">Perfect For</h2>
-          <div className="flex flex-wrap justify-center gap-3">
-            {[
-              "Content Creators",
-              "Influencers",
-              "Small Businesses",
-              "Freelancers",
-              "Artists",
-              "Podcasters",
-              "Musicians",
-              "Entrepreneurs",
-            ].map((useCase, index) => (
-              <span
-                key={index}
-                className="px-4 py-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-blue-200"
-              >
-                {useCase}
-              </span>
-            ))}
+            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+              <div className="text-2xl mb-2">🔗</div>
+              <h4 className="text-white font-medium text-sm mb-1">One Link</h4>
+              <p className="text-blue-200 text-xs">Share everywhere</p>
+            </div>
           </div>
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="mt-8 px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2 font-semibold"
+            className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-500/30 font-semibold"
           >
-            <Plus size={20} />
-            Get Started Now - It's Free
+            <Plus size={24} />
+            Create Link Group
           </button>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
+
+      {/* Description Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+        className="relative z-10 mt-8 max-w-2xl text-center px-4"
+      >
+        <p className="text-blue-200 text-sm leading-relaxed">
+          Perfect for content creators, influencers, businesses, and anyone who
+          wants to share multiple links through a single, memorable URL. No
+          login required!
+        </p>
+      </motion.div>
 
       {/* Modal */}
       <AnimatePresence>

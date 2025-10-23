@@ -30,7 +30,10 @@ export const createLinkGroup = async (
     return res.status(500).send({ message: "Something went wrong" });
   }
 };
-// ... existing code ...
+
+/**
+ * Update a link group
+ */
 export const updateLinkGroup = async (
   req: express.Request,
   res: express.Response
@@ -56,7 +59,7 @@ export const updateLinkGroup = async (
     return res.status(500).send({ message: "Something went wrong" });
   }
 };
-// ... existing code ...
+
 /**
  * Get all link groups
  */
