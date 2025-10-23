@@ -2,7 +2,7 @@ import express from "express";
 import {
   createLinkGroup,
   getAllLinkGroups,
-  getLinkGroup,
+  getLinkGroupPage,
   updateLinkGroup,
   deleteLinkGroup,
   addLinkToGroup,
@@ -13,10 +13,12 @@ const router = express.Router();
 
 router.post("/linkGroup", createLinkGroup);
 router.get("/linkGroups", getAllLinkGroups);
-router.get("/linkGroup/:groupUrl", getLinkGroup);
 router.put("/linkGroup/:id", updateLinkGroup);
 router.delete("/linkGroup/:id", deleteLinkGroup);
 router.post("/linkGroup/:id/link", addLinkToGroup);
 router.delete("/linkGroup/:id/link/:linkId", removeLinkFromGroup);
+
+// Export the page handler separately for use in server.ts
+export { getLinkGroupPage };
 
 export default router;

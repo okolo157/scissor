@@ -34,6 +34,9 @@ app.use("/api", shortUrl_1.default);
 app.use("/api", linkGroup_1.default);
 // Mount redirect routes at the root level
 const shortUrl_2 = require("./controllers/shortUrl");
+const linkGroup_2 = require("./routes/linkGroup");
+// Handle group link pages (must come before /:id to avoid conflicts)
+app.get("/g/:groupUrl", linkGroup_2.getLinkGroupPage);
 // Handle short URLs
 app.get("/:id", shortUrl_2.getUrl);
 app.listen(port, () => {

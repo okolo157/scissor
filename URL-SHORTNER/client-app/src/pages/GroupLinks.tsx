@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { serverUrl } from "../helpers/constants";
 import { LinkGroup, Link } from "../interface/linkGroup";
@@ -18,32 +18,28 @@ import {
 import { CircularProgress } from "@mui/material";
 
 const GroupLinks: React.FC = () => {
-  const [linkGroups, setLinkGroups] = React.useState<LinkGroup[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [showCreateModal, setShowCreateModal] = React.useState<boolean>(false);
-  const [editingGroup, setEditingGroup] = React.useState<LinkGroup | null>(
-    null
-  );
-  const [copiedUrl, setCopiedUrl] = React.useState<string | null>(null);
+  const [linkGroups, setLinkGroups] = useState<LinkGroup[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
+  const [editingGroup, setEditingGroup] = useState<LinkGroup | null>(null);
+  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
 
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     groupName: "",
     description: "",
     links: [] as Link[],
   });
 
-  const [newLink, setNewLink] = React.useState({ title: "", url: "" });
+  const [newLink, setNewLink] = useState({ title: "", url: "" });
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchLinkGroups();
   }, []);
 
   const fetchLinkGroups = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<LinkGroup[]>(
-        `${serverUrl}/api/linkGroups`
-      );
+      const response = await axios.get<LinkGroup[]>(`${serverUrl}/api/linkGroups`);
       setLinkGroups(response.data);
     } catch (error) {
       console.error("Error fetching link groups:", error);
@@ -52,25 +48,21 @@ const GroupLinks: React.FC = () => {
     }
   };
 
-  const handleCreateGroup = async (e: React.FormEvent) => {
+  const handleCreateGroup = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation();
     try {
-      const response = await axios.post<LinkGroup>(
-        `${serverUrl}/api/linkGroup`,
-        formData
-      );
-      setLinkGroups([response.data, ...linkGroups]);
+      const response = await axios.post<LinkGroup>(`${serverUrl}/api/linkGroup`, formData);
+      setLinkGroups((prev) => [response.data, ...prev]);
       setShowCreateModal(false);
-      resetForm();
+      setFormData({ groupName: "", description: "", links: [] });
+      setNewLink({ title: "", url: "" });
     } catch (error) {
       console.error("Error creating link group:", error);
     }
-  };
+  }, [formData]);
 
-  const handleUpdateGroup = async (e: React.FormEvent) => {
+  const handleUpdateGroup = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation();
     if (!editingGroup) return;
 
     try {
@@ -78,50 +70,46 @@ const GroupLinks: React.FC = () => {
         `${serverUrl}/api/linkGroup/${editingGroup._id}`,
         formData
       );
-      setLinkGroups(
-        linkGroups.map((group) =>
+      setLinkGroups((prev) =>
+        prev.map((group) =>
           group._id === editingGroup._id ? response.data : group
         )
       );
       setEditingGroup(null);
-      resetForm();
+      setFormData({ groupName: "", description: "", links: [] });
+      setNewLink({ title: "", url: "" });
     } catch (error) {
       console.error("Error updating link group:", error);
     }
-  };
+  }, [editingGroup, formData]);
 
   const handleDeleteGroup = async (id: string) => {
     if (!confirm("Are you sure you want to delete this group?")) return;
 
     try {
       await axios.delete(`${serverUrl}/api/linkGroup/${id}`);
-      setLinkGroups(linkGroups.filter((group) => group._id !== id));
+      setLinkGroups((prev) => prev.filter((group) => group._id !== id));
     } catch (error) {
       console.error("Error deleting link group:", error);
     }
   };
 
-  const addLinkToForm = () => {
+  const addLinkToForm = useCallback(() => {
     if (!newLink.title || !newLink.url) return;
 
-    setFormData({
-      ...formData,
-      links: [...formData.links, { ...newLink, order: formData.links.length }],
-    });
+    setFormData((prev) => ({
+      ...prev,
+      links: [...prev.links, { ...newLink, order: prev.links.length }],
+    }));
     setNewLink({ title: "", url: "" });
-  };
+  }, [newLink]);
 
-  const removeLinkFromForm = (index: number) => {
-    setFormData({
-      ...formData,
-      links: formData.links.filter((_, i) => i !== index),
-    });
-  };
-
-  const resetForm = () => {
-    setFormData({ groupName: "", description: "", links: [] });
-    setNewLink({ title: "", url: "" });
-  };
+  const removeLinkFromForm = useCallback((index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      links: prev.links.filter((_, i) => i !== index),
+    }));
+  }, []);
 
   const openEditModal = (group: LinkGroup) => {
     setEditingGroup(group);
@@ -139,180 +127,12 @@ const GroupLinks: React.FC = () => {
     setTimeout(() => setCopiedUrl(null), 2000);
   };
 
-  const GroupModal = ({
-    isEdit = false,
-    onClose,
-  }: {
-    isEdit?: boolean;
-    onClose: () => void;
-  }) => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl flex items-center justify-between">
-          <h2 className="text-2xl font-bold">
-            {isEdit ? "Edit Link Group" : "Create New Link Group"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-          >
-            <X size={24} />
-          </button>
-        </div>
-
-        <form
-          onSubmit={isEdit ? handleUpdateGroup : handleCreateGroup}
-          className="p-6 space-y-6"
-        >
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Group Name *
-            </label>
-            <input
-              type="text"
-              required
-              autoComplete="off"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              value={formData.groupName}
-              onChange={(e) => {
-                // e.stopPropagation();
-                setFormData({ ...formData, groupName: e.target.value });
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-              }}
-              placeholder="My Social Links"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Description
-            </label>
-            <textarea
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              rows={3}
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              placeholder="A brief description of your link group"
-            />
-          </div>
-
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-              Links
-            </h3>
-
-            <div className="space-y-3 mb-4">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                  placeholder="Link title"
-                  value={newLink.title}
-                  onChange={(e) =>
-                    setNewLink({ ...newLink, title: e.target.value })
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      if (newLink.title && newLink.url) {
-                        addLinkToForm();
-                      }
-                    }
-                  }}
-                />
-                <input
-                  type="url"
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                  placeholder="https://..."
-                  value={newLink.url}
-                  onChange={(e) =>
-                    setNewLink({ ...newLink, url: e.target.value })
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      if (newLink.title && newLink.url) {
-                        addLinkToForm();
-                      }
-                    }
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={addLinkToForm}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <Plus size={20} />
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              {formData.links.map((link, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                >
-                  <Link2 size={16} className="text-gray-400" />
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-800 dark:text-white">
-                      {link.title}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                      {link.url}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeLinkFromForm(index)}
-                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <Save size={20} />
-              {isEdit ? "Update" : "Create"} Group
-            </button>
-          </div>
-        </form>
-      </motion.div>
-    </motion.div>
-  );
+  const closeModal = useCallback(() => {
+    setShowCreateModal(false);
+    setEditingGroup(null);
+    setFormData({ groupName: "", description: "", links: [] });
+    setNewLink({ title: "", url: "" });
+  }, []);
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -439,14 +259,200 @@ const GroupLinks: React.FC = () => {
       </div>
 
       <AnimatePresence>
-        {showCreateModal && (
-          <GroupModal onClose={() => setShowCreateModal(false)} />
-        )}
-        {editingGroup && (
-          <GroupModal isEdit onClose={() => setEditingGroup(null)} />
+        {(showCreateModal || editingGroup) && (
+          <GroupModal
+            isEdit={!!editingGroup}
+            formData={formData}
+            setFormData={setFormData}
+            newLink={newLink}
+            setNewLink={setNewLink}
+            onSubmit={editingGroup ? handleUpdateGroup : handleCreateGroup}
+            onClose={closeModal}
+            addLinkToForm={addLinkToForm}
+            removeLinkFromForm={removeLinkFromForm}
+          />
         )}
       </AnimatePresence>
     </div>
+  );
+};
+
+interface GroupModalProps {
+  isEdit: boolean;
+  formData: { groupName: string; description: string; links: Link[] };
+  setFormData: React.Dispatch<React.SetStateAction<{ groupName: string; description: string; links: Link[] }>>;
+  newLink: { title: string; url: string };
+  setNewLink: React.Dispatch<React.SetStateAction<{ title: string; url: string }>>;
+  onSubmit: (e: React.FormEvent) => void;
+  onClose: () => void;
+  addLinkToForm: () => void;
+  removeLinkFromForm: (index: number) => void;
+}
+
+const GroupModal: React.FC<GroupModalProps> = ({
+  isEdit,
+  formData,
+  setFormData,
+  newLink,
+  setNewLink,
+  onSubmit,
+  onClose,
+  addLinkToForm,
+  removeLinkFromForm,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: 20 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
+          <h2 className="text-2xl font-bold">
+            {isEdit ? "Edit Link Group" : "Create New Link Group"}
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <form onSubmit={onSubmit} className="p-6 space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Group Name *
+            </label>
+            <input
+              type="text"
+              required
+              autoComplete="off"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              value={formData.groupName}
+              onChange={(e) => setFormData({ ...formData, groupName: e.target.value })}
+              placeholder="My Social Links"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description
+            </label>
+            <textarea
+              autoComplete="off"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              rows={3}
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="A brief description of your link group"
+            />
+          </div>
+
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+              Links
+            </h3>
+
+            <div className="space-y-3 mb-4">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Link title"
+                  value={newLink.title}
+                  onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (newLink.title && newLink.url) {
+                        addLinkToForm();
+                      }
+                    }
+                  }}
+                />
+                <input
+                  type="url"
+                  autoComplete="off"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="https://..."
+                  value={newLink.url}
+                  onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (newLink.title && newLink.url) {
+                        addLinkToForm();
+                      }
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={addLinkToForm}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Plus size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              {formData.links.map((link, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                >
+                  <Link2 size={16} className="text-gray-400" />
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-800 dark:text-white">
+                      {link.title}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                      {link.url}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeLinkFromForm(index)}
+                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <Save size={20} />
+              {isEdit ? "Update" : "Create"} Group
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </motion.div>
   );
 };
 

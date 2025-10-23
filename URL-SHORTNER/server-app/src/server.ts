@@ -40,6 +40,10 @@ app.use("/api", linkGroup);
 
 // Mount redirect routes at the root level
 import { getUrl } from "./controllers/shortUrl";
+import { getLinkGroupPage } from "./routes/linkGroup";
+
+// Handle group link pages (must come before /:id to avoid conflicts)
+app.get("/g/:groupUrl", getLinkGroupPage);
 
 // Handle short URLs
 app.get("/:id", getUrl);
