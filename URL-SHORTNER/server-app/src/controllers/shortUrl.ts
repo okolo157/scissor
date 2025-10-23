@@ -21,7 +21,7 @@ export const createUrl = async (
   res: express.Response
 ) => {
   try {
-    const { fullUrl } = req.body;
+    const { fullUrl, customUrl } = req.body;
 
     // Validate the URL
     if (!validUrl.isUri(fullUrl)) {
@@ -29,30 +29,56 @@ export const createUrl = async (
       return res.status(400).send({ message: "Invalid URL" });
     }
 
-    console.log("Incoming full URL:", fullUrl);
+    // Validate custom URL if provided
+    if (customUrl) {
+      // Check if custom URL is alphanumeric and reasonable length
+      if (!/^[a-zA-Z0-9_-]{3,30}$/.test(customUrl)) {
+        return res.status(400).send({
+          message:
+            "Custom URL must be 3-30 characters and contain only letters, numbers, hyphens, and underscores",
+        });
+      }
+
+      // Check if custom URL already exists
+      const existingCustomUrl = await urlModel.findOne({ shortUrl: customUrl });
+      if (existingCustomUrl) {
+        return res.status(409).send({
+          message: "This custom URL is already taken. Please choose another.",
+        });
+      }
+    }
+
+    console.log("Incoming full URL:", fullUrl, "Custom URL:", customUrl);
 
     const cacheKey = `url:${fullUrl}`;
 
-    // Check Redis cache first
-    const cachedUrl = await redis.get(cacheKey);
-    if (cachedUrl) {
-      console.log("Cache hit for URL:", fullUrl);
-      return res.status(200).send(JSON.parse(cachedUrl));
-    }
+    // Check Redis cache first (only if no custom URL specified)
+    if (!customUrl) {
+      const cachedUrl = await redis.get(cacheKey);
+      if (cachedUrl) {
+        console.log("Cache hit for URL:", fullUrl);
+        return res.status(200).send(JSON.parse(cachedUrl));
+      }
 
-    console.log("Cache miss for URL:", fullUrl);
+      console.log("Cache miss for URL:", fullUrl);
 
-    // Check if URL exists in MongoDB
-    const foundUrl = await urlModel.findOne({ fullUrl });
-    if (foundUrl) {
-      // Cache the found URL
-      await redis.set(cacheKey, JSON.stringify(foundUrl), "EX", 3600); // 1 hour
-      console.log("URL found in database and cached:", fullUrl);
-      return res.status(409).send(foundUrl); // Conflict: already exists
+      // Check if URL exists in MongoDB
+      const foundUrl = await urlModel.findOne({ fullUrl });
+      if (foundUrl) {
+        // Cache the found URL
+        await redis.set(cacheKey, JSON.stringify(foundUrl), "EX", 3600); // 1 hour
+        console.log("URL found in database and cached:", fullUrl);
+        return res.status(409).send(foundUrl); // Conflict: already exists
+      }
     }
 
     // Create a new short URL
-    const shortUrl = await urlModel.create({ fullUrl });
+    const shortUrlData: any = { fullUrl };
+    if (customUrl) {
+      shortUrlData.shortUrl = customUrl;
+    }
+
+    const shortUrl = await urlModel.create(shortUrlData);
 
     // Cache the new URL
     await redis.set(cacheKey, JSON.stringify(shortUrl), "EX", 3600);
@@ -104,9 +130,7 @@ export const deleteUrl = async (
     const cacheKey = `url:${shortUrl.fullUrl}`;
     await redis.del(cacheKey);
 
-    console.log(
-      `Deleted URL: ${cacheKey} (short code: ${shortUrl.shortUrl})`
-    );
+    console.log(`Deleted URL: ${cacheKey} (short code: ${shortUrl.shortUrl})`);
 
     return res.status(204).send({ message: "URL successfully deleted" });
   } catch (error) {

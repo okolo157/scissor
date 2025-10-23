@@ -9,19 +9,47 @@ export const createLinkGroup = async (
   res: express.Response
 ) => {
   try {
-    const { groupName, description, profileImage, links, theme } = req.body;
+    const { groupName, description, profileImage, links, theme, customUrl } =
+      req.body;
 
     if (!groupName) {
       return res.status(400).send({ message: "Group name is required" });
     }
 
-    const linkGroup = await linkGroupModel.create({
+    // Validate custom URL if provided
+    if (customUrl) {
+      // Check if custom URL is alphanumeric and reasonable length
+      if (!/^[a-zA-Z0-9_-]{3,30}$/.test(customUrl)) {
+        return res.status(400).send({
+          message:
+            "Custom URL must be 3-30 characters and contain only letters, numbers, hyphens, and underscores",
+        });
+      }
+
+      // Check if custom URL already exists
+      const existingCustomUrl = await linkGroupModel.findOne({
+        groupUrl: customUrl,
+      });
+      if (existingCustomUrl) {
+        return res.status(409).send({
+          message: "This custom URL is already taken. Please choose another.",
+        });
+      }
+    }
+
+    const linkGroupData: any = {
       groupName,
       description,
       profileImage,
       links: links || [],
       theme: theme || {},
-    });
+    };
+
+    if (customUrl) {
+      linkGroupData.groupUrl = customUrl;
+    }
+
+    const linkGroup = await linkGroupModel.create(linkGroupData);
 
     console.log("New link group created:", linkGroup.groupUrl);
     return res.status(201).send(linkGroup);

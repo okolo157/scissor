@@ -4,8 +4,9 @@ import { useParams, Link as RouterLink } from "react-router-dom";
 import { serverUrl } from "../helpers/constants";
 import { LinkGroup } from "../interface/linkGroup";
 import { motion } from "framer-motion";
-import { ExternalLink, Eye, Home, Loader2 } from "lucide-react";
+import { ExternalLink, Eye, Home } from "lucide-react";
 import Logo from "../assets/scissor-logo.png";
+import { LinkGroupSkeleton } from "../components/skeleton/SkeletonLoader";
 
 const PublicGroup: React.FC = () => {
   const { groupUrl } = useParams<{ groupUrl: string }>();
@@ -24,7 +25,7 @@ const PublicGroup: React.FC = () => {
           `${serverUrl}/api/linkGroup/${groupUrl}`
         );
         setLinkGroup(response.data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching link group:", err);
         setError("Link group not found");
       } finally {
@@ -37,13 +38,27 @@ const PublicGroup: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <Loader2
-            size={48}
-            className="text-blue-400 animate-spin mx-auto mb-4"
-          />
-          <p className="text-blue-200">Loading link group...</p>
+      <div
+        className="min-h-screen py-12 px-4"
+        style={{
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        }}
+      >
+        <div className="container mx-auto max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-8"
+          >
+            <RouterLink
+              to="/"
+              className="inline-flex items-center gap-2 text-white hover:opacity-80 transition-opacity mb-6"
+            >
+              <img src={Logo} alt="Scissor" className="w-8 h-8" />
+              <span className="text-sm font-medium">Powered by Scissor</span>
+            </RouterLink>
+          </motion.div>
+          <LinkGroupSkeleton />
         </div>
       </div>
     );

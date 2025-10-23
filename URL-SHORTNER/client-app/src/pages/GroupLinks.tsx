@@ -27,6 +27,7 @@ const GroupLinks: React.FC = () => {
     groupName: "",
     description: "",
     profileImage: "",
+    customUrl: "",
     links: [] as Link[],
   });
 
@@ -46,16 +47,26 @@ const GroupLinks: React.FC = () => {
       try {
         console.log("Creating group with data:", formData);
 
-        const response = await axios.post(
-          `${serverUrl}/api/linkGroup`,
-          formData
-        );
+        const response = await axios.post(`${serverUrl}/api/linkGroup`, {
+          groupName: formData.groupName,
+          description: formData.description,
+          profileImage: formData.profileImage,
+          links: formData.links,
+          customUrl: formData.customUrl.trim() || undefined,
+        });
         setCreatedGroupUrl(response.data.groupUrl);
         setShowCreateModal(false);
         resetForm();
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Error creating link group:", error);
-        alert("Failed to create link group. Please try again.");
+        let errorMessage = "Failed to create link group. Please try again.";
+        if (error && typeof error === "object" && "response" in error) {
+          const response = (
+            error as { response?: { data?: { message?: string } } }
+          ).response;
+          errorMessage = response?.data?.message || errorMessage;
+        }
+        alert(errorMessage);
       } finally {
         setIsSubmitting(false);
       }
@@ -98,6 +109,7 @@ const GroupLinks: React.FC = () => {
       groupName: "",
       description: "",
       profileImage: "",
+      customUrl: "",
       links: [],
     });
     setNewLink({ title: "", url: "" });
@@ -217,9 +229,6 @@ const GroupLinks: React.FC = () => {
           <div className="space-y-6">
             <div className="bg-white/5 rounded-xl p-6 border border-white/10">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Link2 size={24} className="text-blue-400" />
-                </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-1">
                     What are Link Groups?
@@ -308,6 +317,7 @@ interface GroupModalProps {
     groupName: string;
     description: string;
     profileImage: string;
+    customUrl: string;
     links: Link[];
   };
   setFormData: React.Dispatch<
@@ -315,6 +325,7 @@ interface GroupModalProps {
       groupName: string;
       description: string;
       profileImage: string;
+      customUrl: string;
       links: Link[];
     }>
   >;
@@ -428,6 +439,37 @@ const GroupModal: React.FC<GroupModalProps> = ({
               placeholder="My Social Links"
               disabled={isSubmitting}
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Custom URL (Optional)
+            </label>
+            <div className="flex items-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 dark:bg-gray-700">
+              <span className="pl-4 text-sm text-gray-500 dark:text-gray-400">
+                {window.location.origin}/g/
+              </span>
+              <input
+                type="text"
+                autoComplete="off"
+                className="flex-1 px-2 py-3 bg-transparent dark:text-white outline-none"
+                value={formData.customUrl}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    customUrl: e.target.value,
+                  }))
+                }
+                placeholder="custom-name"
+                pattern="[a-zA-Z0-9_-]{3,30}"
+                title="3-30 characters: letters, numbers, hyphens, and underscores only"
+                disabled={isSubmitting}
+              />
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Leave empty for auto-generated URL. Use 3-30 characters: letters,
+              numbers, hyphens, underscores.
+            </p>
           </div>
 
           <div>

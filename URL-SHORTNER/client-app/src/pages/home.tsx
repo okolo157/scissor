@@ -15,16 +15,24 @@ const Home: React.FC = () => {
   const [error, setError] = React.useState<string | null>(null);
   const [copied, setCopied] = React.useState<boolean>(false);
 
-  const handleShortenUrl = async (originalUrl: string) => {
+  const handleShortenUrl = async (originalUrl: string, customUrl?: string) => {
     try {
       setError(null);
       setLoading(true);
       setShortUrl(null);
       setCopied(false);
 
-      const response = await axios.post<urlData>(`${serverUrl}/api/shortUrl`, {
+      const requestBody: { fullUrl: string; customUrl?: string } = {
         fullUrl: originalUrl,
-      });
+      };
+      if (customUrl) {
+        requestBody.customUrl = customUrl;
+      }
+
+      const response = await axios.post<urlData>(
+        `${serverUrl}/api/shortUrl`,
+        requestBody
+      );
 
       return { shortUrl: response.data.shortUrl };
     } catch (err: unknown) {
