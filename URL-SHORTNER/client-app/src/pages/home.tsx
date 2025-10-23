@@ -2,7 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import { motion } from "framer-motion";
-import { Link2, FolderKanban, ArrowRight, Scissors } from "lucide-react";
+import { Link2, FolderKanban, ArrowRight } from "lucide-react";
 import Logo from "../assets/scissor-logo.png";
 
 const Home: React.FC = () => {
@@ -52,16 +52,15 @@ const Home: React.FC = () => {
             <img
               src={Logo}
               alt="Scissor Logo"
-              className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+              className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
             />
-            <Scissors size={48} className="text-blue-400 hidden sm:block" />
           </div>
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
             Welcome to <span className="text-blue-400">Scissor</span>
           </h1>
           <p className="text-blue-200 text-sm sm:text-base md:text-lg max-w-2xl">
-            Your all-in-one solution for link management — Shorten URLs or
-            create beautiful link-in-bio pages
+            The ultimate link tool you'll ever need. Shorten URLs or create
+            beautiful link-in-bio pages.
           </p>
         </motion.div>
 
