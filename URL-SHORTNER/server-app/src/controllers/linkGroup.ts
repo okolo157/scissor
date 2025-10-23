@@ -643,15 +643,7 @@ export const getLinkGroupPage = async (
           </div>
           
           <div class="footer">
-            <div class="footer-card">
-              <div class="footer-text">Create your own link page</div>
-              <a href="/" class="footer-cta">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-                <span>Get Started Free</span>
-              </a>
-            </div>
+            Create your own link page with <a href="https://scissor.site">Scissor</a>
           </div>
         </div>
       </body>
