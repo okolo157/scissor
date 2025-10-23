@@ -401,85 +401,106 @@ const GroupModal: React.FC<GroupModalProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 z-50 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
-        initial={{ scale: 0.9, y: 20 }}
+        initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4"
+        exit={{ scale: 0.95, y: 20 }}
+        className="min-h-screen w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl flex items-center justify-between z-10">
-          <h2 className="text-2xl font-bold">Create New Link Group</h2>
+        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 py-4 sm:py-6 flex items-center justify-between z-20 shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center">
+              <Link2 size={24} className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
+                Create New Link Group
+              </h2>
+              <p className="text-xs sm:text-sm text-blue-100 mt-1">
+                Build your personalized link-in-bio page
+              </p>
+            </div>
+          </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+            className="p-2 sm:p-3 hover:bg-white/20 rounded-xl transition-colors flex-shrink-0"
           >
-            <X size={24} />
+            <X size={24} className="sm:w-7 sm:h-7" />
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="p-6 space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Group Name *
-            </label>
-            <input
-              type="text"
-              required
-              autoComplete="off"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              value={formData.groupName}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, groupName: e.target.value }))
-              }
-              placeholder="My Social Links"
-              disabled={isSubmitting}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Custom URL (Optional)
-            </label>
-            <div className="flex items-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 dark:bg-gray-700">
-              <span className="pl-4 text-sm text-gray-500 dark:text-gray-400">
-                {window.location.origin}/g/
-              </span>
+        <form
+          onSubmit={onSubmit}
+          className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8"
+        >
+          {/* Group Name & Custom URL - Side by side on desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+              <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                Group Name *
+              </label>
               <input
                 type="text"
+                required
                 autoComplete="off"
-                className="flex-1 px-2 py-3 bg-transparent dark:text-white outline-none"
-                value={formData.customUrl}
+                className="w-full px-4 py-3 sm:py-4 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-base sm:text-lg"
+                value={formData.groupName}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    customUrl: e.target.value,
+                    groupName: e.target.value,
                   }))
                 }
-                placeholder="custom-name"
-                pattern="[a-zA-Z0-9_-]{3,30}"
-                title="3-30 characters: letters, numbers, hyphens, and underscores only"
+                placeholder="My Social Links"
                 disabled={isSubmitting}
               />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Leave empty for auto-generated URL. Use 3-30 characters: letters,
-              numbers, hyphens, underscores.
-            </p>
+
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+              <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                Custom URL (Optional)
+              </label>
+              <div className="flex items-center gap-2 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus-within:ring-4 focus-within:ring-blue-500 dark:bg-gray-700">
+                <span className="pl-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                  {window.location.origin}/g/
+                </span>
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className="flex-1 px-2 py-3 sm:py-4 bg-transparent dark:text-white outline-none text-base sm:text-lg"
+                  value={formData.customUrl}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      customUrl: e.target.value,
+                    }))
+                  }
+                  placeholder="custom-name"
+                  pattern="[a-zA-Z0-9_-]{3,30}"
+                  title="3-30 characters: letters, numbers, hyphens, and underscores only"
+                  disabled={isSubmitting}
+                />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2">
+                Leave empty for auto-generated URL
+              </p>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {/* Description */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
               Description
             </label>
             <textarea
               autoComplete="off"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-              rows={3}
+              className="w-full px-4 py-3 sm:py-4 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-base sm:text-lg resize-none"
+              rows={4}
               value={formData.description}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -492,49 +513,48 @@ const GroupModal: React.FC<GroupModalProps> = ({
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {/* Profile Image */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
               <div className="flex items-center gap-2">
-                <Image size={16} />
+                <Image size={20} />
                 Profile Image
               </div>
             </label>
 
             <div className="space-y-3">
-              <div className="flex gap-2">
-                <label className="flex-1">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) handleImageUpload(file);
-                    }}
-                    disabled={uploadingImage || isSubmitting}
-                  />
-                  <div className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
-                    {uploadingImage ? (
-                      <>
-                        <CircularProgress size={20} />
-                        <span>Uploading...</span>
-                      </>
-                    ) : formData.profileImage ? (
-                      <>
-                        <Check size={20} className="text-green-600" />
-                        <span className="text-green-600 dark:text-green-400">
-                          Image uploaded
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={20} />
-                        <span>Click to upload image</span>
-                      </>
-                    )}
-                  </div>
-                </label>
-              </div>
+              <label className="block">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleImageUpload(file);
+                  }}
+                  disabled={uploadingImage || isSubmitting}
+                />
+                <div className="w-full px-4 py-4 sm:py-5 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer flex items-center justify-center gap-3 text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50">
+                  {uploadingImage ? (
+                    <>
+                      <CircularProgress size={20} />
+                      <span>Uploading...</span>
+                    </>
+                  ) : formData.profileImage ? (
+                    <>
+                      <Check size={20} className="text-green-600" />
+                      <span className="text-green-600 dark:text-green-400">
+                        Image uploaded
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={20} />
+                      <span>Click to upload image</span>
+                    </>
+                  )}
+                </div>
+              </label>
             </div>
 
             {formData.profileImage && (
