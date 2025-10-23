@@ -79,8 +79,8 @@ export const getLinkGroupPage = async (
       `);
     }
 
-    // Increment view counter
-    linkGroup.views++;
+    // Increment view count
+    linkGroup.views += 1;
     await linkGroup.save();
 
     // Get theme with defaults
@@ -90,155 +90,319 @@ export const getLinkGroupPage = async (
       buttonColor: "#3b82f6",
     };
 
-    // Render HTML page with links
+    // Generate HTML page
     const html = `
       <!DOCTYPE html>
       <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${linkGroup.groupName} | Scissor</title>
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${linkGroup.groupName} | Scissor</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            animation: fadeIn 0.5s ease;
+          }
+
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes scaleIn {
+            from {
+              opacity: 0;
+              transform: scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: scale(1);
+            }
+          }
+
+          .header {
+            max-width: 680px;
+            margin: 0 auto 1.5rem;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.6s ease;
+          }
+
+          .logo {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          }
+
+          .container {
+            flex: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            width: 100%;
+            animation: slideIn 0.7s ease;
+          }
+
+          .profile-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+          }
+
+          .avatar {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: scaleIn 0.8s ease;
+          }
+
+          h1 {
+            color: #fff;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          }
+
+          .description {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            font-weight: 500;
+          }
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+          }
+
+          .stat-icon {
+            font-size: 1.1rem;
+          }
+
+          .links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+          }
+
+          .link {
+            display: block;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2d3748;
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s ease backwards;
+          }
+
+          .link:nth-child(1) { animation-delay: 0.1s; }
+          .link:nth-child(2) { animation-delay: 0.15s; }
+          .link:nth-child(3) { animation-delay: 0.2s; }
+          .link:nth-child(4) { animation-delay: 0.25s; }
+          .link:nth-child(5) { animation-delay: 0.3s; }
+          .link:nth-child(n+6) { animation-delay: 0.35s; }
+
+          .link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+          }
+
+          .link:hover::before {
+            left: 100%;
+          }
+
+          .link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            border-color: rgba(102, 126, 234, 0.3);
+            background: #fff;
+          }
+
+          .link:active {
+            transform: translateY(-1px);
+          }
+
+          .link span {
+            position: relative;
+            z-index: 1;
+          }
+
+          .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+          }
+
+          .footer a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+          }
+
+          .footer a:hover {
+            opacity: 0.8;
+          }
+
+          @media (max-width: 640px) {
             body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              background: linear-gradient(135deg, ${theme.backgroundColor}22, ${
-      theme.buttonColor
-    }33);
-              min-height: 100vh;
-              padding: 2rem 1rem;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
+              padding: 0.5rem;
             }
-            .header {
-              text-align: center;
-              margin-bottom: 2rem;
-              color: #fff;
-            }
-            .logo {
-              font-size: 0.875rem;
-              opacity: 0.8;
-              margin-bottom: 1.5rem;
-            }
-            .container {
-              max-width: 42rem;
-              width: 100%;
-              background: rgba(255, 255, 255, 0.95);
-              border-radius: 1.5rem;
-              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-              padding: 2rem;
-            }
-            h1 {
-              color: ${theme.textColor};
+
+            .avatar {
+              width: 80px;
+              height: 80px;
               font-size: 2rem;
-              margin-bottom: 0.5rem;
-              text-align: center;
+              margin-bottom: 1rem;
             }
+
+            h1 {
+              font-size: 1.5rem;
+            }
+
             .description {
-              color: #666;
-              text-align: center;
-              margin-bottom: 2rem;
-              font-size: 0.875rem;
+              font-size: 0.9rem;
             }
+
             .stats {
-              display: flex;
-              justify-content: center;
-              gap: 1.5rem;
-              padding: 1rem 0;
-              margin-bottom: 2rem;
-              border-bottom: 1px solid #e5e7eb;
-              color: #666;
-              font-size: 0.875rem;
+              gap: 1rem;
+              font-size: 0.85rem;
             }
-            .links {
-              display: flex;
-              flex-direction: column;
-              gap: 0.75rem;
+
+            .stat-item {
+              padding: 0.4rem 0.8rem;
             }
+
             .link {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              padding: 1rem 1.5rem;
-              background: ${theme.buttonColor};
-              color: white;
-              text-decoration: none;
-              border-radius: 0.75rem;
-              font-weight: 500;
-              transition: all 0.2s;
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+              padding: 1rem 1.25rem;
+              font-size: 0.95rem;
             }
-            .link:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            }
-            .link svg {
-              width: 1.25rem;
-              height: 1.25rem;
-              opacity: 0.7;
-            }
-            .empty {
-              text-align: center;
-              padding: 3rem;
-              color: #999;
-            }
-            .footer {
-              margin-top: 2rem;
-              text-align: center;
-              color: rgba(255, 255, 255, 0.7);
-              font-size: 0.875rem;
-            }
-            .footer a {
-              color: rgba(255, 255, 255, 0.9);
-              text-decoration: none;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div class="logo">⚡ Powered by Scissor</div>
-          </div>
-          
-          <div class="container">
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="logo">⚡ Powered by Scissor</div>
+        </div>
+        <div class="container">
+          <div class="profile-section">
+            <div class="avatar">
+              ${linkGroup.groupName.charAt(0).toUpperCase()}
+            </div>
             <h1>${linkGroup.groupName}</h1>
             ${
               linkGroup.description
-                ? `<p class="description">${linkGroup.description}</p>`
+                ? `<div class="description">${linkGroup.description}</div>`
                 : ""
             }
-            
             <div class="stats">
-              <span>🔗 ${linkGroup.links.length} links</span>
-              <span>•</span>
-              <span>👀 ${linkGroup.views} views</span>
-            </div>
-            
-            <div class="links">
-              ${
-                linkGroup.links.length > 0
-                  ? linkGroup.links
-                      .sort((a, b) => a.order - b.order)
-                      .map(
-                        (link) => `
-                  <a href="${link.url}" class="link" target="_blank" rel="noopener noreferrer">
-                    <span>${link.title}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                `
-                      )
-                      .join("")
-                  : '<div class="empty">No links added yet</div>'
-              }
+              <div class="stat-item">
+                <span class="stat-icon">🔗</span>
+                <span>${linkGroup.links.length} ${
+      linkGroup.links.length === 1 ? "link" : "links"
+    }</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-icon">👁️</span>
+                <span>${linkGroup.views} ${
+      linkGroup.views === 1 ? "view" : "views"
+    }</span>
+              </div>
             </div>
           </div>
-          
+          <div class="links">
+            ${linkGroup.links
+              .sort((a, b) => (a.order || 0) - (b.order || 0))
+              .map(
+                (link) => `
+                <a href="${link.url}" class="link" target="_blank" rel="noopener noreferrer">
+                  <span>${link.title}</span>
+                </a>
+              `
+              )
+              .join("")}
+          </div>
           <div class="footer">
-            Created with <a href="/">Scissor</a>
+            Create your own link page with <a href="/">Scissor</a>
           </div>
-        </body>
+        </div>
+      </body>
       </html>
     `;
 
