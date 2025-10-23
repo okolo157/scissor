@@ -383,14 +383,6 @@ export const getLinkGroupPage = async (
         </style>
       </head>
       <body>
-        <div class="header">
-          <a href="/" class="logo">
-            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 4L12 12M12 12L4 20M12 12L20 20M12 12L4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Scissor</span>
-          </a>
-        </div>
         <div class="container">
           <div class="profile-section">
             <div class="avatar">
@@ -406,20 +398,7 @@ export const getLinkGroupPage = async (
                 ? `<div class="description">${linkGroup.description}</div>`
                 : ""
             }
-            <div class="stats">
-              <div class="stat-item">
-                <span class="stat-icon">🔗</span>
-                <span>${linkGroup.links.length} ${
-      linkGroup.links.length === 1 ? "link" : "links"
-    }</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-icon">👁️</span>
-                <span>${linkGroup.views} ${
-      linkGroup.views === 1 ? "view" : "views"
-    }</span>
-              </div>
-            </div>
+           
           </div>
           <div class="links">
             ${linkGroup.links

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { serverUrl } from "../helpers/constants";
 import { LinkGroup, Link } from "../interface/linkGroup";
@@ -15,6 +15,9 @@ import {
   Image,
   Upload,
   Trash2,
+  Search,
+  Grid,
+  List,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 
@@ -24,7 +27,9 @@ const GroupLinks: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [editingGroup, setEditingGroup] = useState<LinkGroup | null>(null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [uploadingImage, setUploadingImage] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     groupName: "",
@@ -42,36 +47,55 @@ const GroupLinks: React.FC = () => {
   const fetchLinkGroups = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await axios.get<LinkGroup[]>(
         `${serverUrl}/api/linkGroups`
       );
       setLinkGroups(response.data);
     } catch (error) {
       console.error("Error fetching link groups:", error);
+      setError("Failed to load link groups. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Memoized filtered groups
+  const filteredGroups = useMemo(() => {
+    if (!searchQuery.trim()) return linkGroups;
+
+    const query = searchQuery.toLowerCase();
+    return linkGroups.filter(
+      (group) =>
+        group.groupName.toLowerCase().includes(query) ||
+        group.description?.toLowerCase().includes(query) ||
+        group.links.some((link) => link.title.toLowerCase().includes(query))
+    );
+  }, [linkGroups, searchQuery]);
+
   const handleCreateGroup = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+
+      if (formData.links.length === 0) {
+        alert("Please add at least one link to the group");
+        return;
+      }
+
       try {
+        // Debug: Log the formData being sent
+        console.log("Creating group with data:", formData);
+
         const response = await axios.post<LinkGroup>(
           `${serverUrl}/api/linkGroup`,
           formData
         );
         setLinkGroups((prev) => [response.data, ...prev]);
         setShowCreateModal(false);
-        setFormData({
-          groupName: "",
-          description: "",
-          profileImage: "",
-          links: [],
-        });
-        setNewLink({ title: "", url: "" });
+        resetForm();
       } catch (error) {
         console.error("Error creating link group:", error);
+        alert("Failed to create link group. Please try again.");
       }
     },
     [formData]
@@ -81,6 +105,11 @@ const GroupLinks: React.FC = () => {
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!editingGroup) return;
+
+      if (formData.links.length === 0) {
+        alert("Please add at least one link to the group");
+        return;
+      }
 
       try {
         const response = await axios.put<LinkGroup>(
@@ -93,61 +122,42 @@ const GroupLinks: React.FC = () => {
           )
         );
         setEditingGroup(null);
-        setFormData({
-          groupName: "",
-          description: "",
-          profileImage: "",
-          links: [],
-        });
-        setNewLink({ title: "", url: "" });
+        resetForm();
       } catch (error) {
         console.error("Error updating link group:", error);
+        alert("Failed to update link group. Please try again.");
       }
     },
     [editingGroup, formData]
   );
 
-  const handleImageUpload = async (file: File) => {
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      alert("Please upload an image file");
+  const handleDeleteGroup = useCallback(async (groupId: string) => {
+    if (!window.confirm("Are you sure you want to delete this link group?")) {
       return;
     }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Image size should be less than 5MB");
-      return;
-    }
-
-    setUploadingImage(true);
 
     try {
-      const formDataUpload = new FormData();
-      formDataUpload.append("file", file);
-      formDataUpload.append("upload_preset", "scissor_uploads");
-
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dmctp7kty/image/upload",
-        formDataUpload
-      );
-
-      setFormData((prev) => ({
-        ...prev,
-        profileImage: response.data.secure_url,
-      }));
+      await axios.delete(`${serverUrl}/api/linkGroup/${groupId}`);
+      setLinkGroups((prev) => prev.filter((group) => group._id !== groupId));
     } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Failed to upload image. Please try again.");
-    } finally {
-      setUploadingImage(false);
+      console.error("Error deleting link group:", error);
+      alert("Failed to delete link group. Please try again.");
     }
-  };
+  }, []);
 
   const addLinkToForm = useCallback(() => {
-    if (!newLink.title || !newLink.url) return;
+    if (!newLink.title.trim() || !newLink.url.trim()) {
+      alert("Please fill in both title and URL");
+      return;
+    }
+
+    // Basic URL validation
+    try {
+      new URL(newLink.url);
+    } catch {
+      alert("Please enter a valid URL (e.g., https://example.com)");
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -159,11 +169,25 @@ const GroupLinks: React.FC = () => {
   const removeLinkFromForm = useCallback((index: number) => {
     setFormData((prev) => ({
       ...prev,
-      links: prev.links.filter((_, i) => i !== index),
+      links: prev.links
+        .filter((_, i) => i !== index)
+        .map((link, i) => ({ ...link, order: i })),
     }));
   }, []);
 
-  const openEditModal = (group: LinkGroup) => {
+  const reorderLinks = useCallback((fromIndex: number, toIndex: number) => {
+    setFormData((prev) => {
+      const newLinks = [...prev.links];
+      const [movedLink] = newLinks.splice(fromIndex, 1);
+      newLinks.splice(toIndex, 0, movedLink);
+      return {
+        ...prev,
+        links: newLinks.map((link, i) => ({ ...link, order: i })),
+      };
+    });
+  }, []);
+
+  const openEditModal = useCallback((group: LinkGroup) => {
     setEditingGroup(group);
     setFormData({
       groupName: group.groupName,
@@ -171,18 +195,16 @@ const GroupLinks: React.FC = () => {
       profileImage: group.profileImage || "",
       links: group.links,
     });
-  };
+  }, []);
 
-  const copyGroupUrl = (groupUrl: string) => {
+  const copyGroupUrl = useCallback((groupUrl: string) => {
     const fullUrl = `${window.location.origin}/g/${groupUrl}`;
     navigator.clipboard.writeText(fullUrl);
     setCopiedUrl(groupUrl);
     setTimeout(() => setCopiedUrl(null), 2000);
-  };
+  }, []);
 
-  const closeModal = useCallback(() => {
-    setShowCreateModal(false);
-    setEditingGroup(null);
+  const resetForm = useCallback(() => {
     setFormData({
       groupName: "",
       description: "",
@@ -192,113 +214,153 @@ const GroupLinks: React.FC = () => {
     setNewLink({ title: "", url: "" });
   }, []);
 
+  const closeModal = useCallback(() => {
+    setShowCreateModal(false);
+    setEditingGroup(null);
+    resetForm();
+  }, [resetForm]);
+
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="container mx-auto max-w-6xl">
-        <div className="flex items-center justify-between mb-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Link Groups</h1>
             <p className="text-blue-200">
-              Create and manage your grouped links - similar to Linktree
+              Create and manage your link collections
             </p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg"
           >
             <Plus size={20} />
             Create Group
           </button>
         </div>
 
-        {loading ? (
+        {/* Search and View Toggle */}
+        {!loading && linkGroups.length > 0 && (
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="flex-1 relative">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300"
+                size={20}
+              />
+              <input
+                type="text"
+                placeholder="Search groups..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="flex gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-1">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`p-2 rounded transition-colors ${
+                  viewMode === "grid"
+                    ? "bg-blue-600 text-white"
+                    : "text-blue-300 hover:bg-white/10"
+                }`}
+              >
+                <Grid size={20} />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`p-2 rounded transition-colors ${
+                  viewMode === "list"
+                    ? "bg-blue-600 text-white"
+                    : "text-blue-300 hover:bg-white/10"
+                }`}
+              >
+                <List size={20} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-6">
+            <p className="text-red-200">{error}</p>
+            <button
+              onClick={fetchLinkGroups}
+              className="mt-2 text-sm text-red-100 underline hover:no-underline"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading && (
           <div className="flex justify-center py-20">
             <CircularProgress />
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {linkGroups.map((group) => (
-              <motion.div
+        )}
+
+        {/* Empty State */}
+        {!loading && linkGroups.length === 0 && (
+          <div className="text-center py-20">
+            <div className="w-20 h-20 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Link2 size={40} className="text-blue-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">
+              No link groups yet
+            </h3>
+            <p className="text-blue-200 mb-6">
+              Create your first link group to get started
+            </p>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
+            >
+              <Plus size={20} />
+              Create Your First Group
+            </button>
+          </div>
+        )}
+
+        {/* Groups Grid/List */}
+        {!loading && filteredGroups.length > 0 && (
+          <div
+            className={
+              viewMode === "grid"
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                : "space-y-4"
+            }
+          >
+            {filteredGroups.map((group) => (
+              <GroupCard
                 key={group._id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl transition-all"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  {group.profileImage ? (
-                    <img
-                      src={group.profileImage}
-                      alt={group.groupName}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-white/30"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
-                      {group.groupName.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div className="flex-1 ml-4">
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      {group.groupName}
-                    </h3>
-                    <p className="text-sm text-blue-200 line-clamp-2">
-                      {group.description || "No description"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 text-sm text-blue-200 mb-4">
-                  <span className="flex items-center gap-1">
-                    <Link2 size={14} />
-                    {group.links.length} links
-                  </span>
-                  {/* <span className="flex items-center gap-1">
-                    <Eye size={14} />
-                    {group.views} views
-                  </span> */}
-                </div>
-
-                <div className="bg-white/10 rounded-lg p-3 mb-4">
-                  <p className="text-xs text-blue-200 mb-1">Group URL:</p>
-                  <div className="flex items-center gap-2">
-                    <code className="text-sm text-white flex-1 truncate">
-                      /g/{group.groupUrl}
-                    </code>
-                    <button
-                      onClick={() => copyGroupUrl(group.groupUrl)}
-                      className="p-1.5 hover:bg-white/10 rounded transition-colors"
-                    >
-                      {copiedUrl === group.groupUrl ? (
-                        <Check size={16} className="text-green-400" />
-                      ) : (
-                        <Copy size={16} className="text-blue-300" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <a
-                    href={`/g/${group.groupUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm"
-                  >
-                    <ExternalLink size={16} />
-                    View
-                  </a>
-                  <button
-                    onClick={() => openEditModal(group)}
-                    className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
-                  >
-                    <Edit size={16} />
-                  </button>
-                </div>
-              </motion.div>
+                group={group}
+                viewMode={viewMode}
+                copiedUrl={copiedUrl}
+                onEdit={openEditModal}
+                onCopy={copyGroupUrl}
+                onDelete={handleDeleteGroup}
+              />
             ))}
+          </div>
+        )}
+
+        {/* No Search Results */}
+        {!loading && linkGroups.length > 0 && filteredGroups.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-blue-200 mb-4">No groups match your search</p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="text-blue-400 hover:underline"
+            >
+              Clear search
+            </button>
           </div>
         )}
       </div>
 
+      {/* Modal */}
       <AnimatePresence>
         {(showCreateModal || editingGroup) && (
           <GroupModal
@@ -311,8 +373,7 @@ const GroupLinks: React.FC = () => {
             onClose={closeModal}
             addLinkToForm={addLinkToForm}
             removeLinkFromForm={removeLinkFromForm}
-            handleImageUpload={handleImageUpload}
-            uploadingImage={uploadingImage}
+            reorderLinks={reorderLinks}
           />
         )}
       </AnimatePresence>
@@ -320,6 +381,129 @@ const GroupLinks: React.FC = () => {
   );
 };
 
+// Separate GroupCard component for better organization
+interface GroupCardProps {
+  group: LinkGroup;
+  viewMode: "grid" | "list";
+  copiedUrl: string | null;
+  onEdit: (group: LinkGroup) => void;
+  onCopy: (groupUrl: string) => void;
+  onDelete: (groupId: string) => void;
+}
+
+const GroupCard: React.FC<GroupCardProps> = ({
+  group,
+  viewMode,
+  copiedUrl,
+  onEdit,
+  onCopy,
+  onDelete,
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl transition-all ${
+        viewMode === "list" ? "flex items-center gap-6" : ""
+      }`}
+    >
+      <div
+        className={`flex items-start ${
+          viewMode === "list" ? "flex-row flex-1 gap-4" : "flex-col"
+        }`}
+      >
+        <div
+          className={`flex items-start ${
+            viewMode === "grid" ? "justify-between mb-4 w-full" : "gap-4"
+          }`}
+        >
+          {group.profileImage ? (
+            <img
+              src={group.profileImage}
+              alt={group.groupName}
+              className="w-16 h-16 rounded-full object-cover border-2 border-white/30 flex-shrink-0"
+            />
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-xl border-2 border-white/30 flex-shrink-0">
+              {group.groupName.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div className={`flex-1 ${viewMode === "grid" ? "ml-4" : ""}`}>
+            <h3 className="text-xl font-bold text-white mb-1">
+              {group.groupName}
+            </h3>
+            <p className="text-sm text-blue-200 line-clamp-2">
+              {group.description || "No description"}
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={`flex items-center gap-4 text-sm text-blue-200 ${
+            viewMode === "grid" ? "mb-4" : ""
+          }`}
+        >
+          <span className="flex items-center gap-1">
+            <Link2 size={14} />
+            {group.links.length} link{group.links.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+
+        <div
+          className={`bg-white/10 rounded-lg p-3 ${
+            viewMode === "grid" ? "mb-4" : "flex-1"
+          }`}
+        >
+          <p className="text-xs text-blue-200 mb-1">Group URL:</p>
+          <div className="flex items-center gap-2">
+            <code className="text-sm text-white flex-1 truncate">
+              /g/{group.groupUrl}
+            </code>
+            <button
+              onClick={() => onCopy(group.groupUrl)}
+              className="p-1.5 hover:bg-white/10 rounded transition-colors"
+              title="Copy URL"
+            >
+              {copiedUrl === group.groupUrl ? (
+                <Check size={16} className="text-green-400" />
+              ) : (
+                <Copy size={16} className="text-blue-300" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className={`flex gap-2 ${viewMode === "list" ? "flex-col" : ""}`}>
+        <a
+          href={`/g/${group.groupUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm"
+        >
+          <ExternalLink size={16} />
+          View
+        </a>
+        <button
+          onClick={() => onEdit(group)}
+          className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
+          title="Edit group"
+        >
+          <Edit size={16} />
+        </button>
+        <button
+          onClick={() => onDelete(group._id)}
+          className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-colors"
+          title="Delete group"
+        >
+          <Trash2 size={16} />
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+// Group Modal Component (continued in next part)
 interface GroupModalProps {
   isEdit: boolean;
   formData: {
@@ -344,8 +528,7 @@ interface GroupModalProps {
   onClose: () => void;
   addLinkToForm: () => void;
   removeLinkFromForm: (index: number) => void;
-  handleImageUpload: (file: File) => Promise<void>;
-  uploadingImage: boolean;
+  reorderLinks: (fromIndex: number, toIndex: number) => void;
 }
 
 const GroupModal: React.FC<GroupModalProps> = ({
@@ -358,9 +541,52 @@ const GroupModal: React.FC<GroupModalProps> = ({
   onClose,
   addLinkToForm,
   removeLinkFromForm,
-  handleImageUpload,
-  uploadingImage,
 }) => {
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const handleImageUpload = async (file: File) => {
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size should be less than 5MB");
+      return;
+    }
+
+    setUploadingImage(true);
+
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      formDataUpload.append("upload_preset", "scissor_uploads");
+
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dmctp7kty/image/upload",
+        formDataUpload
+      );
+
+      console.log("Image uploaded to Cloudinary:", response.data.secure_url);
+
+      setFormData((prev) => {
+        const updated = {
+          ...prev,
+          profileImage: response.data.secure_url,
+        };
+        console.log("Updated formData with image:", updated);
+        return updated;
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -401,7 +627,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               value={formData.groupName}
               onChange={(e) =>
-                setFormData({ ...formData, groupName: e.target.value })
+                setFormData((prev) => ({ ...prev, groupName: e.target.value }))
               }
               placeholder="My Social Links"
             />
@@ -417,7 +643,10 @@ const GroupModal: React.FC<GroupModalProps> = ({
               rows={3}
               value={formData.description}
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
               }
               placeholder="A brief description of your link group"
             />
@@ -432,7 +661,6 @@ const GroupModal: React.FC<GroupModalProps> = ({
             </label>
 
             <div className="space-y-3">
-              {/* File Upload */}
               <div className="flex gap-2">
                 <label className="flex-1">
                   <input
@@ -455,7 +683,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
                       <>
                         <Check size={20} className="text-green-600" />
                         <span className="text-green-600 dark:text-green-400">
-                          Image uploaded successfully
+                          Image uploaded
                         </span>
                       </>
                     ) : (
@@ -470,25 +698,28 @@ const GroupModal: React.FC<GroupModalProps> = ({
             </div>
 
             {formData.profileImage && (
-              <div className="mt-3">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                  Preview:
-                </p>
+              <div className="mt-3 flex items-center gap-3">
                 <img
                   src={formData.profileImage}
                   alt="Profile preview"
                   className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
                 />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, profileImage: "" }))
+                  }
+                  className="text-sm text-red-600 hover:underline"
+                >
+                  Remove image
+                </button>
               </div>
             )}
           </div>
 
           <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-              Links
+              Links {formData.links.length > 0 && `(${formData.links.length})`}
             </h3>
 
             <div className="space-y-3 mb-4">
@@ -500,14 +731,12 @@ const GroupModal: React.FC<GroupModalProps> = ({
                   placeholder="Link title"
                   value={newLink.title}
                   onChange={(e) =>
-                    setNewLink({ ...newLink, title: e.target.value })
+                    setNewLink((prev) => ({ ...prev, title: e.target.value }))
                   }
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
-                      if (newLink.title && newLink.url) {
-                        addLinkToForm();
-                      }
+                      addLinkToForm();
                     }
                   }}
                 />
@@ -518,14 +747,12 @@ const GroupModal: React.FC<GroupModalProps> = ({
                   placeholder="https://..."
                   value={newLink.url}
                   onChange={(e) =>
-                    setNewLink({ ...newLink, url: e.target.value })
+                    setNewLink((prev) => ({ ...prev, url: e.target.value }))
                   }
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
-                      if (newLink.title && newLink.url) {
-                        addLinkToForm();
-                      }
+                      addLinkToForm();
                     }
                   }}
                 />
@@ -533,37 +760,46 @@ const GroupModal: React.FC<GroupModalProps> = ({
                   type="button"
                   onClick={addLinkToForm}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  title="Add link"
                 >
                   <Plus size={20} />
                 </button>
               </div>
             </div>
 
-            <div className="space-y-2">
-              {formData.links.map((link, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                >
-                  <Link2 size={16} className="text-gray-400" />
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-800 dark:text-white">
-                      {link.title}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                      {link.url}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeLinkFromForm(index)}
-                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            {formData.links.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <Link2 size={32} className="mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No links added yet</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {formData.links.map((link, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg group"
                   >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
+                    <Link2 size={16} className="text-gray-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-800 dark:text-white truncate">
+                        {link.title}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        {link.url}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeLinkFromForm(index)}
+                      className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
+                      title="Remove link"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -576,7 +812,8 @@ const GroupModal: React.FC<GroupModalProps> = ({
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+              disabled={formData.links.length === 0}
+              className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save size={20} />
               {isEdit ? "Update" : "Create"} Group
