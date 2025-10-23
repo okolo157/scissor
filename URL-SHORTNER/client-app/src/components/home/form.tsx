@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, ExternalLink, Link2 } from "lucide-react";
 
 interface IFormContainerProps {
   onSubmit: (url: string) => Promise<{ shortUrl: string }> | { shortUrl: string };
@@ -31,7 +31,7 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
     try {
       setLoading(true);
       const result = await onSubmit(fullUrl);
-      setSubmittedUrl(fullUrl);  // save original URL for display
+      setSubmittedUrl(fullUrl);
       setShortenedUrl(`${window.location.origin}/${result.shortUrl}`);
       setAlert({ severity: "success", message: "URL successfully shortened!" });
     } catch (err) {
@@ -111,31 +111,101 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
         </div>
       )}
 
-      {/* Show shortened URL */}
+      {/* Improved shortened URL section */}
       {shortenedUrl && (
-        <div className="mt-6 p-4 w-full max-w-sm border border-gray-200 bg-white/10 dark:bg-gray-800/40 backdrop-blur-md rounded-lg">
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">Original URL:</p>
-          <p className="text-sm text-gray-900 dark:text-white truncate mb-3">{submittedUrl}</p>
+        <div className="mt-6 w-full max-w-md">
+          {/* Success header */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+              <Check size={16} className="text-green-600 dark:text-green-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-green-700 dark:text-green-300">
+              URL Shortened Successfully!
+            </h3>
+          </div>
 
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">Shortened URL:</p>
-          <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-900/40 p-2 rounded-md overflow-x-auto">
-            <a
-              href={shortenedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-300 text-sm font-medium hover:underline truncate"
-            >
-              {shortenedUrl}
-            </a>
+          {/* URL cards container */}
+          <div className="space-y-4">
+            {/* Original URL card */}
+            <div className="bg-gray-50 dark:bg-gray-800/60 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-2 mb-2">
+                <Link2 size={16} className="text-gray-500 dark:text-gray-400" />
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  Original URL
+                </span>
+              </div>
+              <p className="text-sm text-gray-900 dark:text-white text-left break-all">
+                {submittedUrl}
+              </p>
+            </div>
+
+            {/* Shortened URL card */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                  <Link2 size={12} className="text-blue-600 dark:text-blue-400" />
+                </div>
+                <span className="text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                  Shortened URL
+                </span>
+              </div>
+              
+              <div className="flex items-center justify-between bg-white dark:bg-gray-900/80 p-3 rounded-lg border border-blue-100 dark:border-blue-800">
+                <a
+                  href={shortenedUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-300 text-sm font-semibold hover:underline break-all text-left flex-1 mr-3"
+                >
+                  {shortenedUrl}
+                </a>
+                <div className="flex items-center gap-1">
+                  <a
+                    href={shortenedUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                    title="Visit link"
+                  >
+                    <ExternalLink size={16} />
+                  </a>
+                  <button
+                    onClick={handleCopy}
+                    className={`p-2 rounded-lg transition-all ${
+                      copied 
+                        ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" 
+                        : "bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50"
+                    }`}
+                    title={copied ? "Copied!" : "Copy link"}
+                  >
+                    {copied ? <Check size={16} /> : <Copy size={16} />}
+                  </button>
+                </div>
+              </div>
+              
+              {copied && (
+                <div className="flex items-center gap-1 mt-2 justify-center">
+                  <Check size={14} className="text-green-500" />
+                  <span className="text-green-600 dark:text-green-400 text-xs font-medium">
+                    Copied to clipboard!
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Quick actions */}
+          <div className="mt-4 flex justify-center">
             <button
-              onClick={handleCopy}
-              className="p-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition"
-              title="Copy link"
+              onClick={() => {
+                setShortenedUrl(null);
+                setSubmittedUrl(null);
+              }}
+              className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 underline transition-colors"
             >
-              {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} className="text-blue-500" />}
+              Shorten another URL
             </button>
           </div>
-          {copied && <p className="text-green-500 text-xs mt-1">Copied to clipboard!</p>}
         </div>
       )}
     </div>
