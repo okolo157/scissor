@@ -6,14 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
   Edit,
-  Trash2,
   ExternalLink,
-  Eye,
   Copy,
   Check,
   Link2,
   Save,
   X,
+  Image,
+  Upload,
+  Trash2,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 
@@ -23,10 +24,12 @@ const GroupLinks: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [editingGroup, setEditingGroup] = useState<LinkGroup | null>(null);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
     groupName: "",
     description: "",
+    profileImage: "",
     links: [] as Link[],
   });
 
@@ -60,7 +63,12 @@ const GroupLinks: React.FC = () => {
         );
         setLinkGroups((prev) => [response.data, ...prev]);
         setShowCreateModal(false);
-        setFormData({ groupName: "", description: "", links: [] });
+        setFormData({
+          groupName: "",
+          description: "",
+          profileImage: "",
+          links: [],
+        });
         setNewLink({ title: "", url: "" });
       } catch (error) {
         console.error("Error creating link group:", error);
@@ -85,7 +93,12 @@ const GroupLinks: React.FC = () => {
           )
         );
         setEditingGroup(null);
-        setFormData({ groupName: "", description: "", links: [] });
+        setFormData({
+          groupName: "",
+          description: "",
+          profileImage: "",
+          links: [],
+        });
         setNewLink({ title: "", url: "" });
       } catch (error) {
         console.error("Error updating link group:", error);
@@ -94,14 +107,42 @@ const GroupLinks: React.FC = () => {
     [editingGroup, formData]
   );
 
-  const handleDeleteGroup = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this group?")) return;
+  const handleImageUpload = async (file: File) => {
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size should be less than 5MB");
+      return;
+    }
+
+    setUploadingImage(true);
 
     try {
-      await axios.delete(`${serverUrl}/api/linkGroup/${id}`);
-      setLinkGroups((prev) => prev.filter((group) => group._id !== id));
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      formDataUpload.append("upload_preset", "scissor_uploads");
+
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dmctp7kty/image/upload",
+        formDataUpload
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        profileImage: response.data.secure_url,
+      }));
     } catch (error) {
-      console.error("Error deleting link group:", error);
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -127,6 +168,7 @@ const GroupLinks: React.FC = () => {
     setFormData({
       groupName: group.groupName,
       description: group.description,
+      profileImage: group.profileImage || "",
       links: group.links,
     });
   };
@@ -141,7 +183,12 @@ const GroupLinks: React.FC = () => {
   const closeModal = useCallback(() => {
     setShowCreateModal(false);
     setEditingGroup(null);
-    setFormData({ groupName: "", description: "", links: [] });
+    setFormData({
+      groupName: "",
+      description: "",
+      profileImage: "",
+      links: [],
+    });
     setNewLink({ title: "", url: "" });
   }, []);
 
@@ -181,7 +228,7 @@ const GroupLinks: React.FC = () => {
               No link groups yet
             </h3>
             <p className="text-blue-200 mb-6">
-              Create your first link group to get started
+              Create your first link group to organize and share your links
             </p>
             <button
               onClick={() => setShowCreateModal(true)}
@@ -200,7 +247,18 @@ const GroupLinks: React.FC = () => {
                 className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:shadow-2xl transition-all"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
+                  {group.profileImage ? (
+                    <img
+                      src={group.profileImage}
+                      alt={group.groupName}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-white/30"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
+                      {group.groupName.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex-1 ml-4">
                     <h3 className="text-xl font-bold text-white mb-1">
                       {group.groupName}
                     </h3>
@@ -215,10 +273,10 @@ const GroupLinks: React.FC = () => {
                     <Link2 size={14} />
                     {group.links.length} links
                   </span>
-                  <span className="flex items-center gap-1">
+                  {/* <span className="flex items-center gap-1">
                     <Eye size={14} />
                     {group.views} views
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className="bg-white/10 rounded-lg p-3 mb-4">
@@ -256,12 +314,6 @@ const GroupLinks: React.FC = () => {
                   >
                     <Edit size={16} />
                   </button>
-                  <button
-                    onClick={() => handleDeleteGroup(group._id)}
-                    className="px-4 py-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-colors"
-                  >
-                    <Trash2 size={16} />
-                  </button>
                 </div>
               </motion.div>
             ))}
@@ -281,6 +333,8 @@ const GroupLinks: React.FC = () => {
             onClose={closeModal}
             addLinkToForm={addLinkToForm}
             removeLinkFromForm={removeLinkFromForm}
+            handleImageUpload={handleImageUpload}
+            uploadingImage={uploadingImage}
           />
         )}
       </AnimatePresence>
@@ -290,11 +344,17 @@ const GroupLinks: React.FC = () => {
 
 interface GroupModalProps {
   isEdit: boolean;
-  formData: { groupName: string; description: string; links: Link[] };
+  formData: {
+    groupName: string;
+    description: string;
+    profileImage: string;
+    links: Link[];
+  };
   setFormData: React.Dispatch<
     React.SetStateAction<{
       groupName: string;
       description: string;
+      profileImage: string;
       links: Link[];
     }>
   >;
@@ -306,6 +366,8 @@ interface GroupModalProps {
   onClose: () => void;
   addLinkToForm: () => void;
   removeLinkFromForm: (index: number) => void;
+  handleImageUpload: (file: File) => Promise<void>;
+  uploadingImage: boolean;
 }
 
 const GroupModal: React.FC<GroupModalProps> = ({
@@ -318,6 +380,8 @@ const GroupModal: React.FC<GroupModalProps> = ({
   onClose,
   addLinkToForm,
   removeLinkFromForm,
+  handleImageUpload,
+  uploadingImage,
 }) => {
   return (
     <motion.div
@@ -379,6 +443,84 @@ const GroupModal: React.FC<GroupModalProps> = ({
               }
               placeholder="A brief description of your link group"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div className="flex items-center gap-2">
+                <Image size={16} />
+                Profile Image
+              </div>
+            </label>
+
+            <div className="space-y-3">
+              {/* File Upload */}
+              <div className="flex gap-2">
+                <label className="flex-1">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleImageUpload(file);
+                    }}
+                    disabled={uploadingImage}
+                  />
+                  <div className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
+                    {uploadingImage ? (
+                      <>
+                        <CircularProgress size={20} />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={20} />
+                        <span>Click to upload image</span>
+                      </>
+                    )}
+                  </div>
+                </label>
+              </div>
+
+              {/* OR Divider */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  OR
+                </span>
+                <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
+              </div>
+
+              {/* URL Input */}
+              <input
+                type="url"
+                autoComplete="off"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                value={formData.profileImage}
+                onChange={(e) =>
+                  setFormData({ ...formData, profileImage: e.target.value })
+                }
+                placeholder="Or paste image URL"
+                disabled={uploadingImage}
+              />
+            </div>
+
+            {formData.profileImage && (
+              <div className="mt-3">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  Preview:
+                </p>
+                <img
+                  src={formData.profileImage}
+                  alt="Profile preview"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           <div className="border-t border-gray-200 dark:border-gray-700 pt-6">

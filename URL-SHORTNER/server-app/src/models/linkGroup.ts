@@ -17,6 +17,10 @@ const linkGroupSchema = new mongoose.Schema(
       unique: true,
       default: () => nanoid(8),
     },
+    profileImage: {
+      type: String,
+      default: "",
+    },
     links: [
       {
         title: {

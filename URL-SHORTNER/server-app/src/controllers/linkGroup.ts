@@ -98,6 +98,7 @@ export const getLinkGroupPage = async (
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${linkGroup.groupName} | Scissor</title>
+        <link rel="icon" type="image/png" href="https://i.imgur.com/YourScissorFavicon.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -154,7 +155,9 @@ export const getLinkGroupPage = async (
           }
 
           .logo {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.5rem 1rem;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -164,6 +167,18 @@ export const getLinkGroupPage = async (
             font-size: 0.85rem;
             letter-spacing: 0.5px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: all 0.3s ease;
+          }
+
+          .logo:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+          }
+
+          .logo-icon {
+            font-size: 1.2rem;
           }
 
           .container {
@@ -194,6 +209,13 @@ export const getLinkGroupPage = async (
             border: 4px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             animation: scaleIn 0.8s ease;
+            overflow: hidden;
+          }
+
+          .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
           }
 
           h1 {
@@ -358,12 +380,19 @@ export const getLinkGroupPage = async (
       </head>
       <body>
         <div class="header">
-          <div class="logo">⚡ Powered by Scissor</div>
+          <a href="${req.protocol}://${req.get("host")}/" class="logo">
+            <span class="logo-icon">✂️</span>
+            <span>Scissor</span>
+          </a>
         </div>
         <div class="container">
           <div class="profile-section">
             <div class="avatar">
-              ${linkGroup.groupName.charAt(0).toUpperCase()}
+              ${
+                linkGroup.profileImage
+                  ? `<img src="${linkGroup.profileImage}" alt="${linkGroup.groupName}" />`
+                  : linkGroup.groupName.charAt(0).toUpperCase()
+              }
             </div>
             <h1>${linkGroup.groupName}</h1>
             ${
@@ -399,7 +428,9 @@ export const getLinkGroupPage = async (
               .join("")}
           </div>
           <div class="footer">
-            Create your own link page with <a href="/">Scissor</a>
+            Create your own link page with <a href="${req.protocol}://${req.get(
+      "host"
+    )}/">Scissor</a>
           </div>
         </div>
       </body>

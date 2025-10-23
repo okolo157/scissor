@@ -16,6 +16,7 @@ export interface LinkGroup {
   groupName: string;
   description: string;
   groupUrl: string;
+  profileImage?: string;
   links: Link[];
   theme: Theme;
   views: number;
