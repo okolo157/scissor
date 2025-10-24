@@ -71,46 +71,71 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            onClick={() => navigate("/shorten")}
-            className="group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-blue-400/50 shadow-lg hover:shadow-blue-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            role="article"
+            aria-labelledby="shorten-link-title"
           >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-shadow">
-                <Link2 size={40} className="text-white" />
-              </div>
-
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                  Shorten Link
-                </h2>
-                <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
-                  Transform long URLs into short, shareable links in seconds
-                </p>
-              </div>
-
-              <div className="space-y-2 w-full">
-                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
-                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                  <span>Instant URL shortening</span>
+            <button
+              onClick={() => navigate("/shorten")}
+              className="w-full group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-blue-400/50 shadow-lg hover:shadow-blue-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
+              aria-label="Navigate to URL shortener page"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-shadow"
+                  aria-hidden="true"
+                >
+                  <Link2 size={40} className="text-white" />
                 </div>
-                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
-                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                  <span>Custom short links</span>
-                </div>
-                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
-                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-                  <span>No registration required</span>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2 text-blue-300 font-semibold group-hover:text-white transition-colors pt-2">
-                <span>Get Started</span>
-                <ArrowRight
-                  size={20}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
+                <div>
+                  <h2
+                    id="shorten-link-title"
+                    className="text-2xl sm:text-3xl font-bold text-white mb-2"
+                  >
+                    Shorten Link
+                  </h2>
+                  <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
+                    Transform long URLs into short, shareable links in seconds
+                  </p>
+                </div>
+
+                <ul
+                  className="space-y-2 w-full"
+                  aria-label="Shorten link features"
+                >
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-blue-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Instant URL shortening</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-blue-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Custom short links</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-blue-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>No registration required</span>
+                  </li>
+                </ul>
+
+                <div className="flex items-center gap-2 text-blue-300 font-semibold group-hover:text-white transition-colors pt-2">
+                  <span>Get Started</span>
+                  <ArrowRight
+                    size={20}
+                    className="group-hover:translate-x-1 transition-transform"
+                    aria-hidden="true"
+                  />
+                </div>
               </div>
-            </div>
+            </button>
           </motion.div>
 
           {/* Create Link Group Card */}
@@ -118,47 +143,72 @@ const Home: React.FC = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            onClick={() => navigate("/link-group")}
-            className="group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-indigo-400/50 shadow-lg hover:shadow-indigo-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+            role="article"
+            aria-labelledby="link-group-title"
           >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow">
-                <FolderKanban size={40} className="text-white" />
-              </div>
-
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                  Create Link Group
-                </h2>
-                <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
-                  Build a beautiful link-in-bio page for all your important
-                  links
-                </p>
-              </div>
-
-              <div className="space-y-2 w-full">
-                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
-                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                  <span>Multiple links in one page</span>
+            <button
+              onClick={() => navigate("/link-group")}
+              className="w-full group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-indigo-400/50 shadow-lg hover:shadow-indigo-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
+              aria-label="Navigate to link group creation page"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow"
+                  aria-hidden="true"
+                >
+                  <FolderKanban size={40} className="text-white" />
                 </div>
-                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
-                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                  <span>Custom profile & branding</span>
-                </div>
-                <div className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
-                  <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                  <span>Perfect for social media</span>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-2 text-indigo-300 font-semibold group-hover:text-white transition-colors pt-2">
-                <span>Get Started</span>
-                <ArrowRight
-                  size={20}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
+                <div>
+                  <h2
+                    id="link-group-title"
+                    className="text-2xl sm:text-3xl font-bold text-white mb-2"
+                  >
+                    Create Link Group
+                  </h2>
+                  <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
+                    Build a beautiful link-in-bio page for all your important
+                    links
+                  </p>
+                </div>
+
+                <ul
+                  className="space-y-2 w-full"
+                  aria-label="Link group features"
+                >
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-indigo-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Multiple links in one page</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-indigo-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Custom profile & branding</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-indigo-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Perfect for social media</span>
+                  </li>
+                </ul>
+
+                <div className="flex items-center gap-2 text-indigo-300 font-semibold group-hover:text-white transition-colors pt-2">
+                  <span>Get Started</span>
+                  <ArrowRight
+                    size={20}
+                    className="group-hover:translate-x-1 transition-transform"
+                    aria-hidden="true"
+                  />
+                </div>
               </div>
-            </div>
+            </button>
           </motion.div>
         </div>
 
@@ -168,15 +218,22 @@ const Home: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
           className="relative z-10 mt-8 max-w-4xl px-4"
+          role="region"
+          aria-labelledby="features-heading"
         >
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6">
+            <h2
+              id="features-heading"
+              className="text-2xl sm:text-3xl font-bold text-center text-white mb-6"
+            >
               Why Choose Scissor?
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="text-center">
-                <div className="text-4xl mb-3">⚡</div>
+                <div className="text-4xl mb-3" aria-hidden="true">
+                  ⚡
+                </div>
                 <h3 className="text-white font-semibold mb-2">
                   Lightning Fast
                 </h3>
@@ -186,7 +243,9 @@ const Home: React.FC = () => {
               </div>
 
               <div className="text-center">
-                <div className="text-4xl mb-3">🎨</div>
+                <div className="text-4xl mb-3" aria-hidden="true">
+                  🎨
+                </div>
                 <h3 className="text-white font-semibold mb-2">
                   Beautiful Design
                 </h3>
@@ -196,7 +255,9 @@ const Home: React.FC = () => {
               </div>
 
               <div className="text-center">
-                <div className="text-4xl mb-3">🔒</div>
+                <div className="text-4xl mb-3" aria-hidden="true">
+                  🔒
+                </div>
                 <h3 className="text-white font-semibold mb-2">Privacy First</h3>
                 <p className="text-blue-200 text-sm">
                   No signup required, your privacy matters
@@ -207,17 +268,20 @@ const Home: React.FC = () => {
         </motion.div>
 
         {/* Footer */}
-        <p className="mt-8 sm:mt-12 text-xs sm:text-sm text-blue-300/70 text-center">
-          © {new Date().getFullYear()} Scissor • Crafted with 💙{" "}
-          <a
-            href="https://github.com/okolo157"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-blue-200 transition-colors"
-          >
-            Victor Okolo
-          </a>
-        </p>
+        <footer className="mt-8 sm:mt-12 text-xs sm:text-sm text-blue-300/70 text-center">
+          <p>
+            © {new Date().getFullYear()} Scissor • Crafted with 💙{" "}
+            <a
+              href="https://github.com/okolo157"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-200 transition-colors"
+              aria-label="Visit Victor Okolo's GitHub profile"
+            >
+              Victor Okolo
+            </a>
+          </p>
+        </footer>
       </div>
     </>
   );

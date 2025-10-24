@@ -163,8 +163,9 @@ const GroupLinks: React.FC = () => {
           transition={{ duration: 0.3 }}
           onClick={() => navigate("/")}
           className="relative z-10 self-start mb-6 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-lg transition-all text-blue-200 hover:text-white"
+          aria-label="Go back to home page"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={20} aria-hidden="true" />
           <span className="text-sm font-medium">Back to Home</span>
         </motion.button>
 

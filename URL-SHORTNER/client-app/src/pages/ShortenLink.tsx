@@ -65,8 +65,9 @@ const ShortenLink: React.FC = () => {
           transition={{ duration: 0.3 }}
           onClick={() => navigate("/")}
           className="relative z-10 self-start mb-6 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-lg transition-all text-blue-200 hover:text-white"
+          aria-label="Go back to home page"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={20} aria-hidden="true" />
           <span className="text-sm font-medium">Back to Home</span>
         </motion.button>
 
@@ -102,23 +103,34 @@ const ShortenLink: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
           className="relative z-10 mt-8 sm:mt-12 max-w-2xl text-center px-4"
+          role="region"
+          aria-labelledby="how-it-works-heading"
         >
-          <h2 className="text-xl sm:text-2xl font-semibold text-blue-100 mb-3">
+          <h2
+            id="how-it-works-heading"
+            className="text-xl sm:text-2xl font-semibold text-blue-100 mb-3"
+          >
             How It Works
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-blue-200 text-xs sm:text-sm md:text-base">
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-              <div className="text-3xl mb-2">1️⃣</div>
+              <div className="text-3xl mb-2" aria-hidden="true">
+                1️⃣
+              </div>
               <h3 className="font-semibold text-white mb-1">Paste URL</h3>
               <p>Enter your long URL</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-              <div className="text-3xl mb-2">2️⃣</div>
+              <div className="text-3xl mb-2" aria-hidden="true">
+                2️⃣
+              </div>
               <h3 className="font-semibold text-white mb-1">Customize</h3>
               <p>Optional custom alias</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
-              <div className="text-3xl mb-2">3️⃣</div>
+              <div className="text-3xl mb-2" aria-hidden="true">
+                3️⃣
+              </div>
               <h3 className="font-semibold text-white mb-1">Share</h3>
               <p>Copy and share anywhere</p>
             </div>
@@ -130,17 +142,20 @@ const ShortenLink: React.FC = () => {
         </motion.div>
 
         {/* Footer */}
-        <p className="mt-8 sm:mt-10 text-xs sm:text-sm text-blue-300/70">
-          © {new Date().getFullYear()} Scissor • Crafted with 💙{" "}
-          <a
-            href="https://github.com/okolo157"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-blue-200 transition-colors"
-          >
-            Victor Okolo
-          </a>
-        </p>
+        <footer className="mt-8 sm:mt-10 text-xs sm:text-sm text-blue-300/70">
+          <p>
+            © {new Date().getFullYear()} Scissor • Crafted with 💙{" "}
+            <a
+              href="https://github.com/okolo157"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-200 transition-colors"
+              aria-label="Visit Victor Okolo's GitHub profile"
+            >
+              Victor Okolo
+            </a>
+          </p>
+        </footer>
       </div>
     </>
   );

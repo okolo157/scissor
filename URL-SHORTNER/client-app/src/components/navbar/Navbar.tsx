@@ -15,20 +15,27 @@ const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg">
+    <nav
+      className="sticky top-0 z-50 w-full bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg"
+      aria-label="Main navigation"
+    >
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo Section */}
           <Link
             to="/"
             className="flex items-center gap-2 group hover:scale-105 transition-transform"
+            aria-label="Scissor home page"
           >
             <img
               src={Logo}
               alt="Scissor Logo"
               className="w-10 h-10 object-contain"
             />
-            <span className="text-white text-xl font-bold hidden sm:block">
+            <span
+              className="text-white text-xl font-bold hidden sm:block"
+              aria-hidden="true"
+            >
               Scissor
             </span>
           </Link>
@@ -48,8 +55,10 @@ const Navbar: React.FC = () => {
                       ? "bg-blue-600 text-white shadow-md"
                       : "text-blue-100 hover:bg-white/10 hover:text-white"
                   }`}
+                  aria-label={item.label}
+                  aria-current={active ? "page" : undefined}
                 >
-                  <Icon size={18} />
+                  <Icon size={18} aria-hidden="true" />
                   <span className="hidden sm:inline">{item.label}</span>
                 </Link>
               );
