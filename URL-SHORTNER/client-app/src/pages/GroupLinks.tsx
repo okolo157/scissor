@@ -17,6 +17,7 @@ import {
   Copy,
   ExternalLink,
   ArrowLeft,
+  FolderKanban,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 
@@ -175,9 +176,12 @@ const GroupLinks: React.FC = () => {
           transition={{ duration: 0.4 }}
           className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-4 sm:p-6 md:p-8"
         >
-          <div className="text-center mb-4 sm:mb-6 border-b border-white/10 pb-4 sm:pb-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <Link2 size={32} className="text-white" />
+          <div className="text-center mb-4 sm:mb-6 flex items-center justify-center flex-col gap-3 border-b border-white/10 pb-4 sm:pb-6">
+            <div
+              className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow"
+              aria-hidden="true"
+            >
+              <FolderKanban size={40} className="text-white" />
             </div>
             <h1 className="text-white text-2xl sm:text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)] mb-2">
               Link <span className="text-blue-400">Groups</span>

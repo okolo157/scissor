@@ -5,7 +5,7 @@ import { urlData } from "../interface/urlData";
 import FormContainer from "../components/home/form";
 import SEO from "../components/SEO";
 import { motion } from "framer-motion";
-import { ArrowLeft, FolderKanban } from "lucide-react";
+import { ArrowLeft, Link2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ShortenLink: React.FC = () => {
@@ -85,10 +85,10 @@ const ShortenLink: React.FC = () => {
             className="container mx-auto flex flex-col items-center justify-center gap-3 text-center mb-6 border-b border-white/10 pb-4"
           >
             <div
-              className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow"
+              className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-shadow"
               aria-hidden="true"
             >
-              <FolderKanban size={40} className="text-white" />
+              <Link2 size={40} className="text-white" />
             </div>
             <h1 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)]">
               <span className="text-blue-400">Shorten</span> Your Link
