@@ -42,6 +42,8 @@ app.get("/api/health", (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
+
+  console.log("Health check success");
 });
 
 // Mount API routes under /api
