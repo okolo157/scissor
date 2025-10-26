@@ -43,10 +43,17 @@ const GroupLinks: React.FC = () => {
 
   // Floating animation variants for scissors
   const floatingVariants = {
+    initial: {
+      y: 0,
+      x: 0,
+      rotate: 0,
+      opacity: 0,
+    },
     animate: (i: number) => ({
       y: [0, -25, 0],
       x: [0, 12, -12, 0],
       rotate: [0, 8, -8, 0],
+      opacity: [0, 0.1, 0.15],
       transition: {
         duration: 5.5 + i * 0.4,
         repeat: Infinity,
@@ -207,6 +214,7 @@ const GroupLinks: React.FC = () => {
       <div className="relative flex flex-col items-center w-full justify-center py-8 min-h-screen px-4 text-white overflow-hidden">
         {/* Animated floating scissor shapes for visual depth */}
         <motion.div
+          initial="initial"
           custom={0}
           variants={floatingVariants}
           animate="animate"
@@ -216,6 +224,7 @@ const GroupLinks: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={1}
           variants={floatingVariants}
           animate="animate"
@@ -225,6 +234,7 @@ const GroupLinks: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={2}
           variants={floatingVariants}
           animate="animate"
@@ -234,6 +244,7 @@ const GroupLinks: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={3}
           variants={floatingVariants}
           animate="animate"
@@ -243,6 +254,7 @@ const GroupLinks: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={4}
           variants={floatingVariants}
           animate="animate"
@@ -252,6 +264,7 @@ const GroupLinks: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={5}
           variants={floatingVariants}
           animate="animate"
@@ -261,6 +274,7 @@ const GroupLinks: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={6}
           variants={floatingVariants}
           animate="animate"

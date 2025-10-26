@@ -11,10 +11,17 @@ const Home: React.FC = () => {
 
   // Floating animation variants for scissors
   const floatingVariants = {
+    initial: {
+      y: 0,
+      x: 0,
+      rotate: 0,
+      opacity: 0,
+    },
     animate: (i: number) => ({
       y: [0, -30, 0],
       x: [0, 15, -15, 0],
       rotate: [0, 10, -10, 0],
+      opacity: [0, 0.15, 0.15],
       transition: {
         duration: 6 + i * 0.5,
         repeat: Infinity,
@@ -55,6 +62,7 @@ const Home: React.FC = () => {
       <div className="relative flex flex-col items-center w-full justify-center py-8 sm:py-12 min-h-screen px-4 sm:px-6 text-white overflow-hidden">
         {/* Animated floating scissor shapes for visual depth */}
         <motion.div
+          initial="initial"
           custom={0}
           variants={floatingVariants}
           animate="animate"
@@ -64,6 +72,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={1}
           variants={floatingVariants}
           animate="animate"
@@ -73,6 +82,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={2}
           variants={floatingVariants}
           animate="animate"
@@ -82,6 +92,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={3}
           variants={floatingVariants}
           animate="animate"
@@ -91,6 +102,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={4}
           variants={floatingVariants}
           animate="animate"
@@ -100,6 +112,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={5}
           variants={floatingVariants}
           animate="animate"
@@ -108,6 +121,7 @@ const Home: React.FC = () => {
           <ScissorShape size={95} color="#a78bfa" />
         </motion.div>
         <motion.div
+          initial="initial"
           custom={5}
           variants={floatingVariants}
           animate="animate"
@@ -117,6 +131,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={6}
           variants={floatingVariants}
           animate="animate"
@@ -126,6 +141,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         <motion.div
+          initial="initial"
           custom={2}
           variants={floatingVariants}
           animate="animate"
@@ -134,6 +150,7 @@ const Home: React.FC = () => {
           <ScissorShape size={100} color="#a78bfa" />
         </motion.div>
         <motion.div
+          initial="initial"
           custom={5}
           variants={floatingVariants}
           animate="animate"
