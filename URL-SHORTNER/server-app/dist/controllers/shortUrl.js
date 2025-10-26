@@ -29,31 +29,53 @@ redis.on("error", (err) => {
  */
 const createUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { fullUrl } = req.body;
+        const { fullUrl, customUrl } = req.body;
         // Validate the URL
         if (!valid_url_1.default.isUri(fullUrl)) {
             console.log("Invalid URL:", fullUrl);
             return res.status(400).send({ message: "Invalid URL" });
         }
-        console.log("Incoming full URL:", fullUrl);
-        const cacheKey = `url:${fullUrl}`;
-        // Check Redis cache first
-        const cachedUrl = yield redis.get(cacheKey);
-        if (cachedUrl) {
-            console.log("Cache hit for URL:", fullUrl);
-            return res.status(200).send(JSON.parse(cachedUrl));
+        // Validate custom URL if provided
+        if (customUrl) {
+            // Check if custom URL is alphanumeric and reasonable length
+            if (!/^[a-zA-Z0-9_-]{3,30}$/.test(customUrl)) {
+                return res.status(400).send({
+                    message: "Custom URL must be 3-30 characters and contain only letters, numbers, hyphens, and underscores",
+                });
+            }
+            // Check if custom URL already exists
+            const existingCustomUrl = yield shortUrl_1.urlModel.findOne({ shortUrl: customUrl });
+            if (existingCustomUrl) {
+                return res.status(409).send({
+                    message: "This custom URL is already taken. Please choose another.",
+                });
+            }
         }
-        console.log("Cache miss for URL:", fullUrl);
-        // Check if URL exists in MongoDB
-        const foundUrl = yield shortUrl_1.urlModel.findOne({ fullUrl });
-        if (foundUrl) {
-            // Cache the found URL
-            yield redis.set(cacheKey, JSON.stringify(foundUrl), "EX", 3600); // 1 hour
-            console.log("URL found in database and cached:", fullUrl);
-            return res.status(409).send(foundUrl); // Conflict: already exists
+        console.log("Incoming full URL:", fullUrl, "Custom URL:", customUrl);
+        const cacheKey = `url:${fullUrl}`;
+        // Check Redis cache first (only if no custom URL specified)
+        if (!customUrl) {
+            const cachedUrl = yield redis.get(cacheKey);
+            if (cachedUrl) {
+                console.log("Cache hit for URL:", fullUrl);
+                return res.status(200).send(JSON.parse(cachedUrl));
+            }
+            console.log("Cache miss for URL:", fullUrl);
+            // Check if URL exists in MongoDB
+            const foundUrl = yield shortUrl_1.urlModel.findOne({ fullUrl });
+            if (foundUrl) {
+                // Cache the found URL
+                yield redis.set(cacheKey, JSON.stringify(foundUrl), "EX", 3600); // 1 hour
+                console.log("URL found in database and cached:", fullUrl);
+                return res.status(409).send(foundUrl); // Conflict: already exists
+            }
         }
         // Create a new short URL
-        const shortUrl = yield shortUrl_1.urlModel.create({ fullUrl });
+        const shortUrlData = { fullUrl };
+        if (customUrl) {
+            shortUrlData.shortUrl = customUrl;
+        }
+        const shortUrl = yield shortUrl_1.urlModel.create(shortUrlData);
         // Cache the new URL
         yield redis.set(cacheKey, JSON.stringify(shortUrl), "EX", 3600);
         console.log("New short URL created and cached:", fullUrl);

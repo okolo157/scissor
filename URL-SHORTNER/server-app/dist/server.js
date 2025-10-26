@@ -10,6 +10,7 @@ const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const dbConfig_1 = __importDefault(require("./config/dbConfig"));
 const shortUrl_1 = __importDefault(require("./routes/shortUrl"));
 const linkGroup_1 = __importDefault(require("./routes/linkGroup"));
+const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 (0, dbConfig_1.default)();
 const port = process.env.PORT || 5000;
@@ -29,6 +30,16 @@ app.use((0, cors_1.default)({
 }));
 // Apply rate limiter globally
 app.use(limiter);
+// Health check endpoint for keep-alive service (must be before wildcard routes)
+app.get("/api/health", (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        message: "Backend is alive",
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+    });
+    console.log("Health check success");
+});
 // Mount API routes under /api
 app.use("/api", shortUrl_1.default);
 app.use("/api", linkGroup_1.default);
@@ -37,8 +48,22 @@ const shortUrl_2 = require("./controllers/shortUrl");
 const linkGroup_2 = require("./routes/linkGroup");
 // Handle group link pages (must come before /:id to avoid conflicts)
 app.get("/g/:groupUrl", linkGroup_2.getLinkGroupPage);
-// Handle short URLs
-app.get("/:id", shortUrl_2.getUrl);
+// Handle short URLs redirecting
+app.get("/r/:id", shortUrl_2.getUrl);
+// Serve static files from the React app build directory
+// Using the correct path resolution for production as per project requirements
+app.use(express_1.default.static(path_1.default.join(__dirname, "..", "dist")));
+// Catch-all route to serve the React app for any non-API routes
+// This is essential for client-side routing to work properly in production
+app.get("*", (req, res) => {
+    // Don't serve the React app for API routes or other specific backend routes
+    if (req.path.startsWith("/api") || req.path.startsWith("/r/") || req.path.startsWith("/g/")) {
+        return res.status(404).send("Not Found");
+    }
+    // Serve the React app's index.html for all other routes
+    // Using the correct path resolution for production as per project requirements
+    res.sendFile(path_1.default.join(__dirname, "..", "dist", "index.html"));
+});
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`);
 });

@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import connectDb from "./config/dbConfig";
 import shortUrl from "./routes/shortUrl";
 import linkGroup from "./routes/linkGroup";
+import path from "path";
 
 dotenv.config();
 connectDb();
@@ -59,6 +60,27 @@ app.get("/g/:groupUrl", getLinkGroupPage);
 
 // Handle short URLs redirecting
 app.get("/r/:id", getUrl);
+
+// Serve static files from the React app build directory
+// Using the correct path resolution for production as per project requirements
+app.use(express.static(path.join(__dirname, "..", "dist")));
+
+// Catch-all route to serve the React app for any non-API routes
+// This is essential for client-side routing to work properly in production
+app.get("*", (req, res) => {
+  // Don't serve the React app for API routes or other specific backend routes
+  if (
+    req.path.startsWith("/api") ||
+    req.path.startsWith("/r/") ||
+    req.path.startsWith("/g/")
+  ) {
+    return res.status(404).send("Not Found");
+  }
+
+  // Serve the React app's index.html for all other routes
+  // Using the correct path resolution for production as per project requirements
+  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
