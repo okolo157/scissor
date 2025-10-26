@@ -164,7 +164,7 @@ const Home: React.FC = () => {
                     id="link-group-title"
                     className="text-2xl sm:text-3xl font-bold text-white mb-2"
                   >
-                    Create Link Group
+                    Link Groups
                   </h2>
                   <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
                     Build a beautiful link-in-bio page for all your important
