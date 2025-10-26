@@ -9,6 +9,21 @@ import ScissorShape from "../components/ScissorShape";
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
+  // Floating animation variants for scissors
+  const floatingVariants = {
+    animate: (i: number) => ({
+      y: [0, -30, 0],
+      x: [0, 15, -15, 0],
+      rotate: [0, 10, -10, 0],
+      transition: {
+        duration: 6 + i * 0.5,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: i * 0.3,
+      },
+    }),
+  };
+
   return (
     <>
       <SEO
@@ -38,13 +53,94 @@ const Home: React.FC = () => {
         }}
       />
       <div className="relative flex flex-col items-center w-full justify-center py-8 sm:py-12 min-h-screen px-4 sm:px-6 text-white overflow-hidden">
-        {/* Background scissor shapes for visual depth */}
-        <div className="absolute top-1/4 left-1/3 opacity-20">
-          <ScissorShape size={288} color="#60a5fa" className="rotate-12" />
-        </div>
-        <div className="absolute bottom-1/4 right-1/3 opacity-20">
-          <ScissorShape size={320} color="#818cf8" className="-rotate-12" />
-        </div>
+        {/* Animated floating scissor shapes for visual depth */}
+        <motion.div
+          custom={0}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-0 left-1/4 opacity-15"
+        >
+          <ScissorShape size={120} color="#60a5fa" />
+        </motion.div>
+
+        <motion.div
+          custom={1}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-0 right-1/4 opacity-15"
+        >
+          <ScissorShape size={140} color="#818cf8" />
+        </motion.div>
+
+        <motion.div
+          custom={2}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-1/2 right-1/4 opacity-10"
+        >
+          <ScissorShape size={100} color="#a78bfa" />
+        </motion.div>
+
+        <motion.div
+          custom={3}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-1/3 left-1/4 opacity-10"
+        >
+          <ScissorShape size={110} color="#60a5fa" />
+        </motion.div>
+
+        <motion.div
+          custom={4}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-1/2 left-1/6 opacity-12"
+        >
+          <ScissorShape size={90} color="#818cf8" />
+        </motion.div>
+
+        <motion.div
+          custom={5}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-1/2 right-1/6 opacity-12"
+        >
+          <ScissorShape size={95} color="#a78bfa" />
+        </motion.div>
+        <motion.div
+          custom={5}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-1/2 right-1/6 opacity-12"
+        >
+          <ScissorShape size={95} color="#a78bfa" />
+        </motion.div>
+
+        <motion.div
+          custom={6}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-2/3 right-1/3 opacity-8"
+        >
+          <ScissorShape size={80} color="#60a5fa" />
+        </motion.div>
+
+        <motion.div
+          custom={2}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-1/3 right-1/4 opacity-10"
+        >
+          <ScissorShape size={100} color="#a78bfa" />
+        </motion.div>
+        <motion.div
+          custom={5}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-1/2 right-1/6 opacity-12"
+        >
+          <ScissorShape size={95} color="#a78bfa" />
+        </motion.div>
 
         {/* Header */}
         <motion.div

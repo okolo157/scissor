@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
 import QRCode from "react-qr-code";
+import ScissorShape from "../components/ScissorShape";
 
 const GroupLinks: React.FC = () => {
   const navigate = useNavigate();
@@ -39,6 +40,21 @@ const GroupLinks: React.FC = () => {
   });
 
   const [newLink, setNewLink] = useState({ title: "", url: "" });
+
+  // Floating animation variants for scissors
+  const floatingVariants = {
+    animate: (i: number) => ({
+      y: [0, -25, 0],
+      x: [0, 12, -12, 0],
+      rotate: [0, 8, -8, 0],
+      transition: {
+        duration: 5.5 + i * 0.4,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: i * 0.25,
+      },
+    }),
+  };
 
   const handleCreateGroup = useCallback(
     async (e: React.FormEvent) => {
@@ -87,7 +103,6 @@ const GroupLinks: React.FC = () => {
       return;
     }
 
-    // Basic URL validation
     try {
       new URL(newLink.url);
     } catch {
@@ -190,9 +205,69 @@ const GroupLinks: React.FC = () => {
         }}
       />
       <div className="relative flex flex-col items-center w-full justify-center py-8 min-h-screen px-4 text-white overflow-hidden">
-        {/* Background blobs for visual depth */}
-        <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/20 rounded-full" />
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/20 rounded-full" />
+        {/* Animated floating scissor shapes for visual depth */}
+        <motion.div
+          custom={0}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-10 left-1/4 opacity-12"
+        >
+          <ScissorShape size={70} color="#818cf8" />
+        </motion.div>
+
+        <motion.div
+          custom={1}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-16 right-1/3 opacity-10"
+        >
+          <ScissorShape size={65} color="#a78bfa" />
+        </motion.div>
+
+        <motion.div
+          custom={2}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-1/3 left-1/6 opacity-15"
+        >
+          <ScissorShape size={85} color="#60a5fa" />
+        </motion.div>
+
+        <motion.div
+          custom={3}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute top-1/2 right-1/5 opacity-12"
+        >
+          <ScissorShape size={75} color="#818cf8" />
+        </motion.div>
+
+        <motion.div
+          custom={4}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-1/3 left-1/4 opacity-10"
+        >
+          <ScissorShape size={80} color="#a78bfa" />
+        </motion.div>
+
+        <motion.div
+          custom={5}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-20 right-1/4 opacity-14"
+        >
+          <ScissorShape size={72} color="#60a5fa" />
+        </motion.div>
+
+        <motion.div
+          custom={6}
+          variants={floatingVariants}
+          animate="animate"
+          className="absolute bottom-12 left-1/3 opacity-8"
+        >
+          <ScissorShape size={68} color="#818cf8" />
+        </motion.div>
 
         {/* Back Button */}
         <motion.button
