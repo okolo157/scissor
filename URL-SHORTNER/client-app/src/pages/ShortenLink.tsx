@@ -45,7 +45,7 @@ const ShortenLink: React.FC = () => {
       }
 
       const response = await axios.post<urlData>(
-        `${serverUrl}/api/r/shortUrl`,
+        `${serverUrl}/api/shortUrl`,
         requestBody
       );
 
