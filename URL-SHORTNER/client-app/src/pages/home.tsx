@@ -2,8 +2,8 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import { motion } from "framer-motion";
-import { Link2, FolderKanban, ArrowRight } from "lucide-react";
-import Logo from "../assets/scissor-logo.png";
+import { Link2, FolderKanban, ArrowRight, QrCode } from "lucide-react";
+// import Logo from "../assets/scissor-logo.png";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -48,13 +48,13 @@ const Home: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="relative z-10 flex flex-col items-center justify-center gap-4 text-center mb-8 sm:mb-12"
         >
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <img
               src={Logo}
               alt="Scissor Logo"
               className="w-20 h-20 sm:w-24 sm:h-24 object-contain"
             />
-          </div>
+          </div> */}
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide drop-shadow-[0_0_15px_rgba(59,130,246,0.4)]">
             Welcome to <span className="text-blue-400">Scissor</span>
           </h1>
@@ -65,7 +65,7 @@ const Home: React.FC = () => {
         </motion.div>
 
         {/* Main Cards */}
-        <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
+        <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-12">
           {/* Shorten Link Card */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -200,6 +200,75 @@ const Home: React.FC = () => {
                 </ul>
 
                 <div className="flex items-center gap-2 text-indigo-300 font-semibold group-hover:text-white transition-colors pt-2">
+                  <span>Get Started</span>
+                  <ArrowRight
+                    size={20}
+                    className="group-hover:translate-x-1 transition-transform"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+            </button>
+          </motion.div>
+
+          {/* QR Code Generator Card */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            role="article"
+            aria-labelledby="qr-code-title"
+          >
+            <button
+              onClick={() => navigate("/qr-generator")}
+              className="w-full group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-purple-400/50 shadow-lg hover:shadow-purple-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
+              aria-label="Navigate to QR code generator page"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-purple-500/50 transition-shadow"
+                  aria-hidden="true"
+                >
+                  <QrCode size={40} className="text-white" />
+                </div>
+
+                <div>
+                  <h2
+                    id="qr-code-title"
+                    className="text-2xl sm:text-3xl font-bold text-white mb-2"
+                  >
+                    QR Code Generator
+                  </h2>
+                  <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
+                    Create scannable QR codes for any URL or text
+                  </p>
+                </div>
+
+                <ul className="space-y-2 w-full" aria-label="QR code features">
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-purple-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Instant generation</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-purple-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>High-quality download</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-blue-100 text-xs sm:text-sm">
+                    <span
+                      className="w-1.5 h-1.5 bg-purple-400 rounded-full"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Customizable size</span>
+                  </li>
+                </ul>
+
+                <div className="flex items-center gap-2 text-purple-300 font-semibold group-hover:text-white transition-colors pt-2">
                   <span>Get Started</span>
                   <ArrowRight
                     size={20}

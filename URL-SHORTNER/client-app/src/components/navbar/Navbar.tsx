@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Link2, FolderKanban } from "lucide-react";
+import { Home, Link2, FolderKanban, QrCode } from "lucide-react";
 import Logo from "../../assets/scissor-logo.png";
 
 const Navbar: React.FC = () => {
@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
     { path: "/", label: "Home", icon: Home },
     { path: "/shorten", label: "Shorten Link", icon: Link2 },
     { path: "/link-group", label: "Link Groups", icon: FolderKanban },
+    { path: "/qr-generator", label: "QR Generator", icon: QrCode },
   ];
 
   const isActive = (path: string) => location.pathname === path;

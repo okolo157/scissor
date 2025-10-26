@@ -1,6 +1,15 @@
 import * as React from "react";
-import { Check, Copy, ExternalLink, Link2, Settings } from "lucide-react";
+import {
+  Check,
+  Copy,
+  ExternalLink,
+  Link2,
+  Settings,
+  Download,
+  QrCode,
+} from "lucide-react";
 import { FormSkeleton } from "../skeleton/SkeletonLoader";
+import QRCode from "react-qr-code";
 
 interface IFormContainerProps {
   onSubmit: (
@@ -79,6 +88,40 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const handleDownloadQR = () => {
+    if (!shortenedUrl) return;
+
+    const svg = document.getElementById("qr-code-svg");
+    if (!svg) return;
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+
+    canvas.width = 300;
+    canvas.height = 300;
+
+    img.onload = () => {
+      ctx!.fillStyle = "white";
+      ctx!.fillRect(0, 0, 300, 300);
+      ctx!.drawImage(img, 0, 0);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `qr-code-${Date.now()}.png`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
   };
 
   return (
@@ -314,6 +357,34 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
                 >
                   {shortenedUrl}
                 </a>
+
+                {/* QR Code Section */}
+                <div className="flex flex-col items-center gap-3 mb-4 p-4 bg-gray-50 dark:bg-gray-800/60 rounded-lg">
+                  <div className="flex items-center gap-2 mb-1">
+                    <QrCode
+                      size={16}
+                      className="text-blue-600 dark:text-blue-400"
+                    />
+                    <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      QR Code
+                    </span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg">
+                    <QRCode
+                      id="qr-code-svg"
+                      value={shortenedUrl}
+                      size={150}
+                      level="H"
+                    />
+                  </div>
+                  <button
+                    onClick={handleDownloadQR}
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-xs sm:text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all font-medium"
+                  >
+                    <Download size={16} />
+                    Download QR Code
+                  </button>
+                </div>
 
                 <div className="flex flex-col sm:flex-row gap-2">
                   <button

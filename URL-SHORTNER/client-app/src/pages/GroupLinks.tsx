@@ -10,7 +10,7 @@ import {
   Link2,
   Save,
   X,
-  Image,
+  Image as ImageIcon,
   Upload,
   Trash2,
   Check,
@@ -18,8 +18,11 @@ import {
   ExternalLink,
   ArrowLeft,
   FolderKanban,
+  Download,
+  QrCode,
 } from "lucide-react";
 import { CircularProgress } from "@mui/material";
+import QRCode from "react-qr-code";
 
 const GroupLinks: React.FC = () => {
   const navigate = useNavigate();
@@ -130,6 +133,40 @@ const GroupLinks: React.FC = () => {
     navigator.clipboard.writeText(fullUrl);
   }, [createdGroupUrl]);
 
+  const downloadGroupQR = useCallback(() => {
+    if (!createdGroupUrl) return;
+
+    const svg = document.getElementById("group-qr-code-svg");
+    if (!svg) return;
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = document.createElement("img") as HTMLImageElement;
+
+    canvas.width = 300;
+    canvas.height = 300;
+
+    img.onload = () => {
+      ctx!.fillStyle = "white";
+      ctx!.fillRect(0, 0, 300, 300);
+      ctx!.drawImage(img, 0, 0);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `group-qr-code-${createdGroupUrl}.png`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
+  }, [createdGroupUrl]);
+
   return (
     <>
       <SEO
@@ -218,6 +255,32 @@ const GroupLinks: React.FC = () => {
                         {window.location.origin}/g/{createdGroupUrl}
                       </code>
                     </div>
+
+                    {/* QR Code Section */}
+                    <div className="flex flex-col items-center gap-2 mb-3 p-3 bg-black/20 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <QrCode size={16} className="text-green-300" />
+                        <span className="text-xs font-semibold text-green-300">
+                          QR Code
+                        </span>
+                      </div>
+                      <div className="bg-white p-2 rounded">
+                        <QRCode
+                          id="group-qr-code-svg"
+                          value={`${window.location.origin}/g/${createdGroupUrl}`}
+                          size={120}
+                          level="H"
+                        />
+                      </div>
+                      <button
+                        onClick={downloadGroupQR}
+                        className="flex items-center justify-center gap-2 px-3 py-1.5 text-xs bg-white/10 hover:bg-white/20 text-green-200 rounded transition-colors"
+                      >
+                        <Download size={14} />
+                        Download QR
+                      </button>
+                    </div>
+
                     <div className="flex gap-2">
                       <button
                         onClick={copyCreatedUrl}
@@ -540,7 +603,7 @@ const GroupModal: React.FC<GroupModalProps> = ({
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-700">
             <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
               <div className="flex items-center gap-2">
-                <Image size={20} />
+                <ImageIcon size={20} />
                 Profile Image
               </div>
             </label>
