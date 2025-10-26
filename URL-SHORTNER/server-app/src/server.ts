@@ -57,7 +57,7 @@ import { getLinkGroupPage } from "./routes/linkGroup";
 // Handle group link pages (must come before /:id to avoid conflicts)
 app.get("/g/:groupUrl", getLinkGroupPage);
 
-// Handle short URLs
+// Handle short URLs redirecting
 app.get("/r/:id", getUrl);
 
 app.listen(port, () => {
