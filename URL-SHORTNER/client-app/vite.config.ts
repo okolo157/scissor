@@ -1,19 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "/", // 👈 ensures all assets are loaded from root
   server: {
     open: true,
     port: 3000,
     proxy: {
-      // Proxy API requests to backend
       "/api": {
         target: "http://localhost:5000",
         changeOrigin: true,
       },
-      // Proxy group links to backend
       "/g": {
         target: "http://localhost:5000",
         changeOrigin: true,
