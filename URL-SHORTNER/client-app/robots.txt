@@ -4,6 +4,7 @@
 User-agent: *
 Allow: /
 Allow: /links
+Allow: /qr-generator
 
 # Prevent crawling of API endpoints and dynamic routes
 Disallow: /api/
