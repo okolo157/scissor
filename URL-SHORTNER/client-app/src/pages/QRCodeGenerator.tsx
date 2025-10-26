@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, QrCode, Download, Copy, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
+import ScissorShape from "../components/ScissorShape";
 
 const QRCodeGenerator: React.FC = () => {
   const navigate = useNavigate();
@@ -90,9 +91,13 @@ const QRCodeGenerator: React.FC = () => {
         }}
       />
       <div className="relative flex flex-col items-center w-full justify-center py-5 sm:py-8 min-h-screen px-4 sm:px-6 text-white overflow-hidden">
-        {/* Background blobs for visual depth */}
-        <div className="absolute top-1/4 left-1/3 w-64 h-64 sm:w-72 sm:h-72 bg-purple-500/30 blur-3xl rounded-full animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/3 w-72 h-72 sm:w-80 sm:h-80 bg-pink-500/30 blur-3xl rounded-full animate-pulse delay-300" />
+        {/* Background scissor shapes for visual depth */}
+        <div className="absolute top-1/4 left-1/3 opacity-20">
+          <ScissorShape size={288} color="#a855f7" className="rotate-12" />
+        </div>
+        <div className="absolute bottom-1/4 right-1/3 opacity-20">
+          <ScissorShape size={320} color="#ec4899" className="-rotate-12" />
+        </div>
 
         {/* Back Button */}
         <motion.button
@@ -111,7 +116,7 @@ const QRCodeGenerator: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-6 sm:p-8"
+          className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 sm:p-8"
         >
           <motion.div
             initial={{ opacity: 0, y: -15 }}
@@ -120,7 +125,7 @@ const QRCodeGenerator: React.FC = () => {
             className="container mx-auto flex flex-col items-center justify-center gap-3 text-center mb-6 border-b border-white/10 pb-4"
           >
             <div
-              className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-purple-500/50 transition-shadow"
+              className="w-20 h-20 sm:w-24 sm:h-24 bg-purple-600 rounded-2xl flex items-center justify-center"
               aria-hidden="true"
             >
               <QrCode size={40} className="text-white" />
@@ -177,7 +182,7 @@ const QRCodeGenerator: React.FC = () => {
             <button
               onClick={handleGenerate}
               disabled={!inputUrl.trim()}
-              className="w-full px-6 py-3 sm:py-4 text-sm sm:text-base font-medium rounded-xl text-white transition-all bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed hover:scale-[1.02] shadow-lg shadow-purple-500/30"
+              className="w-full px-6 py-3 sm:py-4 text-sm sm:text-base font-medium rounded-xl text-white transition-all bg-purple-600 hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed hover:scale-[1.02]"
             >
               Generate QR Code
             </button>

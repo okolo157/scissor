@@ -27,7 +27,7 @@ const SEO: React.FC<SEOProps> = ({
   twitterTitle,
   twitterDescription,
   twitterImage,
-  keywords = "url shortener, link shortener, short url, shorten link, free url shortener, link in bio, linktree alternative, link groups, qr code generator, create qr code, qr code maker",
+  keywords = "url shortener, link shortener, short url, shorten link, free url shortener, link in bio, linktree alternative, qr code generator, create qr code, qr code maker",
   schemaData,
 }) => {
   const finalCanonical = canonical || window.location.href;

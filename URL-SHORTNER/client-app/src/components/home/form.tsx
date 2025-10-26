@@ -19,7 +19,7 @@ interface IFormContainerProps {
 }
 
 const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
-  const [step, setStep] = React.useState<1 | 2 | 3>(1); // 1: Enter URL, 2: Customize (optional), 3: Result
+  const [step, setStep] = React.useState<1 | 2 | 3 | 4>(1); // 1: Enter URL, 2: Customize (optional), 3: Confirm, 4: Result
   const [fullUrl, setFullUrl] = React.useState<string>("");
   const [customUrl, setCustomUrl] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -45,8 +45,16 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
     }
   };
 
-  const handleSkipCustomization = async () => {
+  const handleSkipCustomization = () => {
+    setStep(3); // Go to confirmation step
+  };
+
+  const handleConfirmAndSubmit = async () => {
     await handleSubmit();
+  };
+
+  const handleBackToCustomization = () => {
+    setStep(2);
   };
 
   const handleSubmit = async () => {
@@ -56,7 +64,7 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
       setSubmittedUrl(fullUrl);
       setShortenedUrl(`${window.location.origin}/${result.shortUrl}`);
       setAlert({ severity: "success", message: "URL successfully shortened!" });
-      setStep(3);
+      setStep(4);
     } catch (err: unknown) {
       console.error("Error in form submit:", err);
       let errorMessage = "Failed to shorten URL.";
@@ -179,7 +187,28 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
                   : "bg-gray-200 dark:bg-gray-700 text-gray-500"
               }`}
             >
-              {step === 3 ? <Check size={16} /> : "3"}
+              {step > 3 ? <Check size={16} /> : "3"}
+            </div>
+            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+              Confirm
+            </span>
+          </div>
+          <div className="flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
+            <div
+              className={`h-full bg-blue-600 rounded transition-all duration-300 ${
+                step >= 4 ? "w-full" : "w-0"
+              }`}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+                step >= 4
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-500"
+              }`}
+            >
+              {step === 4 ? <Check size={16} /> : "4"}
             </div>
             <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
               Done
@@ -287,7 +316,7 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
                 Skip
               </button>
               <button
-                onClick={handleSubmit}
+                onClick={() => setStep(3)}
                 disabled={
                   loading ||
                   (customUrl.trim() !== "" &&
@@ -295,7 +324,7 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
                 }
                 className="flex-1 px-6 py-3 text-sm sm:text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all hover:scale-[1.02]"
               >
-                Create →
+                Next →
               </button>
             </div>
           )}
@@ -319,8 +348,53 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
         </div>
       )}
 
-      {/* Step 3: Result */}
-      {step === 3 && shortenedUrl && (
+      {/* Step 3: Confirmation */}
+      {step === 3 && (
+        <div className="w-full max-w-md space-y-4">
+          <div className="text-center mb-4">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-2">
+              Step 3: Confirm Your Link
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+              Review your link details before creating
+            </p>
+          </div>
+
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 space-y-4">
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Original URL</h4>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-all p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
+                {fullUrl}
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Short URL</h4>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-all p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
+                {window.location.origin}/{customUrl || "auto-generated"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={handleBackToCustomization}
+              className="flex-1 px-6 py-3 text-sm sm:text-base font-medium rounded-xl text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+            >
+              ← Back
+            </button>
+            <button
+              onClick={handleConfirmAndSubmit}
+              className="flex-1 px-6 py-3 text-sm sm:text-base font-medium rounded-xl text-white bg-green-600 hover:bg-green-700 transition-all hover:scale-[1.02]"
+            >
+              Confirm & Create →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Step 4: Result */}
+      {step === 4 && shortenedUrl && (
         <div className="w-full max-w-md">
           {/* Success header */}
           <div className="text-center mb-6">

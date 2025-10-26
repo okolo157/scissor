@@ -170,14 +170,14 @@ const GroupLinks: React.FC = () => {
   return (
     <>
       <SEO
-        title="Link Groups — Create Your Link in Bio Page | Scissor"
+        title="Link in Bio — Create Your Link in Bio Page | Scissor"
         description="Create a beautiful link-in-bio page with Scissor. Perfect alternative to Linktree. Group all your important links in one place - social media, portfolio, store, and more."
-        keywords="link in bio, linktree alternative, link groups, bio link, social media links, link page, free linktree"
+        keywords="link in bio, linktree alternative, bio link, social media links, link page, free linktree"
         canonical="https://www.scissor.site/links"
         schemaData={{
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          name: "Scissor Link Groups",
+          name: "Scissor Link in Bio",
           url: "https://www.scissor.site/group-links",
           description:
             "Create beautiful link-in-bio pages to share all your important links in one place.",
@@ -191,8 +191,8 @@ const GroupLinks: React.FC = () => {
       />
       <div className="relative flex flex-col items-center w-full justify-center py-8 min-h-screen px-4 text-white overflow-hidden">
         {/* Background blobs for visual depth */}
-        <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
+        <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/20 rounded-full" />
+        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-indigo-500/20 rounded-full" />
 
         {/* Back Button */}
         <motion.button
@@ -211,17 +211,17 @@ const GroupLinks: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg rounded-2xl p-4 sm:p-6 md:p-8"
+          className="relative z-10 w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-6 md:p-8"
         >
           <div className="text-center mb-4 sm:mb-6 flex items-center justify-center flex-col gap-3 border-b border-white/10 pb-4 sm:pb-6">
             <div
-              className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow"
+              className="w-20 h-20 sm:w-24 sm:h-24 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg"
               aria-hidden="true"
             >
               <FolderKanban size={40} className="text-white" />
             </div>
-            <h1 className="text-white text-2xl sm:text-3xl font-semibold tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.3)] mb-2">
-              Link <span className="text-blue-400">Groups</span>
+            <h1 className="text-white text-2xl sm:text-3xl font-semibold tracking-wide mb-2">
+              Link in <span className="text-blue-400">Bio</span>
             </h1>
             <p className="text-blue-200 text-xs sm:text-sm">
               Create a beautiful landing page with all your links in one place
@@ -244,10 +244,10 @@ const GroupLinks: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-white mb-1">
-                      🎉 Link Group Created!
+                      🎉 Link in Bio Page Created!
                     </h3>
                     <p className="text-green-200 text-sm mb-3">
-                      Your link group is ready to share
+                      Your link in bio page is ready to share
                     </p>
                     <div className="bg-black/20 rounded-lg p-3 mb-3">
                       <p className="text-xs text-green-300 mb-1">Your Link:</p>

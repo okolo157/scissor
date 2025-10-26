@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SEO from "../components/SEO";
 import { motion } from "framer-motion";
 import { Link2, FolderKanban, ArrowRight, QrCode } from "lucide-react";
+import ScissorShape from "../components/ScissorShape";
 // import Logo from "../assets/scissor-logo.png";
 
 const Home: React.FC = () => {
@@ -30,16 +31,20 @@ const Home: React.FC = () => {
           },
           featureList: [
             "URL Shortening",
-            "Link Groups",
+            "Link in Bio",
             "QR Code Generation",
             "Link Analytics",
           ],
         }}
       />
       <div className="relative flex flex-col items-center w-full justify-center py-8 sm:py-12 min-h-screen px-4 sm:px-6 text-white overflow-hidden">
-        {/* Background blobs for visual depth */}
-        <div className="absolute top-1/4 left-1/3 w-64 h-64 sm:w-72 sm:h-72 bg-blue-500/30 blur-3xl rounded-full animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/3 w-72 h-72 sm:w-80 sm:h-80 bg-indigo-500/30 blur-3xl rounded-full animate-pulse delay-300" />
+        {/* Background scissor shapes for visual depth */}
+        <div className="absolute top-1/4 left-1/3 opacity-20">
+          <ScissorShape size={288} color="#60a5fa" className="rotate-12" />
+        </div>
+        <div className="absolute bottom-1/4 right-1/3 opacity-20">
+          <ScissorShape size={320} color="#818cf8" className="-rotate-12" />
+        </div>
 
         {/* Header */}
         <motion.div
@@ -76,12 +81,12 @@ const Home: React.FC = () => {
           >
             <button
               onClick={() => navigate("/shorten")}
-              className="w-full group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-blue-400/50 shadow-lg hover:shadow-blue-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
+              className="w-full group cursor-pointer bg-white/10 backdrop-blur-xl border border-white/20 hover:border-blue-400/50 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
               aria-label="Navigate to URL shortener page"
             >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div
-                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50 transition-shadow"
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-600 rounded-2xl flex items-center justify-center"
                   aria-hidden="true"
                 >
                   <Link2 size={40} className="text-white" />
@@ -148,12 +153,12 @@ const Home: React.FC = () => {
           >
             <button
               onClick={() => navigate("/link-group")}
-              className="w-full group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-indigo-400/50 shadow-lg hover:shadow-indigo-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
-              aria-label="Navigate to link group creation page"
+              className="w-full group cursor-pointer bg-white/10 backdrop-blur-xl border border-white/20 hover:border-indigo-400/50 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
+              aria-label="Navigate to link in bio creation page"
             >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div
-                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/50 transition-shadow"
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-indigo-600 rounded-2xl flex items-center justify-center"
                   aria-hidden="true"
                 >
                   <FolderKanban size={40} className="text-white" />
@@ -164,7 +169,7 @@ const Home: React.FC = () => {
                     id="link-group-title"
                     className="text-2xl sm:text-3xl font-bold text-white mb-2"
                   >
-                    Link Groups
+                    Link in Bio
                   </h2>
                   <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
                     Build a beautiful link-in-bio page for all your important
@@ -221,12 +226,12 @@ const Home: React.FC = () => {
           >
             <button
               onClick={() => navigate("/qr-generator")}
-              className="w-full group cursor-pointer bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-purple-400/50 shadow-lg hover:shadow-purple-500/30 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
+              className="w-full group cursor-pointer bg-white/10 backdrop-blur-xl border border-white/20 hover:border-purple-400/50 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:scale-105 hover:-translate-y-2 text-left"
               aria-label="Navigate to QR code generator page"
             >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div
-                  className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-purple-500/50 transition-shadow"
+                  className="w-20 h-20 sm:w-24 sm:h-24 bg-purple-600 rounded-2xl flex items-center justify-center"
                   aria-hidden="true"
                 >
                   <QrCode size={40} className="text-white" />
@@ -290,7 +295,7 @@ const Home: React.FC = () => {
           role="region"
           aria-labelledby="features-heading"
         >
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8">
             <h2
               id="features-heading"
               className="text-2xl sm:text-3xl font-bold text-center text-white mb-6"

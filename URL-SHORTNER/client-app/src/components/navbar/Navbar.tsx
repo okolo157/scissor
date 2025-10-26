@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
   const navItems = [
     { path: "/", label: "Home", icon: Home },
     { path: "/shorten", label: "Shorten Link", icon: Link2 },
-    { path: "/link-group", label: "Link Groups", icon: FolderKanban },
+    { path: "/link-group", label: "Link in Bio", icon: FolderKanban },
     { path: "/qr-generator", label: "QR Generator", icon: QrCode },
   ];
 
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className="sticky top-0 z-50 w-full bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg"
+      className="sticky top-0 z-50 w-full bg-white/10 backdrop-blur-xl"
       aria-label="Main navigation"
     >
       <div className="container mx-auto px-4 py-3">
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             <img
               src={Logo}
               alt="Scissor Logo"
-              className="w-10 h-10 object-contain"
+              className="w-12 h-12 object-contain"
             />
             <span
               className="text-white text-xl font-bold hidden sm:block"
@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Navigation Links */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path);
@@ -51,9 +51,9 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all ${
                     active
-                      ? "bg-blue-600 text-white shadow-md"
+                      ? "bg-white/20 text-white"
                       : "text-blue-100 hover:bg-white/10 hover:text-white"
                   }`}
                   aria-label={item.label}
