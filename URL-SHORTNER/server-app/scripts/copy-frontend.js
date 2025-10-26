@@ -28,13 +28,24 @@ function copyDir(src, dest) {
 }
 
 // Define source and destination paths
+// Using relative paths that work in both local and Render environments
 const frontendDistPath = path.join(__dirname, "..", "..", "client-app", "dist");
 const serverDistPath = path.join(__dirname, "..", "dist");
 
+console.log("Frontend dist path:", frontendDistPath);
+console.log("Server dist path:", serverDistPath);
+
 // Check if frontend dist directory exists
 if (!fs.existsSync(frontendDistPath)) {
+  console.error("Frontend dist directory not found at:", frontendDistPath);
+  console.error("Current working directory:", process.cwd());
   console.error(
-    "Frontend dist directory not found. Please build the frontend first."
+    "Directory contents of client-app:",
+    fs
+      .readdirSync(path.join(__dirname, "..", "..", "client-app"), {
+        withFileTypes: true,
+      })
+      .map((d) => d.name)
   );
   process.exit(1);
 }

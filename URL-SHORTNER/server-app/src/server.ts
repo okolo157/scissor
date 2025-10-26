@@ -63,6 +63,7 @@ app.get("/r/:id", getUrl);
 
 // Serve static files from the React app build directory
 // Using the correct path resolution for production as per project requirements
+// In Node.js + Express + TypeScript backend using CommonJS, use '__dirname + '/../dist'' instead of '__dirname + '/dist''
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
 // Catch-all route to serve the React app for any non-API routes
@@ -79,6 +80,7 @@ app.get("*", (req, res) => {
 
   // Serve the React app's index.html for all other routes
   // Using the correct path resolution for production as per project requirements
+  // In Node.js + Express + TypeScript backend using CommonJS, use '__dirname + '/../dist'' instead of '__dirname + '/dist''
   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
 });
 

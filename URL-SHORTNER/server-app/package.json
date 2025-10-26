@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "start": "npx tsc && node ./dist/server.js",
+    "start": "node ./dist/server.js",
     "dev": "nodemon",
     "build": "npx tsc",
     "postbuild": "node ./scripts/copy-frontend.js",

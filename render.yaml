@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: scissor
+    env: node
+    buildCommand: cd ../client-app && npm install && npm run build && cd ../server-app && npm install && npm run build
+    startCommand: npx tsc && node ./dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
