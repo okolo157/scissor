@@ -237,7 +237,7 @@ const Home: React.FC = () => {
                     id="qr-code-title"
                     className="text-2xl sm:text-3xl font-bold text-white mb-2"
                   >
-                    QR Code Generator
+                    QR Code
                   </h2>
                   <p className="text-blue-200 text-sm sm:text-base leading-relaxed">
                     Create scannable QR codes for any URL or text
