@@ -62,7 +62,7 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
       setLoading(true);
       const result = await onSubmit(fullUrl, customUrl.trim() || undefined);
       setSubmittedUrl(fullUrl);
-      setShortenedUrl(`${window.location.origin}/${result.shortUrl}`);
+      setShortenedUrl(`${window.location.origin}/r/${result.shortUrl}`);
       setAlert({ severity: "success", message: "URL successfully shortened!" });
       setStep(4);
     } catch (err: unknown) {
@@ -362,14 +362,18 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
 
           <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 space-y-4">
             <div>
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Original URL</h4>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Original URL
+              </h4>
               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-all p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
                 {fullUrl}
               </p>
             </div>
-            
+
             <div>
-              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Short URL</h4>
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Short URL
+              </h4>
               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-all p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
                 {window.location.origin}/{customUrl || "auto-generated"}
               </p>

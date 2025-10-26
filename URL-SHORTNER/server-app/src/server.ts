@@ -58,7 +58,7 @@ import { getLinkGroupPage } from "./routes/linkGroup";
 app.get("/g/:groupUrl", getLinkGroupPage);
 
 // Handle short URLs
-app.get("/:id", getUrl);
+app.get("/r/:id", getUrl);
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
