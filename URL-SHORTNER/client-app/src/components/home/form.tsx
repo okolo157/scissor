@@ -135,87 +135,109 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       {/* Progress Indicator */}
-      <div className="w-full max-w-md mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                step >= 1
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-500"
-              }`}
-            >
-              {step > 1 ? <Check size={16} /> : "1"}
-            </div>
-            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-              Enter URL
-            </span>
-          </div>
-          <div className="flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
-            <div
-              className={`h-full bg-blue-600 rounded transition-all duration-300 ${
-                step >= 2 ? "w-full" : "w-0"
-              }`}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                step >= 2
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-500"
-              }`}
-            >
-              {step > 2 ? <Check size={16} /> : "2"}
-            </div>
-            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-              Customize
-            </span>
-          </div>
-          <div className="flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
-            <div
-              className={`h-full bg-blue-600 rounded transition-all duration-300 ${
-                step >= 3 ? "w-full" : "w-0"
-              }`}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                step >= 3
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-500"
-              }`}
-            >
-              {step > 3 ? <Check size={16} /> : "3"}
-            </div>
-            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-              Confirm
-            </span>
-          </div>
-          <div className="flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
-            <div
-              className={`h-full bg-blue-600 rounded transition-all duration-300 ${
-                step >= 4 ? "w-full" : "w-0"
-              }`}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                step >= 4
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 dark:bg-gray-700 text-gray-500"
-              }`}
-            >
-              {step === 4 ? <Check size={16} /> : "4"}
-            </div>
-            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-              Done
-            </span>
-          </div>
-        </div>
+      <div className="w-full max-w-2xl mx-auto mb-6">
+  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2">
+    {/* Step 1 */}
+    <div className="flex items-center gap-2 flex-shrink-0">
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+          step >= 1
+            ? "bg-blue-600 text-white"
+            : "bg-gray-200 dark:bg-gray-700 text-gray-500"
+        }`}
+      >
+        {step > 1 ? <Check size={16} /> : "1"}
       </div>
+      <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+        Enter URL
+      </span>
+    </div>
+
+    {/* Progress 1 */}
+    <div className="hidden sm:block flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
+      <div
+        className={`h-full bg-blue-600 rounded transition-all duration-300 ${
+          step >= 2 ? "w-full" : "w-0"
+        }`}
+      />
+    </div>
+
+    {/* Step 2 */}
+    <div className="flex items-center gap-2 flex-shrink-0">
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+          step >= 2
+            ? "bg-blue-600 text-white"
+            : "bg-gray-200 dark:bg-gray-700 text-gray-500"
+        }`}
+      >
+        {step > 2 ? <Check size={16} /> : "2"}
+      </div>
+      <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+        Customize
+      </span>
+    </div>
+
+    {/* Progress 2 */}
+    <div className="hidden sm:block flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
+      <div
+        className={`h-full bg-blue-600 rounded transition-all duration-300 ${
+          step >= 3 ? "w-full" : "w-0"
+        }`}
+      />
+    </div>
+
+    {/* Step 3 */}
+    <div className="flex items-center gap-2 flex-shrink-0">
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+          step >= 3
+            ? "bg-blue-600 text-white"
+            : "bg-gray-200 dark:bg-gray-700 text-gray-500"
+        }`}
+      >
+        {step > 3 ? <Check size={16} /> : "3"}
+      </div>
+      <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+        Confirm
+      </span>
+    </div>
+
+    {/* Progress 3 */}
+    <div className="hidden sm:block flex-1 h-1 mx-2 bg-gray-200 dark:bg-gray-700 rounded">
+      <div
+        className={`h-full bg-blue-600 rounded transition-all duration-300 ${
+          step >= 4 ? "w-full" : "w-0"
+        }`}
+      />
+    </div>
+
+    {/* Step 4 */}
+    <div className="flex items-center gap-2 flex-shrink-0">
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+          step >= 4
+            ? "bg-blue-600 text-white"
+            : "bg-gray-200 dark:bg-gray-700 text-gray-500"
+        }`}
+      >
+        {step === 4 ? <Check size={16} /> : "4"}
+      </div>
+      <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+        Done
+      </span>
+    </div>
+  </div>
+
+  {/* Mobile horizontal progress bar */}
+  <div className="sm:hidden mt-3 h-1 bg-gray-200 dark:bg-gray-700 rounded">
+    <div
+      className={`h-full bg-blue-600 rounded transition-all duration-300`}
+      style={{ width: `${(step / 4) * 100}%` }}
+    />
+  </div>
+</div>
+
 
       {/* Step 1: Enter URL */}
       {step === 1 && (
@@ -329,7 +351,6 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
             </div>
           )}
 
-          {/* Alert feedback */}
           {alert && alert.severity === "error" && (
             <div className="p-3 sm:p-4 rounded-lg border bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300">
               <div className="flex items-start justify-between gap-2">
@@ -348,7 +369,6 @@ const FormContainer: React.FC<IFormContainerProps> = ({ onSubmit }) => {
         </div>
       )}
 
-      {/* Step 3: Confirmation */}
       {step === 3 && (
         <div className="w-full max-w-md space-y-4">
           <div className="text-center mb-4">
